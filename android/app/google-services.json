@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "949749564887",
+    "firebase_url": "https://betsquad-314ef.firebaseio.com",
+    "project_id": "betsquad-314ef",
+    "storage_bucket": "betsquad-314ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949749564887:android:0dcbb30563825d6591f792",
+        "android_client_info": {
+          "package_name": "com.betsquad.betsquad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "949749564887-rdan7c0mskmthp6v35snb7bb62gnb1sv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9Q120iDtbbzAHR1h_Cbx8WUw6yZFL1no"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949749564887-rdan7c0mskmthp6v35snb7bb62gnb1sv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "949749564887-km04klhdr6vub1mr73eludnki49ubuab.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.BetSquad.BetSquad"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
