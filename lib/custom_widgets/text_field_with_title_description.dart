@@ -4,51 +4,58 @@ import 'package:betsquad/styles/constants.dart';
 class TextFieldWithTitleDesc extends StatelessWidget {
   final String title, detail;
   final Function onChangeTextField;
+  final bool shouldObscureText;
 
   TextFieldWithTitleDesc(
       {Key key,
-        @required this.title,
-        this.detail,
-        @required this.onChangeTextField})
+      @required this.title,
+      this.detail,
+      @required this.onChangeTextField,
+      this.shouldObscureText})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var titleText = Text(
+      title,
+      textAlign: TextAlign.start,
+      style: TextStyle(
+        color: Colors.orange,
+      ),
+    );
+
+    var spacing = SizedBox(
+      height: 5,
+    );
+
+    var textField = Container(
+      padding: EdgeInsets.only(bottom: 10),
+      child: TextField(
+        obscureText: shouldObscureText != null ? shouldObscureText : false,
+        decoration: kTextFieldInputDecoration,
+        style: TextStyle(color: Colors.white),
+        onChanged: (value) {
+          onChangeTextField(value);
+        },
+      ),
+    );
+
     return Container(
       decoration: kGradientBoxDecoration,
       padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            title,
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              color: Colors.orange,
-            ),
-          ),
+          titleText,
           if (detail != null) ...[
-            SizedBox(
-              height: 5,
-            ),
+            spacing,
             Text(
               detail,
               style: TextStyle(color: Colors.orange, fontSize: 12),
             ),
           ],
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            padding: EdgeInsets.only(bottom: 10),
-            child: TextField(
-              decoration: kDOBTextFieldInputDecoration,
-              style: TextStyle(color: Colors.white),
-              onChanged: (value) {
-                onChangeTextField();
-              },
-            ),
-          )
+          spacing,
+          textField
         ],
       ),
     );

@@ -9,22 +9,25 @@ class FullWidthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var button = RaisedButton(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(0))
+      ),
+      onPressed: () {
+        onPressedFunction();
+      },
+      child: Text(
+        title,
+        style: TextStyle(color: Colors.orange),
+      ),
+      color: Colors.black87,
+    );
+
     return  Container(
       height: 60,
       width: MediaQuery.of(context).size.width,
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0))
-        ),
-        onPressed: () {
-          onPressedFunction();
-        },
-        child: Text(
-          title,
-          style: TextStyle(color: Colors.orange),
-        ),
-        color: Colors.black87,
-      ),
+      child: button
     );
   }
 }

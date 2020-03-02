@@ -1,66 +1,35 @@
+import 'package:betsquad/screens/preparation_screen.dart';
+import 'package:betsquad/screens/signup_address_screen.dart';
+import 'package:betsquad/screens/signup_userinfo_screen.dart';
+import 'package:betsquad/screens/signup_username_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:betsquad/screens/login_screen.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BetSquad',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'BetSquad'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      theme: Theme.of(context).copyWith(
+          accentIconTheme:
+              Theme.of(context).accentIconTheme.copyWith(color: Colors.white),
+          accentColor: Colors.orange,
+          primaryColor: Colors.white,
+          primaryIconTheme:
+              Theme.of(context).primaryIconTheme.copyWith(color: Colors.black),
+          primaryTextTheme: Theme.of(context)
+              .primaryTextTheme
+              .apply(bodyColor: Colors.black)),
+      initialRoute: LoginScreen.id,
+      routes: {
+        PreparationScreen.id: (context) => PreparationScreen(),
+        LoginScreen.id: (context) => LoginScreen(),
+        SignUpUsernameScreen.id: (context) => SignUpUsernameScreen(),
+        SignupUserInfoScreen.id: (context) => SignupUserInfoScreen(),
+        SignupAddressScreen.id: (context) => SignupAddressScreen(),
+      },
     );
   }
 }
