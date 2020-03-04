@@ -5,11 +5,13 @@ class TextFieldWithTitleDesc extends StatelessWidget {
   final String title, detail;
   final Function onChangeTextField;
   final bool shouldObscureText;
+  final TextEditingController controller;
 
   TextFieldWithTitleDesc(
       {Key key,
       @required this.title,
       this.detail,
+      this.controller,
       @required this.onChangeTextField,
       this.shouldObscureText})
       : super(key: key);
@@ -31,6 +33,7 @@ class TextFieldWithTitleDesc extends StatelessWidget {
     var textField = Container(
       padding: EdgeInsets.only(bottom: 10),
       child: TextField(
+        controller: controller,
         obscureText: shouldObscureText != null ? shouldObscureText : false,
         decoration: kTextFieldInputDecoration,
         style: TextStyle(color: Colors.white),

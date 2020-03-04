@@ -14,10 +14,8 @@ class FullWidthButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(0))
       ),
-      onPressed: () {
-        onPressedFunction();
-      },
-      child: Text(
+      onPressed: () => onPressedFunction(),
+        child: Text(
         title,
         style: TextStyle(color: Colors.orange),
       ),

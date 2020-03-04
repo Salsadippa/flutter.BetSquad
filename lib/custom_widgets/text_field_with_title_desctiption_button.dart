@@ -4,11 +4,13 @@ import 'package:betsquad/styles/constants.dart';
 class TextFieldWithTitleDescButton extends StatelessWidget {
   final String title, detail, buttonTitle;
   final Function onChangeTextField, onPressedButton;
+  final TextEditingController controller;
 
   TextFieldWithTitleDescButton(
       {Key key,
       @required this.title,
       this.detail,
+      this.controller,
       @required this.buttonTitle,
       @required this.onPressedButton,
       @required this.onChangeTextField})
@@ -31,9 +33,10 @@ class TextFieldWithTitleDescButton extends StatelessWidget {
     var textField = Container(
       padding: EdgeInsets.only(bottom: 10),
       child: TextField(
+        controller: controller,
         decoration: kTextFieldInputDecoration,
         style: TextStyle(color: Colors.white),
-        onChanged: (value){
+        onChanged: (value) {
           this.onChangeTextField(value);
         },
       ),
@@ -44,7 +47,7 @@ class TextFieldWithTitleDescButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(5.0)),
         color: Colors.orange,
-        onPressed: (){
+        onPressed: () {
           this.onPressedButton();
         },
         child: Text(buttonTitle,

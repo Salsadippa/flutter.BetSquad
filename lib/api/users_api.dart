@@ -1,14 +1,25 @@
 import 'package:betsquad/services/networking.dart';
 
 class UsersApi {
-  usernameIsAvailable(String username) async {
+
+  Future<bool> usernameIsAvailable(String username) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var queryParameters = {
       'username': username,
     };
     var availableData = await networkHelper.getString(
         '/checkDuplicateUsername', queryParameters);
-    print(availableData);
     return availableData == "available";
   }
+
+  Future searchForAddresses(String postcode) async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.GOOGLE_APP_ENGINE);
+    var queryParameters = {
+      'postcode': postcode,
+    };
+    var results = await networkHelper.getJSON(
+        '/findPostcode', queryParameters);
+    return results;
+  }
+
 }

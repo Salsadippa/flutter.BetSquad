@@ -10,4 +10,8 @@ class FirebaseServices {
   forgotPassword(email) async {
     return _auth.sendPasswordResetEmail(email: email);
   }
+
+  signUp(Map<String, Object> userDetails) async {
+    return _auth.createUserWithEmailAndPassword(email: userDetails["email"], password: userDetails["password"]);
+  }
 }

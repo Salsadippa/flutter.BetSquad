@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:betsquad/styles/constants.dart';
 
 class SignUpUsernameScreen extends StatefulWidget {
-  static String id = 'signup_username_screen';
+  static const String id = 'signup_username_screen';
 
   @override
   _SignUpUsernameScreenState createState() => _SignUpUsernameScreenState();
@@ -17,6 +17,7 @@ class SignUpUsernameScreen extends StatefulWidget {
 class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
   String username;
   var appBar = BetSquadLogoAppBar();
+  Map<String,Object> userDetails = {};
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +45,8 @@ class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
 
     var usernameTextField = TextFieldWithTitleDesc(
         title: 'Username',
-        onChangeTextField: (value) {
-          username = value;
+        onChangeTextField: (String value) {
+          username = value.trim();
         });
 
     return Scaffold(
@@ -61,12 +62,11 @@ class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
             spacing,
             usernameTextField,
             FullWidthButton('Next', () async {
-              if (username != null) {
-                print("NEXT");
-                print(username);
+              if (username.isNotEmpty) {
                 var available = await UsersApi().usernameIsAvailable(username);
                 if (available) {
-                  Navigator.pushNamed(context, SignupUserInfoScreen.id);
+                  userDetails["username"] = username;
+                  Navigator.pushNamed(context, SignupUserInfoScreen.id, arguments: userDetails);
                 }
                 else {
                   Utility().showErrorAlertDialog(context, 'Username taken',

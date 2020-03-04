@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:betsquad/styles/constants.dart';
 
 class LoginScreen extends StatefulWidget {
-  static String id = 'login_screen';
+  static const String id = 'login_screen';
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -16,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String email, password = '';
   FirebaseServices firebaseHelper = FirebaseServices();
 
-  signIn() async {
+  _signIn() async {
     try {
       final user = await firebaseHelper.signIn(email, password);
       if (user != null) {
@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  forgotPassword() async {
+  _forgotPassword() async {
     try {
       final _ = await firebaseHelper.forgotPassword(email);
       print("email sent");
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Colors.orange,
         onPressed: () async {
           if (email != null && password != null)
-            signIn();
+            _signIn();
           else
             Utility.getInstance().showErrorAlertDialog(context, "Invalid login", "Please enter a valid username and password");
         },
@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () {
               print("forgot password");
               if (email != null)
-                forgotPassword();
+                _forgotPassword();
               else
                 Utility.getInstance().showErrorAlertDialog(context, "Invalid login", "Please enter a valid email address");
             },

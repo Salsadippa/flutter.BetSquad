@@ -4,7 +4,7 @@ import 'package:betsquad/styles/constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class PreparationScreen extends StatefulWidget {
-  static String id = 'preparation_screen';
+  static const String id = 'preparation_screen';
 
   @override
   _PreparationScreenState createState() => _PreparationScreenState();

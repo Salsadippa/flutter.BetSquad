@@ -1,30 +1,65 @@
 import 'package:betsquad/custom_widgets/betsquad_logo_appbar.dart';
 import 'package:betsquad/custom_widgets/checkbox_with_description.dart';
 import 'package:betsquad/custom_widgets/full_width_button.dart';
+import 'package:betsquad/custom_widgets/text_field_with_date_picker.dart';
 import 'package:betsquad/custom_widgets/text_field_with_title_description.dart';
 import 'package:betsquad/screens/signup_address_screen.dart';
+import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SignupUserInfoScreen extends StatefulWidget {
-  static String id = 'signup_userinfo_screen';
+  static const String id = 'signup_userinfo_screen';
 
   @override
   _SignupUserInfoScreenState createState() => _SignupUserInfoScreenState();
 }
 
 class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
-  String dob, firstName, lastName, email, password, confirmPassword;
-  bool termsAndConditionsOptIn, marketingOptIn = false;
+  DateTime dob;
+  String firstName = '', lastName = '', email = '', password = '', confirmPassword = '';
+  bool termsAndConditionsOptIn = false;
+  bool marketingOptIn = false;
+  var formatter = new DateFormat('dd-MM-yyyy');
+
+  int _calculateAge(DateTime birthDate) {
+    DateTime currentDate = DateTime.now();
+    int age = currentDate.year - birthDate.year;
+    int month1 = currentDate.month;
+    int month2 = birthDate.month;
+    if (month2 > month1) {
+      age--;
+    } else if (month1 == month2) {
+      int day1 = currentDate.day;
+      int day2 = birthDate.day;
+      if (day2 > day1) {
+        age--;
+      }
+    }
+    return age;
+  }
 
   @override
   Widget build(BuildContext context) {
-    var dobTextField = TextFieldWithTitleDesc(
-        title: 'D.O.B',
-        detail:
-            'BetSquad is a social betting app. You must be over 18 to play.',
-        onChangeTextField: (value) {
-          dob = value;
-        });
+    final Map<String,Object> userDetails = ModalRoute.of(context).settings.arguments;
+
+    var dobTextField = TextFieldWithDatePicker(
+      title: 'D.O.B',
+      value: dob != null ? formatter.format(dob) : '',
+      onDateChanged: (value) {
+        int age = _calculateAge(value);
+        if (age >= 18) {
+          setState(() {
+            dob = value;
+          });
+        } else {
+          Utility().showErrorAlertDialog(context, 'You must be over 18',
+              'BetSquad is a social betting app. You must be over 18 to play.');
+        }
+      },
+      detail: 'BetSquad is a social betting app. You must be over 18 to play.',
+    );
+
     var firstNameTextField = TextFieldWithTitleDesc(
         title: 'First Name',
         onChangeTextField: (value) {
@@ -66,20 +101,44 @@ class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
         marketingOptIn, (value) {
       setState(() {
         marketingOptIn = value;
-        if (marketingOptIn){
-          print("opted in");
-        } else {
-          print("opted out");
-        }
       });
     });
 
     var nextButton = FullWidthButton('Next', () {
-      Navigator.pushNamed(context, SignupAddressScreen.id);
+      if (dob != null &&
+          firstName.trim().isNotEmpty &&
+          lastName.trim().isNotEmpty &&
+          email.trim().isNotEmpty &&
+          password.trim().isNotEmpty &&
+          confirmPassword.trim().isNotEmpty) {
+        if (password != confirmPassword) {
+          Utility().showErrorAlertDialog(context, 'Passwords do not match',
+              'The passwords entered do not match');
+          return;
+        }
+        if (!termsAndConditionsOptIn) {
+          Utility().showErrorAlertDialog(context, 'Terms and Conditions',
+              'You must accept the terms and conditions to continue');
+          return;
+        }
+
+        userDetails["dob"] = formatter.format(dob);
+        userDetails["firstName"] = firstName;
+        userDetails["lastName"] = lastName;
+        userDetails["email"] = email;
+        userDetails["password"] = password;
+        userDetails["marketingOptIn"] = marketingOptIn;
+
+        Navigator.pushNamed(context, SignupAddressScreen.id, arguments: userDetails);
+        return;
+      } else {
+        Utility().showErrorAlertDialog(context, 'Missing fields',
+            'Please fill in all fields and try again');
+      }
     });
 
     return Scaffold(
-//      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey,
       appBar: BetSquadLogoAppBar(),
       body: SingleChildScrollView(
         child: Column(
@@ -94,6 +153,7 @@ class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
             termsAndConditionsCheckbox,
             marketingCheckbox,
             nextButton,
+
           ],
         ),
       ),

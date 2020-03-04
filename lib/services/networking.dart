@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 enum BASE_URL { CLOUD_FUNCTIONS, GOOGLE_APP_ENGINE }
@@ -9,7 +11,7 @@ class NetworkHelper {
       'www.us-central1-betsquad-314ef.cloudfunctions.net';
 
   static const BASE_URL_GOOGLE_APP_ENGINE =
-      'www.us-central1-betsquad-314ef.cloudfunctions.net';
+      'www.betsquad-314ef.appspot.com';
 
   NetworkHelper(BASE_URL baseUrl) {
     if (baseUrl == BASE_URL.CLOUD_FUNCTIONS)
@@ -29,4 +31,18 @@ class NetworkHelper {
       print(response.statusCode);
     }
   }
+
+  Future getJSON(String endpoint, Map<String, String> parameters) async {
+    var uri = Uri.http(this.baseURL, endpoint, parameters);
+    var response = await http.get(uri);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return data;
+    } else {
+      print(response.statusCode);
+    }
+
+  }
+
+
 }

@@ -44,4 +44,11 @@ class Utility {
     );
   }
 
+  bool isNumeric(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.parse(s) != null;
+  }
+
 }
