@@ -13,30 +13,28 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String email, password = '';
-  FirebaseServices firebaseHelper = FirebaseServices();
+  String _email, _password = '';
+  FirebaseServices _firebaseHelper = FirebaseServices();
 
   _signIn() async {
-    try {
-      final user = await firebaseHelper.signIn(email, password);
-      if (user != null) {
-        print("signed in");
-      }
-    } catch (e) {
-      print(e);
-      Utility.getInstance().showErrorAlertDialog(context, 'Error', e.toString());
-    }
+    await _firebaseHelper.signIn(_email, _password, onSuccess: () {
+      print("signed in");
+    }, bannedCallback: (duration) {
+      Utility().showErrorAlertDialog(context, 'Account Suspended',
+          'This account has been suspended until $duration');
+    }, onError: (e){
+      Utility().showErrorAlertDialog(context, 'Error', e.toString());
+    });
   }
 
   _forgotPassword() async {
-    try {
-      final _ = await firebaseHelper.forgotPassword(email);
-      print("email sent");
-
-    } catch(e){
-      Utility.getInstance().showErrorAlertDialog(context, 'Error', e.toString());
-
-    }
+    _firebaseHelper.forgotPassword(_email, onSuccess: () {
+      Utility().showErrorAlertDialog(context, 'Success',
+          'A password reset link has been sent to your email');
+    }, onError: (e) {
+      Utility.getInstance()
+          .showErrorAlertDialog(context, 'Error', e.toString());
+    });
   }
 
   @override
@@ -59,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
         decoration: kEmailTextFieldInputDecoration,
         keyboardType: TextInputType.emailAddress,
         onChanged: (value) {
-          email = value;
+          _email = value;
         },
       ),
     );
@@ -70,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
         obscureText: true,
         decoration: kPasswordTextFieldInputDecoration,
         onChanged: (value) {
-          password = value;
+          _password = value;
         },
       ),
     );
@@ -83,10 +81,11 @@ class _LoginScreenState extends State<LoginScreen> {
             borderRadius: new BorderRadius.circular(5.0)),
         color: Colors.orange,
         onPressed: () async {
-          if (email != null && password != null)
+          if (_email != null && _password != null)
             _signIn();
           else
-            Utility.getInstance().showErrorAlertDialog(context, "Invalid login", "Please enter a valid username and password");
+            Utility.getInstance().showErrorAlertDialog(context, "Invalid login",
+                "Please enter a valid username and password");
         },
         child: const Text('Sign In',
             style: TextStyle(fontSize: 16, color: Colors.white)),
@@ -101,10 +100,11 @@ class _LoginScreenState extends State<LoginScreen> {
           FlatButton(
             onPressed: () {
               print("forgot password");
-              if (email != null)
+              if (_email != null)
                 _forgotPassword();
               else
-                Utility.getInstance().showErrorAlertDialog(context, "Invalid login", "Please enter a valid email address");
+                Utility.getInstance().showErrorAlertDialog(context,
+                    "Invalid login", "Please enter a valid email address");
             },
             child: Text(
               'Forgot Password?',

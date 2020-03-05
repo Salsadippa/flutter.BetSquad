@@ -6,6 +6,7 @@ import 'package:betsquad/screens/signup_userinfo_screen.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/styles/constants.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignUpUsernameScreen extends StatefulWidget {
   static const String id = 'signup_username_screen';
@@ -15,9 +16,17 @@ class SignUpUsernameScreen extends StatefulWidget {
 }
 
 class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
-  String username;
-  var appBar = BetSquadLogoAppBar();
-  Map<String,Object> userDetails = {};
+  String _username;
+  var _appBar = BetSquadLogoAppBar();
+  Map<String,Object> _userDetails = {};
+  var _image;
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +43,26 @@ class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
       height: 30,
     );
 
-    var photo = CircleAvatar(
-      backgroundColor: Colors.orange,
-      radius: 70,
-      child: CircleAvatar(
-        backgroundImage: kUserPlaceholderImage,
-        radius: 67,
+    var photo = GestureDetector(
+      onTap: () => getImage(),
+      child:  CircleAvatar(
+        backgroundColor: Colors.orange,
+        radius: 70,
+        child: CircleAvatar(
+          backgroundImage: _image != null ? FileImage(_image) : kUserPlaceholderImage,
+          radius: 67,
+        ),
       ),
     );
 
     var usernameTextField = TextFieldWithTitleDesc(
         title: 'Username',
         onChangeTextField: (String value) {
-          username = value.trim();
+          _username = value.trim();
         });
 
     return Scaffold(
-      appBar: appBar,
+      appBar: _appBar,
       body: Container(
         color: Colors.black87,
         child: Column(
@@ -62,11 +74,12 @@ class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
             spacing,
             usernameTextField,
             FullWidthButton('Next', () async {
-              if (username.isNotEmpty) {
-                var available = await UsersApi().usernameIsAvailable(username);
+              if (_username.isNotEmpty) {
+                var available = await UsersApi().usernameIsAvailable(_username);
                 if (available) {
-                  userDetails["username"] = username;
-                  Navigator.pushNamed(context, SignupUserInfoScreen.id, arguments: userDetails);
+                  _userDetails["username"] = _username;
+                  _userDetails["image"] = _image;
+                  Navigator.pushNamed(context, SignupUserInfoScreen.id, arguments: _userDetails);
                 }
                 else {
                   Utility().showErrorAlertDialog(context, 'Username taken',

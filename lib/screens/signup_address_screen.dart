@@ -17,30 +17,30 @@ class SignupAddressScreen extends StatefulWidget {
 }
 
 class _SignupAddressScreenState extends State<SignupAddressScreen> {
-  String postcode = '', building = '', street = '', city = '', county = '';
-  TextEditingController buildingController = TextEditingController(),
-      streetController = TextEditingController(),
-      cityController = TextEditingController(),
-      countyController = TextEditingController();
-  FirebaseServices firebaseHelper = FirebaseServices();
+  String _postcode = '', _building = '', _street = '', _city = '', _county = '';
+  TextEditingController _buildingController = TextEditingController(),
+      _streetController = TextEditingController(),
+      _cityController = TextEditingController(),
+      _countyController = TextEditingController();
+  FirebaseServices _firebaseHelper = FirebaseServices();
 
   _selectedAddress(String address) {
     List parts = address.split(',');
-    building = parts[0].toString().split(' ')[0];
-    if (Utility().isNumeric(building))
-      street = parts[0].toString().replaceAll(building, '').trim();
+    _building = parts[0].toString().split(' ')[0];
+    if (Utility().isNumeric(_building))
+      _street = parts[0].toString().replaceAll(_building, '').trim();
     else {
-      building = parts[0].toString().trim();
-      street = parts[1].toString().trim();
+      _building = parts[0].toString().trim();
+      _street = parts[1].toString().trim();
     }
 
-    city = parts[5].toString().trim();
-    county = parts[6].toString().trim();
+    _city = parts[5].toString().trim();
+    _county = parts[6].toString().trim();
 
-    buildingController.text = building;
-    streetController.text = street;
-    cityController.text = city;
-    countyController.text = county;
+    _buildingController.text = _building;
+    _streetController.text = _street;
+    _cityController.text = _city;
+    _countyController.text = _county;
 
     Navigator.pop(context);
   }
@@ -73,10 +73,10 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
         title: 'Postcode',
         buttonTitle: 'Search',
         onChangeTextField: (value) {
-          postcode = value;
+          _postcode = value;
         },
         onPressedButton: () async {
-          var addresses = await UsersApi().searchForAddresses(postcode);
+          var addresses = await UsersApi().searchForAddresses(_postcode);
 
           showCupertinoModalPopup(
             context: context,
@@ -95,56 +95,51 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
         });
 
     var buildingTextField = TextFieldWithTitleDesc(
-        controller: buildingController,
+        controller: _buildingController,
         title: 'Building',
         onChangeTextField: (String value) {
-          building = value.trim();
+          _building = value.trim();
         });
 
     var streetTextField = TextFieldWithTitleDesc(
-        controller: streetController,
+        controller: _streetController,
         title: 'Street',
         onChangeTextField: (String value) {
-          street = value.trim();
+          _street = value.trim();
         });
     var cityTextField = TextFieldWithTitleDesc(
-        controller: cityController,
+        controller: _cityController,
         title: 'City',
         onChangeTextField: (String value) {
-          city = value.trim();
+          _city = value.trim();
         });
     var countyTextField = TextFieldWithTitleDesc(
-        controller: countyController,
+        controller: _countyController,
         title: 'County',
         onChangeTextField: (String value) {
-          county = value.trim();
+          _county = value.trim();
         });
 
     var skipButton = FullWidthButton('Skip', () {
       print("skip");
     });
     var doneButton = FullWidthButton('Done', () async {
-      if (postcode.isNotEmpty &&
-          building.isNotEmpty &&
-          street.isNotEmpty &&
-          city.isNotEmpty &&
-          county.isNotEmpty) {
+      if (_postcode.isNotEmpty &&
+          _building.isNotEmpty &&
+          _street.isNotEmpty &&
+          _city.isNotEmpty &&
+          _county.isNotEmpty) {
+        userDetails["postcode"] = _postcode;
+        userDetails["building"] = _building;
+        userDetails["street"] = _street;
+        userDetails["city"] = _city;
+        userDetails["county"] = _county;
 
-        userDetails["postcode"] = postcode;
-        userDetails["building"] = building;
-        userDetails["street"] = street;
-        userDetails["city"] = city;
-        userDetails["county"] = county;
-
-        try {
-          var newUser = await firebaseHelper.signUp(userDetails);
-          if (newUser != null) {
-            print("new user created");
-          }
-        } catch (e) {
-          Utility().showErrorAlertDialog(context, 'Error creating account', e.toString());
-          print("ERRORR: " + e.toString());
-        }
+        await _firebaseHelper.signUp(userDetails, onSuccess: () {
+          print('new user signed up');
+        }, onError: (e) {
+          Utility().showErrorAlertDialog(context, 'Error', e.toString());
+        });
 
       } else {
         Utility().showErrorAlertDialog(context, "Missing fields",

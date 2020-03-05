@@ -41,7 +41,6 @@ class NetworkHelper {
     } else {
       print(response.statusCode);
     }
-
   }
 
 

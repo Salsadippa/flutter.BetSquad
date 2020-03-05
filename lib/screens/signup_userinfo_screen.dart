@@ -16,11 +16,11 @@ class SignupUserInfoScreen extends StatefulWidget {
 }
 
 class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
-  DateTime dob;
-  String firstName = '', lastName = '', email = '', password = '', confirmPassword = '';
-  bool termsAndConditionsOptIn = false;
-  bool marketingOptIn = false;
-  var formatter = new DateFormat('dd-MM-yyyy');
+  DateTime _dob;
+  String _firstName = '', _lastName = '', _email = '', _password = '', _confirmPassword = '';
+  bool _termsAndConditionsOptIn = false;
+  bool _marketingOptIn = false;
+  var _formatter = new DateFormat('dd-MM-yyyy');
 
   int _calculateAge(DateTime birthDate) {
     DateTime currentDate = DateTime.now();
@@ -45,12 +45,12 @@ class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
 
     var dobTextField = TextFieldWithDatePicker(
       title: 'D.O.B',
-      value: dob != null ? formatter.format(dob) : '',
+      value: _dob != null ? _formatter.format(_dob) : '',
       onDateChanged: (value) {
         int age = _calculateAge(value);
         if (age >= 18) {
           setState(() {
-            dob = value;
+            _dob = value;
           });
         } else {
           Utility().showErrorAlertDialog(context, 'You must be over 18',
@@ -63,71 +63,71 @@ class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
     var firstNameTextField = TextFieldWithTitleDesc(
         title: 'First Name',
         onChangeTextField: (value) {
-          firstName = value;
+          _firstName = value;
         });
     var lastNameTextField = TextFieldWithTitleDesc(
         title: 'Last Name',
         onChangeTextField: (value) {
-          lastName = value;
+          _lastName = value;
         });
     var emailTextField = TextFieldWithTitleDesc(
         title: 'Email',
         onChangeTextField: (value) {
-          email = value;
+          _email = value;
         });
     var passwordTextField = TextFieldWithTitleDesc(
         title: 'Password',
         shouldObscureText: true,
         onChangeTextField: (value) {
-          password = value;
+          _password = value;
         });
     var confirmPasswordTextField = TextFieldWithTitleDesc(
         title: 'Confirm Password',
         shouldObscureText: true,
         onChangeTextField: (value) {
-          confirmPassword = value;
+          _confirmPassword = value;
         });
 
     var termsAndConditionsCheckbox = CheckboxWithDescription(
         'By creating an account you are agreeing to BetSquad\'s Terms and Conditions',
-        termsAndConditionsOptIn, (value) {
+        _termsAndConditionsOptIn, (value) {
       setState(() {
-        termsAndConditionsOptIn = value;
+        _termsAndConditionsOptIn = value;
       });
     });
 
     var marketingCheckbox = CheckboxWithDescription(
         'I would like to receive the latest news, updates and offers from BetSquad via email',
-        marketingOptIn, (value) {
+        _marketingOptIn, (value) {
       setState(() {
-        marketingOptIn = value;
+        _marketingOptIn = value;
       });
     });
 
     var nextButton = FullWidthButton('Next', () {
-      if (dob != null &&
-          firstName.trim().isNotEmpty &&
-          lastName.trim().isNotEmpty &&
-          email.trim().isNotEmpty &&
-          password.trim().isNotEmpty &&
-          confirmPassword.trim().isNotEmpty) {
-        if (password != confirmPassword) {
+      if (_dob != null &&
+          _firstName.trim().isNotEmpty &&
+          _lastName.trim().isNotEmpty &&
+          _email.trim().isNotEmpty &&
+          _password.trim().isNotEmpty &&
+          _confirmPassword.trim().isNotEmpty) {
+        if (_password != _confirmPassword) {
           Utility().showErrorAlertDialog(context, 'Passwords do not match',
               'The passwords entered do not match');
           return;
         }
-        if (!termsAndConditionsOptIn) {
+        if (!_termsAndConditionsOptIn) {
           Utility().showErrorAlertDialog(context, 'Terms and Conditions',
               'You must accept the terms and conditions to continue');
           return;
         }
 
-        userDetails["dob"] = formatter.format(dob);
-        userDetails["firstName"] = firstName;
-        userDetails["lastName"] = lastName;
-        userDetails["email"] = email;
-        userDetails["password"] = password;
-        userDetails["marketingOptIn"] = marketingOptIn;
+        userDetails["dob"] = _formatter.format(_dob);
+        userDetails["firstName"] = _firstName;
+        userDetails["lastName"] = _lastName;
+        userDetails["email"] = _email;
+        userDetails["password"] = _password;
+        userDetails["marketingOptIn"] = _marketingOptIn;
 
         Navigator.pushNamed(context, SignupAddressScreen.id, arguments: userDetails);
         return;
