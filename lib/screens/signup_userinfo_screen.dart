@@ -1,15 +1,15 @@
-import 'package:betsquad/custom_widgets/betsquad_logo_appbar.dart';
-import 'package:betsquad/custom_widgets/checkbox_with_description.dart';
-import 'package:betsquad/custom_widgets/full_width_button.dart';
-import 'package:betsquad/custom_widgets/text_field_with_date_picker.dart';
-import 'package:betsquad/custom_widgets/text_field_with_title_description.dart';
+import 'package:betsquad/widgets/betsquad_logo_appbar.dart';
+import 'package:betsquad/widgets/checkbox_with_description.dart';
+import 'package:betsquad/widgets/full_width_button.dart';
+import 'package:betsquad/widgets/text_field_with_date_picker.dart';
+import 'package:betsquad/widgets/text_field_with_title_description.dart';
 import 'package:betsquad/screens/signup_address_screen.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class SignupUserInfoScreen extends StatefulWidget {
-  static const String id = 'signup_userinfo_screen';
+  static const String ID = 'signup_userinfo_screen';
 
   @override
   _SignupUserInfoScreenState createState() => _SignupUserInfoScreenState();
@@ -129,7 +129,7 @@ class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
         userDetails["password"] = _password;
         userDetails["marketingOptIn"] = _marketingOptIn;
 
-        Navigator.pushNamed(context, SignupAddressScreen.id, arguments: userDetails);
+        Navigator.pushNamed(context, SignupAddressScreen.ID, arguments: userDetails);
         return;
       } else {
         Utility().showErrorAlertDialog(context, 'Missing fields',

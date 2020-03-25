@@ -1,5 +1,4 @@
 import 'package:betsquad/services/networking.dart';
-import 'package:betsquad/utilities/utility.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,6 +28,10 @@ class FirebaseServices {
     } catch (e) {
       onError(e);
     }
+  }
+
+  signOut(){
+    _auth.signOut();
   }
 
   forgotPassword(email,
@@ -75,4 +78,10 @@ class FirebaseServices {
     var url = download.toString();
     return url;
   }
+
+  Future<bool> loggedInUser() async {
+    var user = await _auth.currentUser();
+    return user != null;
+  }
+
 }

@@ -1,12 +1,13 @@
-import 'package:betsquad/custom_widgets/dual_coloured_text.dart';
+import 'package:betsquad/widgets/dual_coloured_text.dart';
 import 'package:betsquad/screens/signup_username_screen.dart';
+import 'package:betsquad/screens/tab_bar.dart';
 import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/styles/constants.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const String id = 'login_screen';
+  static const String ID = 'login_screen';
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -18,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _signIn() async {
     await _firebaseHelper.signIn(_email, _password, onSuccess: () {
-      print("signed in");
+      Navigator.pushReplacementNamed(context, TabBarController.ID);
     }, bannedCallback: (duration) {
       Utility().showErrorAlertDialog(context, 'Account Suspended',
           'This account has been suspended until $duration');
@@ -114,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           FlatButton(
             onPressed: () {
-              Navigator.pushNamed(context, SignUpUsernameScreen.id);
+              Navigator.pushNamed(context, SignUpUsernameScreen.ID);
             },
             child: Text(
               'New here? Sign up',

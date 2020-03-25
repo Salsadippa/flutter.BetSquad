@@ -1,7 +1,7 @@
 import 'package:betsquad/api/users_api.dart';
-import 'package:betsquad/custom_widgets/betsquad_logo_appbar.dart';
-import 'package:betsquad/custom_widgets/full_width_button.dart';
-import 'package:betsquad/custom_widgets/text_field_with_title_description.dart';
+import 'package:betsquad/widgets/betsquad_logo_appbar.dart';
+import 'package:betsquad/widgets/full_width_button.dart';
+import 'package:betsquad/widgets/text_field_with_title_description.dart';
 import 'package:betsquad/screens/signup_userinfo_screen.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:betsquad/styles/constants.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SignUpUsernameScreen extends StatefulWidget {
-  static const String id = 'signup_username_screen';
+  static const String ID = 'signup_username_screen';
 
   @override
   _SignUpUsernameScreenState createState() => _SignUpUsernameScreenState();
@@ -75,11 +75,11 @@ class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
             usernameTextField,
             FullWidthButton('Next', () async {
               if (_username.isNotEmpty) {
-                var available = await UsersApi().usernameIsAvailable(_username);
+                var available = await UsersApi.usernameIsAvailable(_username);
                 if (available) {
                   _userDetails["username"] = _username;
                   _userDetails["image"] = _image;
-                  Navigator.pushNamed(context, SignupUserInfoScreen.id, arguments: _userDetails);
+                  Navigator.pushNamed(context, SignupUserInfoScreen.ID, arguments: _userDetails);
                 }
                 else {
                   Utility().showErrorAlertDialog(context, 'Username taken',

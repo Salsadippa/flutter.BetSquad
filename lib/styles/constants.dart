@@ -52,7 +52,6 @@ const kTextFieldInputDecoration = InputDecoration(
     ),
     filled: true,
     fillColor: Colors.grey,
-
     hintStyle: TextStyle(color: Colors.grey, fontSize: 13));
 
 const kPitchBackgroundDecoration = BoxDecoration(
@@ -79,9 +78,18 @@ const kBetSquadLogoImage = AssetImage('images/betsquad_login_page_logo.png');
 const kUserPlaceholderImage = AssetImage('images/user_placeholder.png');
 
 const kGradientBoxDecoration = BoxDecoration(
-    gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [Colors.black87, Colors.black]));
+  gradient: LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Colors.black87, Colors.black]),
+);
 
-const kGamblingCommissionLogoImage = AssetImage('images/gambling_commission_logo.png');
+const kGamblingCommissionLogoImage =
+    AssetImage('images/gambling_commission_logo.png');
+
+const kGrassTrimBoxDecoration = BoxDecoration(
+  image: DecorationImage(
+    image: AssetImage("images/grass_trim.jpg"),
+    fit: BoxFit.fill,
+  ),
+);

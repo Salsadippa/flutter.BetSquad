@@ -1,7 +1,13 @@
+import 'package:betsquad/screens/match_details_screen.dart';
+import 'package:betsquad/screens/match_feed_screen.dart';
+import 'package:betsquad/screens/match_info_screen.dart';
+import 'package:betsquad/screens/match_lineups_screen.dart';
+import 'package:betsquad/screens/match_list_screen.dart';
 import 'package:betsquad/screens/preparation_screen.dart';
 import 'package:betsquad/screens/signup_address_screen.dart';
 import 'package:betsquad/screens/signup_userinfo_screen.dart';
 import 'package:betsquad/screens/signup_username_screen.dart';
+import 'package:betsquad/screens/tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/screens/login_screen.dart';
 
@@ -23,13 +29,19 @@ class MyApp extends StatelessWidget {
           primaryTextTheme: Theme.of(context)
               .primaryTextTheme
               .apply(bodyColor: Colors.black)),
-      initialRoute: LoginScreen.id,
+      initialRoute: PreparationScreen.ID,
       routes: {
-        PreparationScreen.id: (context) => PreparationScreen(),
-        LoginScreen.id: (context) => LoginScreen(),
-        SignUpUsernameScreen.id: (context) => SignUpUsernameScreen(),
-        SignupUserInfoScreen.id: (context) => SignupUserInfoScreen(),
-        SignupAddressScreen.id: (context) => SignupAddressScreen(),
+        PreparationScreen.ID: (context) => PreparationScreen(),
+        LoginScreen.ID: (context) => LoginScreen(),
+        SignUpUsernameScreen.ID: (context) => SignUpUsernameScreen(),
+        SignupUserInfoScreen.ID: (context) => SignupUserInfoScreen(),
+        SignupAddressScreen.ID: (context) => SignupAddressScreen(),
+        TabBarController.ID: (context) => TabBarController(),
+        MatchListScreen.ID: (context) => MatchListScreen(),
+        MatchDetailsScreen.ID: (context) => MatchDetailsScreen(),
+        MatchInfoScreen.ID: (context) => MatchInfoScreen(),
+        MatchFeedScreen.ID: (context) => MatchFeedScreen(),
+        MatchLineupsScreen.ID: (context) => MatchLineupsScreen(),
       },
     );
   }

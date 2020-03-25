@@ -1,16 +1,15 @@
 import 'package:betsquad/api/users_api.dart';
-import 'package:betsquad/custom_widgets/betsquad_logo_appbar.dart';
-import 'package:betsquad/custom_widgets/full_width_button.dart';
-import 'package:betsquad/custom_widgets/text_field_with_title_description.dart';
-import 'package:betsquad/custom_widgets/text_field_with_title_desctiption_button.dart';
+import 'package:betsquad/widgets/betsquad_logo_appbar.dart';
+import 'package:betsquad/widgets/full_width_button.dart';
+import 'package:betsquad/widgets/text_field_with_title_description.dart';
+import 'package:betsquad/widgets/text_field_with_title_desctiption_button.dart';
 import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupAddressScreen extends StatefulWidget {
-  static const String id = 'signup_address_screen';
+  static const String ID = 'signup_address_screen';
 
   @override
   _SignupAddressScreenState createState() => _SignupAddressScreenState();
@@ -46,9 +45,6 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
   }
 
   List<Widget> _buildActionSheet(List addresses) {
-    final Map<String, Object> userDetails =
-        ModalRoute.of(context).settings.arguments;
-
     List<Widget> widgets = [];
     for (var i = 0; i < addresses.length; i++) {
       var action = CupertinoActionSheetAction(
@@ -62,8 +58,6 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
     return widgets;
   }
 
-  final _auth = FirebaseAuth.instance;
-
   @override
   Widget build(BuildContext context) {
     final Map<String, Object> userDetails =
@@ -76,7 +70,7 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
           _postcode = value;
         },
         onPressedButton: () async {
-          var addresses = await UsersApi().searchForAddresses(_postcode);
+          var addresses = await UsersApi.searchForAddresses(_postcode);
 
           showCupertinoModalPopup(
             context: context,
