@@ -6,10 +6,10 @@ import 'package:betsquad/utilities/hex_color.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class MatchCell extends StatelessWidget {
-  const MatchCell(this.match, this.selected, this.onMatchPressed);
+  const MatchCell(this.match, this.selected, this.onMatchPressed, this.onMatchLongPressed);
 
   final Match match;
-  final Function onMatchPressed;
+  final Function onMatchPressed, onMatchLongPressed;
   final bool selected;
 
   @override
@@ -31,6 +31,9 @@ class MatchCell extends StatelessWidget {
       onTap: () {
         onMatchPressed();
       },
+      onLongPress: (){
+        onMatchLongPressed();
+      },
       child: Container(
         height: 50,
         decoration: selected ? BoxDecoration(
@@ -38,7 +41,7 @@ class MatchCell extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [Colors.black87, Colors.black]),
-          border: Border.all(color: Colors.orange),
+          border: Border.all(color: Colors.orange, width: 1.5),
         ) :
         kGradientBoxDecoration,
         child: Row(

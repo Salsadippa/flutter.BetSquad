@@ -23,6 +23,7 @@ dependencies:
   calendar_strip: ^1.0.6
   sqflite: ^1.2.2+1
   path_provider: ^1.6.5
+  provider: ^4.0.4
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:betsquad/models/match_data.dart';
 import 'package:betsquad/widgets/betsquad_logo_profile_balance_appbar.dart';
 import 'package:betsquad/screens/match_details_screen.dart';
 import 'package:betsquad/services/local_database.dart';
@@ -7,6 +8,7 @@ import 'package:calendar_strip/calendar_strip.dart';
 import 'package:betsquad/widgets/custom_expansion_tile.dart' as custom;
 import 'package:betsquad/models/match.dart';
 import 'package:betsquad/widgets/match_cell.dart';
+import 'package:provider/provider.dart';
 
 class MatchListScreen extends StatefulWidget {
   static const String ID = 'match_list_screen';
@@ -18,7 +20,6 @@ class MatchListScreen extends StatefulWidget {
 class _MatchListScreenState extends State<MatchListScreen> {
   Map<String, List<Match>> matches;
   DateTime selectedDay = DateTime.now();
-  Match selectedMatch;
 
   @override
   void initState() {
@@ -35,6 +36,8 @@ class _MatchListScreenState extends State<MatchListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Match selectedMatch = Provider.of<MatchData>(context).selectedMatch;
+
     return Scaffold(
       appBar: BetSquadLogoProfileBalanceAppBar(),
       body: Container(
@@ -72,13 +75,13 @@ class _MatchListScreenState extends State<MatchListScreen> {
                       ),
                     ),
                     children: _buildExpandableContent(
-                        matches[matches.keys.toList()[i]], (match) {
-                      setState(() {
-                        Navigator.pushNamed(context, MatchDetailsScreen.ID, arguments: match);
-                        print(match);
-                        selectedMatch = match;
-                      });
-                    }),
+                        matches[matches.keys.toList()[i]], (Match match) {
+                      Provider.of<MatchData>(context, listen: false)
+                          .updateSelectedMatch(match);
+                    }, (Match match) {
+                      Navigator.pushNamed(context, MatchDetailsScreen.ID,
+                          arguments: match);
+                    }, selectedMatch),
                   );
                 },
               ),
@@ -88,16 +91,17 @@ class _MatchListScreenState extends State<MatchListScreen> {
       ),
     );
   }
-}
 
-_buildExpandableContent(List<Match> matches, Function onPressed) {
-  List<Widget> expandableContent = [];
-  for (Match match in matches) {
-    expandableContent.add(MatchCell(match, false, () {
-      onPressed(match);
-    }));
+  _buildExpandableContent(List<Match> matches, Function onPressed,
+      Function onLongPressed, Match selectedMatch) {
+    List<Widget> expandableContent = [];
+    for (Match match in matches) {
+      expandableContent.add(MatchCell(match, match == selectedMatch, () {
+        onPressed(match);
+      }, () {
+        onLongPressed(match);
+      }));
+    }
+    return expandableContent;
   }
-  return expandableContent;
 }
-
-

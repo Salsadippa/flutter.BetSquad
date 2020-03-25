@@ -78,10 +78,8 @@ class DBProvider {
   Future<Map<String, List<Match>>> getMatchesOnDate(DateTime date) async {
     final db = await database;
     final formattedDate = DateFormat('yyyy-MM-dd').format(date);
-    print("getting matches on " + formattedDate);
     var res = await db
         .rawQuery("SELECT * FROM Matches WHERE date = ?", [formattedDate]);
-    print(res.length);
     List<Match> list = res.isNotEmpty
         ? res.toList().map((m) => Match.fromMap(m)).toList()
         : null;
