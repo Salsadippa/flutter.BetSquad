@@ -1,15 +1,13 @@
-import 'package:betsquad/screens/match_details_screen.dart';
-import 'package:betsquad/screens/match_feed_screen.dart';
-import 'package:betsquad/screens/match_info_screen.dart';
-import 'package:betsquad/screens/match_lineups_screen.dart';
-import 'package:betsquad/screens/match_list_screen.dart';
-import 'package:betsquad/screens/preparation_screen.dart';
-import 'package:betsquad/screens/signup_address_screen.dart';
-import 'package:betsquad/screens/signup_userinfo_screen.dart';
-import 'package:betsquad/screens/signup_username_screen.dart';
+import 'package:betsquad/screens/bet/bet_screen_tabs.dart';
+import 'package:betsquad/screens/match/match_detail_tabs.dart';
+import 'package:betsquad/screens/match/match_list_screen.dart';
+import 'package:betsquad/screens/login_and_signup/preparation_screen.dart';
+import 'package:betsquad/screens/login_and_signup/signup_address_screen.dart';
+import 'package:betsquad/screens/login_and_signup/signup_userinfo_screen.dart';
+import 'package:betsquad/screens/login_and_signup/signup_username_screen.dart';
 import 'package:betsquad/screens/tab_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:betsquad/screens/login_screen.dart';
+import 'package:betsquad/screens/login_and_signup/login_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,10 +36,8 @@ class MyApp extends StatelessWidget {
         SignupAddressScreen.ID: (context) => SignupAddressScreen(),
         TabBarController.ID: (context) => TabBarController(),
         MatchListScreen.ID: (context) => MatchListScreen(),
-        MatchDetailsScreen.ID: (context) => MatchDetailsScreen(),
-        MatchInfoScreen.ID: (context) => MatchInfoScreen(),
-        MatchFeedScreen.ID: (context) => MatchFeedScreen(),
-        MatchLineupsScreen.ID: (context) => MatchLineupsScreen(),
+        MatchDetailTabs.ID: (context) => MatchDetailTabs(),
+        BetScreenTabs.ID: (context) => BetScreenTabs(),
       },
     );
   }

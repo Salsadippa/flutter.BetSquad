@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-enum BASE_URL { CLOUD_FUNCTIONS, GOOGLE_APP_ENGINE, BASE_URL_PAYMENT_SERVER }
+enum BASE_URL { CLOUD_FUNCTIONS, GOOGLE_APP_ENGINE, PAYMENT_SERVER, LOCALHOST }
 
 class NetworkHelper {
   String baseURL;
@@ -14,13 +14,17 @@ class NetworkHelper {
 
   static const BASE_URL_PAYMENT_SERVER = 'wwww.api.bet-squad.com';
 
+  static const BASE_URL_LOCALHOST = 'localhost:8080';
+
   NetworkHelper(BASE_URL baseUrl) {
     if (baseUrl == BASE_URL.CLOUD_FUNCTIONS)
       this.baseURL = BASE_URL_CLOUD_FUNCTIONS;
     else if (baseUrl == BASE_URL.GOOGLE_APP_ENGINE)
       this.baseURL = BASE_URL_GOOGLE_APP_ENGINE;
-    else
+    else if (baseUrl == BASE_URL.PAYMENT_SERVER)
       this.baseURL = BASE_URL_PAYMENT_SERVER;
+    else
+      this.baseURL = BASE_URL_LOCALHOST;
   }
 
   Future getString(String endpoint, Map<String, String> parameters) async {

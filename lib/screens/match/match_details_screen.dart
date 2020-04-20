@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:betsquad/widgets/title_value_label.dart';
+import 'package:betsquad/models/match.dart';
 
-class MatchInfoScreen extends StatefulWidget {
+class MatchDetailsScreen extends StatefulWidget {
   static const String ID = 'match_info_screen';
+
+  final Match match;
+  const MatchDetailsScreen(this.match);
 
   @override
   _MatchInfoScreenState createState() => _MatchInfoScreenState();
 }
 
-class _MatchInfoScreenState extends State<MatchInfoScreen> {
+class _MatchInfoScreenState extends State<MatchDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,9 +20,9 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
       child: ListView(
         children: <Widget>[
           SizedBox(height: 30,),
-          TitleValueLabel('Competition', '-'),
-          TitleValueLabel('Competition', '-'),
-          TitleValueLabel('Competition', '-'),
+          TitleValueLabel('Competition', widget.match.competitionName),
+          TitleValueLabel('Stage', widget.match.stage),
+          TitleValueLabel('Venue', widget.match.venue),
           SizedBox(height: 30,),
           TitleValueLabel('Competition', '-'),
           TitleValueLabel('Competition', '-'),

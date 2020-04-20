@@ -17,13 +17,13 @@ class FullWidthButton extends StatelessWidget {
       onPressed: () => onPressedFunction(),
         child: Text(
         title,
-        style: TextStyle(color: Colors.orange),
+        style: TextStyle(color: Colors.black),
       ),
-      color: Colors.black87,
+      color: Colors.orange,
     );
 
     return  Container(
-      height: 60,
+      height: 50,
       width: MediaQuery.of(context).size.width,
       child: button
     );

@@ -1,4 +1,5 @@
 import 'package:betsquad/services/networking.dart';
+import 'package:betsquad/services/local_database.dart';
 
 class MatchApi {
 
@@ -7,6 +8,5 @@ class MatchApi {
     var matches = await networkHelper.getJSON('/matches', {});
     return matches;
   }
-
 
 }

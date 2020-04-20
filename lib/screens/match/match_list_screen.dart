@@ -1,6 +1,7 @@
 import 'package:betsquad/models/match_data.dart';
+import 'package:betsquad/screens/match/match_details_screen.dart';
 import 'package:betsquad/widgets/betsquad_logo_profile_balance_appbar.dart';
-import 'package:betsquad/screens/match_details_screen.dart';
+import 'package:betsquad/screens/match/match_detail_tabs.dart';
 import 'package:betsquad/services/local_database.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,7 @@ class _MatchListScreenState extends State<MatchListScreen> {
                       Provider.of<MatchData>(context, listen: false)
                           .updateSelectedMatch(match);
                     }, (Match match) {
-                      Navigator.pushNamed(context, MatchDetailsScreen.ID,
+                      Navigator.pushNamed(context, MatchDetailTabs.ID,
                           arguments: match);
                     }, selectedMatch),
                   );

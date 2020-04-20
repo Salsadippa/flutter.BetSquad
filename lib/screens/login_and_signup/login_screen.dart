@@ -1,5 +1,5 @@
 import 'package:betsquad/widgets/dual_coloured_text.dart';
-import 'package:betsquad/screens/signup_username_screen.dart';
+import 'package:betsquad/screens/login_and_signup/signup_username_screen.dart';
 import 'package:betsquad/screens/tab_bar.dart';
 import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/utilities/utility.dart';

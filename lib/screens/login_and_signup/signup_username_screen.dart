@@ -2,7 +2,7 @@ import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/widgets/betsquad_logo_appbar.dart';
 import 'package:betsquad/widgets/full_width_button.dart';
 import 'package:betsquad/widgets/text_field_with_title_description.dart';
-import 'package:betsquad/screens/signup_userinfo_screen.dart';
+import 'package:betsquad/screens/login_and_signup/signup_userinfo_screen.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/styles/constants.dart';

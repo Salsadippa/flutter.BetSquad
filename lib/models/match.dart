@@ -7,7 +7,11 @@ class Match {
       awayTeamName,
       round,
       startTimestamp,
-      venue;
+      venue,
+      stage,
+      stats,
+      homeLineup,
+      awayLineup;
   final int id,
       awayGoals,
       homeGoals,
@@ -17,51 +21,63 @@ class Match {
       currentState,
       minute,
       nextState,
-      lastPolled;
+      lastPolled,
+      homeTeamId,
+      awayTeamId;
 
-  Match({
-    this.awayShirtColor,
-    this.homeShirtColor,
-    this.competitionName,
-    this.date,
-    this.homeTeamName,
-    this.awayTeamName,
-    this.id,
-    this.round,
-    this.startTimestamp,
-    this.venue,
-    this.awayGoals,
-    this.homeGoals,
-    this.awayPenalties,
-    this.homePenalties,
-    this.competitionId,
-    this.currentState,
-    this.minute,
-    this.nextState,
-    this.lastPolled,
-  });
+  Match(
+      {this.awayShirtColor,
+      this.homeShirtColor,
+      this.competitionName,
+      this.date,
+      this.homeTeamName,
+      this.awayTeamName,
+      this.id,
+      this.round,
+      this.startTimestamp,
+      this.venue,
+      this.awayGoals,
+      this.homeGoals,
+      this.awayPenalties,
+      this.homePenalties,
+      this.competitionId,
+      this.currentState,
+      this.minute,
+      this.nextState,
+      this.lastPolled,
+      this.stage,
+      this.stats,
+      this.homeLineup,
+      this.awayLineup,
+      this.homeTeamId,
+      this.awayTeamId});
 
-  factory Match.fromMap(Map<String, dynamic> json) =>
-      Match(
-          id: json['id'],
-          awayShirtColor: json['awayShirtColor'],
-          homeShirtColor: json['homeShirtColor'],
-          competitionName: json['competitionName'],
-          date: json['date'],
-          homeTeamName: json['homeTeamName'],
-          awayTeamName: json['awayTeamName'],
-          round: json['round'],
-          startTimestamp: json['startTimestamp'].toString(),
-          venue: json['venue'],
-          awayGoals: json['awayGoals'],
-          homeGoals: json['homeGoals'],
-          awayPenalties: json['awayPenalties'],
-          homePenalties: json['homePenalties'],
-          competitionId: json['competitionId'],
-          currentState: json['currentState'],
-          minute: json['minute'],
-          nextState: json['nextState'],
-          lastPolled: json['lastPolled']);
+  factory Match.fromMap(Map<String, dynamic> json) => Match(
+      id: json['id'],
+      awayShirtColor: json['awayShirtColor'],
+      homeShirtColor: json['homeShirtColor'],
+      competitionName: json['competitionName'],
+      date: json['date'],
+      homeTeamName: json['homeTeamName'],
+      awayTeamName: json['awayTeamName'],
+      round: json['round'],
+      startTimestamp: json['startTimestamp'].toString(),
+      venue: json['venue'],
+      awayGoals: json['awayGoals'],
+      homeGoals: json['homeGoals'],
+      awayPenalties: json['awayPenalties'],
+      homePenalties: json['homePenalties'],
+      competitionId: json['competitionId'],
+      currentState: json['currentState'],
+      minute: json['minute'],
+      nextState: json['nextState'],
+      lastPolled: json['lastPolled'],
+      stage: json['stage'],
+      stats: json['stats'],
+      homeLineup: json['homeLineup'],
+      awayLineup: json['awayLineup'],
+      awayTeamId: json['awayTeamId'],
+      homeTeamId: json['homeTeamId']);
 
   Map<String, dynamic> toMap() {
     return {
@@ -83,12 +99,18 @@ class Match {
       'minute': minute,
       'nextState': nextState,
       'lastPolled': lastPolled,
-      'startTimestamp': startTimestamp
+      'startTimestamp': startTimestamp,
+      'stage': stage,
+      'stats': stats,
+      'homeLineup': homeLineup,
+      'awayLineup': awayLineup,
+      'homeTeamId': homeTeamId,
+      'awayTeamId': awayTeamId
     };
   }
 
   @override
   String toString() {
-    return 'Match{id: $date/$homeTeamName, awayTeam: $awayTeamName, homeGoals: $homeGoals, awayGoals: $awayGoals}';
+    return 'Match{id: $date/$homeTeamName, dbid: $id, awayTeam: $awayTeamName, homeGoals: $homeGoals, awayGoals: $awayGoals}';
   }
 }

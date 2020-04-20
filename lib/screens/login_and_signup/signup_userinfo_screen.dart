@@ -3,7 +3,7 @@ import 'package:betsquad/widgets/checkbox_with_description.dart';
 import 'package:betsquad/widgets/full_width_button.dart';
 import 'package:betsquad/widgets/text_field_with_date_picker.dart';
 import 'package:betsquad/widgets/text_field_with_title_description.dart';
-import 'package:betsquad/screens/signup_address_screen.dart';
+import 'package:betsquad/screens/login_and_signup/signup_address_screen.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

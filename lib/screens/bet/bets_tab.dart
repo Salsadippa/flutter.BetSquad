@@ -9,7 +9,7 @@ class _BetsTabScreenState extends State<BetsTabScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-color: Colors.grey,
+      color: Colors.grey,
     );
   }
 }
