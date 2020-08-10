@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 class FirebaseServices {
+  
   final _auth = FirebaseAuth.instance;
   NetworkHelper cloudFunctionsNetworkHelper =
       NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
@@ -83,5 +84,7 @@ class FirebaseServices {
     var user = await _auth.currentUser();
     return user != null;
   }
+
+
 
 }

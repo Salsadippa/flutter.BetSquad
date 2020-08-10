@@ -74,7 +74,7 @@ class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
             spacing,
             usernameTextField,
             FullWidthButton('Next', () async {
-              if (_username.isNotEmpty) {
+              if (_username != null && _username.isNotEmpty) {
                 var available = await UsersApi.usernameIsAvailable(_username);
                 if (available) {
                   _userDetails["username"] = _username;

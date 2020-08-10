@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 class Match {
-  final String awayShirtColor,
-      homeShirtColor,
-      competitionName,
+  String awayShirtColor, homeShirtColor;
+  final String competitionName,
       date,
       homeTeamName,
       awayTeamName,
@@ -52,7 +53,35 @@ class Match {
       this.homeTeamId,
       this.awayTeamId});
 
-  factory Match.fromMap(Map<String, dynamic> json) => Match(
+  factory Match.fromFirebaseDict(var match) => Match(
+        id: match["id"],
+        awayShirtColor: match["awayTeam"]["shirtUrl"],
+        homeShirtColor: match["homeTeam"]["shirtUrl"],
+        awayTeamId: match["awayTeam"]["dbid"],
+        homeTeamId: match["homeTeam"]["dbid"],
+        awayGoals: match["awayGoals"] ?? 0,
+        homeGoals: match["homeGoals"] ?? 0,
+        awayPenalties: match["awayPenalties"] ?? -1,
+        homePenalties: match["homePenalties"] ?? -1,
+        awayTeamName: match["awayTeam"]["name"],
+        competitionId: match["competition"]["dbid"],
+        competitionName: match["competition"]["name"],
+        currentState: match["currentState"],
+        date: match["date"],
+        homeTeamName: match["homeTeam"]["name"],
+        lastPolled: match["lastPolled"],
+        minute: match["minute"],
+        nextState: match["nextState"],
+        round: match["round"] != null ? match["round"]["name"].toString() : "-",
+        startTimestamp: match["start"],
+        venue: match["venue"] != null ? match["venue"]["name"] : "-",
+        stage: match["stage"] != null ? match["stage"]["name"] + " " + match["stage"]["type"] : "-",
+        stats: match["stats"] != null ? json.encode(match["stats"]) : null,
+        homeLineup: match["homePlayers"] != null ? json.encode(match["homePlayers"]) : null,
+        awayLineup: match["awayPlayers"] != null ? json.encode(match["awayPlayers"]) : null,
+      );
+
+  factory Match.fromMap(Map<dynamic, dynamic> json) => Match(
       id: json['id'],
       awayShirtColor: json['awayShirtColor'],
       homeShirtColor: json['homeShirtColor'],

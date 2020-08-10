@@ -33,77 +33,79 @@ class _PreparationScreenState extends State<PreparationScreen> {
   saveMatches() async {
     List matches = await MatchApi().getMatches();
     List<Future<dynamic>> futures = [];
-    for (final match in matches) {
-      Match m = Match(
-        id: match["id"],
-        awayShirtColor: match["awayTeam"]["shirtUrl"],
-        homeShirtColor: match["homeTeam"]["shirtUrl"],
-        awayTeamId: match["awayTeam"]["dbid"],
-        homeTeamId: match["homeTeam"]["dbid"],
-        awayGoals: match["awayGoals"] ?? 0,
-        homeGoals: match["homeGoals"] ?? 0,
-        awayPenalties: match["awayPenalties"] ?? -1,
-        homePenalties: match["homePenalties"] ?? -1,
-        awayTeamName: match["awayTeam"]["name"],
-        competitionId: match["competition"]["dbid"],
-        competitionName: match["competition"]["name"],
-        currentState: match["currentState"],
-        date: match["date"],
-        homeTeamName: match["homeTeam"]["name"],
-        lastPolled: match["lastPolled"],
-        minute: match["minute"],
-        nextState: match["nextState"],
-        round: match["round"] != null ? match["round"]["name"].toString() : "-",
-        startTimestamp: match["start"],
-        venue: match["venue"] != null ? match["venue"]["name"] : "-",
-        stage: match["stage"] != null ? match["stage"]["name"] + " " + match["stage"]["type"] : "-",
-        stats: match["stats"] != null ? json.encode(match["stats"]) : null,
-        homeLineup: match["homePlayers"] != null ? json.encode(match["homePlayers"]) : null,
-        awayLineup: match["awayPlayers"] != null ? json.encode(match["awayPlayers"]) : null,
-      );
+    if (matches != null) {
+      for (final match in matches) {
+        Match m = Match(
+          id: match["id"],
+          awayShirtColor: match["awayTeam"]["shirtUrl"],
+          homeShirtColor: match["homeTeam"]["shirtUrl"],
+          awayTeamId: match["awayTeam"]["dbid"],
+          homeTeamId: match["homeTeam"]["dbid"],
+          awayGoals: match["awayGoals"] ?? 0,
+          homeGoals: match["homeGoals"] ?? 0,
+          awayPenalties: match["awayPenalties"] ?? -1,
+          homePenalties: match["homePenalties"] ?? -1,
+          awayTeamName: match["awayTeam"]["name"],
+          competitionId: match["competition"]["dbid"],
+          competitionName: match["competition"]["name"],
+          currentState: match["currentState"],
+          date: match["date"],
+          homeTeamName: match["homeTeam"]["name"],
+          lastPolled: match["lastPolled"],
+          minute: match["minute"],
+          nextState: match["nextState"],
+          round: match["round"] != null ? match["round"]["name"].toString() : "-",
+          startTimestamp: match["start"],
+          venue: match["venue"] != null ? match["venue"]["name"] : "-",
+          stage: match["stage"] != null ? match["stage"]["name"] + " " + match["stage"]["type"] : "-",
+          stats: match["stats"] != null ? json.encode(match["stats"]) : null,
+          homeLineup: match["homePlayers"] != null ? json.encode(match["homePlayers"]) : null,
+          awayLineup: match["awayPlayers"] != null ? json.encode(match["awayPlayers"]) : null,
+        );
 
-      futures.add(DBProvider.db.insertMatch(m));
+        futures.add(DBProvider.db.insertMatch(m));
 
-      if (match["goals"] != null) {
-        for (final goal in match["goals"]) {
-          Goal g = Goal(
-              id: goal['id'],
-              type: goal["goalType"],
-              side: goal["side"],
-              scoringPlayer: goal["scoringPlayer"],
-              matchId: m.id,
-              playerId: goal["playerId"],
-              minute: goal["minute"]);
-          futures.add(DBProvider.db.insertGoal(g));
+        if (match["goals"] != null) {
+          for (final goal in match["goals"]) {
+            Goal g = Goal(
+                id: goal['id'],
+                type: goal["goalType"],
+                side: goal["side"],
+                scoringPlayer: goal["scoringPlayer"],
+                matchId: m.id,
+                playerId: goal["playerId"],
+                minute: goal["minute"]);
+            futures.add(DBProvider.db.insertGoal(g));
+          }
         }
-      }
 
-      if (match["cards"] != null) {
-        for (final card in match["cards"]) {
-          BSCard.Card c = BSCard.Card(
-              id: card['id'],
-              cardType: card["cardType"],
-              minute: card["minute"],
-              player: card["player"],
-              playerId: card["playerId"],
-              side: card["side"],
-              matchId: m.id);
-          futures.add(DBProvider.db.insertCard(c));
+        if (match["cards"] != null) {
+          for (final card in match["cards"]) {
+            BSCard.Card c = BSCard.Card(
+                id: card['id'],
+                cardType: card["cardType"],
+                minute: card["minute"],
+                player: card["player"],
+                playerId: card["playerId"],
+                side: card["side"],
+                matchId: m.id);
+            futures.add(DBProvider.db.insertCard(c));
+          }
         }
-      }
 
-      if (match["substitutions"] != null) {
-        for (final sub in match["substitutions"]) {
-          Substitution s = Substitution(
-              id: sub['id'],
-              matchId: m.id,
-              side: sub["side"],
-              minute: sub["minute"],
-              playerIn: sub["playerIn"],
-              playerInId: sub["playerInId"],
-              playerOut: sub["playerOut"],
-              playerOutId: sub["playerOutId"]);
-          futures.add(DBProvider.db.insertSub(s));
+        if (match["substitutions"] != null) {
+          for (final sub in match["substitutions"]) {
+            Substitution s = Substitution(
+                id: sub['id'],
+                matchId: m.id,
+                side: sub["side"],
+                minute: sub["minute"],
+                playerIn: sub["playerIn"],
+                playerInId: sub["playerInId"],
+                playerOut: sub["playerOut"],
+                playerOutId: sub["playerOutId"]);
+            futures.add(DBProvider.db.insertSub(s));
+          }
         }
       }
     }

@@ -20,6 +20,7 @@ class BetSquadLogoProfileBalanceAppBar extends StatelessWidget
     );
 
     return AppBar(
+      elevation: 0,
       actions: <Widget>[
         Row(children: <Widget>[
           Text('£0.00', style: TextStyle(fontSize: 16),),

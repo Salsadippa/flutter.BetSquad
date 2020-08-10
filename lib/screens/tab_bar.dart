@@ -1,14 +1,18 @@
 import 'package:betsquad/models/match_data.dart';
 import 'package:betsquad/models/match.dart';
+import 'package:betsquad/screens/bet/bet_history.dart';
 import 'package:betsquad/screens/bet/bet_screen_tabs.dart';
 import 'package:betsquad/screens/match/match_list_screen.dart';
+import 'package:betsquad/screens/profile/squads_tab.dart';
+import 'package:betsquad/widgets/betsquad_logo_profile_balance_appbar.dart';
+import 'package:custom_navigator/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/widgets/fab_bottom_app_bar.dart';
-import 'package:betsquad/screens/bet/bets_tab.dart';
 import 'package:betsquad/screens/chat_tab.dart';
 import 'package:betsquad/screens/squads_tab.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:custom_navigator/custom_navigator.dart';
 
 import 'match/match_detail_tabs.dart';
 
@@ -23,9 +27,9 @@ class _TabBarControllerState extends State<TabBarController> {
   int currentTab = 0;
   final List<Widget> screens = [
     MatchListScreen(),
-    BetsTabScreen(),
+    BetHistoryPage(),
     ChatTabScreen(),
-    SquadsTabScreen(),
+    SquadsTab(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -41,10 +45,8 @@ class _TabBarControllerState extends State<TabBarController> {
     return ChangeNotifierProvider<MatchData>(
       create: (_) => MatchData(),
       child: Scaffold(
-          body: PageStorage(
-            child: screens[currentTab],
-            bucket: bucket,
-          ),
+        appBar: BetSquadLogoProfileBalanceAppBar(),
+        body: PageStorage(bucket: bucket, child: screens[currentTab]),
           bottomNavigationBar: FABBottomAppBar(
             color: Colors.grey,
             selectedColor: Colors.blueAccent,
@@ -57,14 +59,14 @@ class _TabBarControllerState extends State<TabBarController> {
               FABBottomAppBarItem(iconData: Icons.supervised_user_circle, text: 'Squads'),
             ],
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: BetNowButton()),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: BetNowButton(),
+      ),
     );
   }
 }
 
 class BetNowButton extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     Match selectedMatch = Provider.of<MatchData>(context).selectedMatch;

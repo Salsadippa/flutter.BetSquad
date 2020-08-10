@@ -40,7 +40,7 @@ class _MatchListScreenState extends State<MatchListScreen> {
     Match selectedMatch = Provider.of<MatchData>(context).selectedMatch;
 
     return Scaffold(
-      appBar: BetSquadLogoProfileBalanceAppBar(),
+//      appBar: BetSquadLogoProfileBalanceAppBar(),
       body: Container(
         decoration: kGrassTrimBoxDecoration,
         child: Column(
