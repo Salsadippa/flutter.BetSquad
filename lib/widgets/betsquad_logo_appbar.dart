@@ -12,7 +12,8 @@ class BetSquadLogoAppBar extends StatelessWidget implements PreferredSizeWidget 
     );
 
     return AppBar(
-        centerTitle: true, // this is all you need
+        elevation: 0,
+        centerTitle: true,
         title: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,

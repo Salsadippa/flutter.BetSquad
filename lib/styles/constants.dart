@@ -1,3 +1,4 @@
+import 'package:betsquad/utilities/hex_color.dart';
 import 'package:flutter/material.dart';
 
 const kEmailTextFieldInputDecoration = InputDecoration(
@@ -77,11 +78,11 @@ const kBetSquadLogoImage = AssetImage('images/betsquad_login_page_logo.png');
 
 const kUserPlaceholderImage = AssetImage('images/user_placeholder.png');
 
-const kGradientBoxDecoration = BoxDecoration(
+var kGradientBoxDecoration = BoxDecoration(
   gradient: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      colors: [Colors.black87, Colors.black]),
+      colors: [HexColor('#2f2f2f'),HexColor('#191919')]),
 );
 
 const kGamblingCommissionLogoImage =

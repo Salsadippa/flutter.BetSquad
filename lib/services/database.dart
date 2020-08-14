@@ -44,10 +44,17 @@ class DatabaseService {
     FirebaseUser currentUser = await getCurrentUser();
     await databaseReference.child('users').child(currentUser.uid).child('bets').once().then((DataSnapshot value) {
       betIdList = value.value;
-      betIdList.forEach((key, value) async {
-        futures.add(getBet(key, value));
-      });
+      if (betIdList != null) {
+        betIdList.forEach((key, value) async {
+          futures.add(getBet(key, value));
+        });
+      }
     });
+
+    if (futures.length == 0) {
+      List<Bet> open = [], recent = [], closed = [];
+      return [open,recent,closed];
+    }
 
     var bets = await Future.wait(futures);
     bets.sort((a,b) => a['created'] > b['created'] ? -1 : a['created'] == b['created'] ? 0 : 1 );

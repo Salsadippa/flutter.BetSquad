@@ -1,4 +1,6 @@
 import 'package:betsquad/models/bet.dart';
+import 'package:betsquad/screens/bet/h2h_bet_screen.dart';
+import 'package:betsquad/screens/bet/ngs_bet_screen.dart';
 import 'package:betsquad/services/database.dart';
 import 'package:betsquad/utilities/hex_color.dart';
 import 'package:betsquad/widgets/betsquad_logo_profile_balance_appbar.dart';
@@ -101,15 +103,22 @@ class BetHistoryCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(bet.id);
-        print(bet.match.homeShirtColor);
-        print(bet.userStatus);
+//        print(bet.status);
+//        print(bet.userStatus);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return bet.mode == "NGS" ? NGSBetScreen(bet) : Head2HeadBetScreen(bet);
+            },
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-              begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black87.withOpacity(0.7),
-            Colors.black.withOpacity(0.8)]),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.black87.withOpacity(0.7), Colors.black.withOpacity(0.8)]),
         ),
         child: Row(
           children: [
@@ -123,23 +132,23 @@ class BetHistoryCell extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     if (bet.mode != 'custom')
-                    Row(
-                      children: [
-                        Icon(
-                          MdiIcons.tshirtCrew,
-                          color: HexColor(bet.match.homeShirtColor),
-                        ),
-                        SizedBox(width: 5),
-                        Text(
-                          bet.match != null ? bet.match.homeTeamName : '',
-                          maxLines: 1,
-                          style: TextStyle(color: Colors.white),
-                        )
-                      ],
-                    ),
+                      Row(
+                        children: [
+                          Icon(
+                            MdiIcons.tshirtCrew,
+                            color: HexColor(bet.match.homeShirtColor),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            bet.match != null ? bet.match.homeTeamName : '',
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
                     bet.mode == 'custom'
-                        ? Text('${bet.name.toUpperCase()}\n\nCustom Bet',style: TextStyle(color: Colors.white),
-                      maxLines: 5)
+                        ? Text('${bet.name.toUpperCase()}\n\nCustom Bet',
+                            style: TextStyle(color: Colors.white), maxLines: 5)
                         : bet.mode == 'NGS'
                             ? Row(
                                 children: [
@@ -154,52 +163,49 @@ class BetHistoryCell extends StatelessWidget {
                                   Expanded(
                                     //win button
                                     child: Image.asset(
-//                                        bet.homeBet == BetOption.Positive
-//                                            ? 'images/win_green.png'
-//                                            : (bet.homeBet == BetOption.Negative
-//                                            ? 'images/win_red.png'
-//                                            :
-                                        'images/win_grey.png'),
-//                                      ),
+                                      bet.homeBet == BetOption.Positive
+                                          ? 'images/win_green.png'
+                                          : (bet.homeBet == BetOption.Negative
+                                              ? 'images/win_red.png'
+                                              : 'images/win_grey.png'),
+                                    ),
                                   ),
                                   Expanded(
                                     //draw button
                                     child: Image.asset(
-//                                        bet.drawBet == BetOption.Positive
-//                                            ? 'images/draw_green.png'
-//                                            : (bet.drawBet == BetOption.Negative
-//                                            ? 'images/draw_red.png'
-//                                            :
-                                        'images/draw_grey.png'),
-//                                      ),
+                                      bet.drawBet == BetOption.Positive
+                                          ? 'images/draw_green.png'
+                                          : (bet.drawBet == BetOption.Negative
+                                              ? 'images/draw_red.png'
+                                              : 'images/draw_grey.png'),
+                                    ),
                                   ),
                                   Expanded(
                                     child: Image.asset(
-//                                        bet.awayBet == BetOption.Positive
-//                                            ? 'images/lose_green.png'
-//                                            : (bet.awayBet == BetOption.Negative
-//                                            ? 'images/lose_red.png'
-//                                            :
-                                        'images/lose_grey.png'),
-                                  ),
-//                                    )
+                                      bet.awayBet == BetOption.Positive
+                                          ? 'images/lose_green.png'
+                                          : (bet.awayBet == BetOption.Negative
+                                              ? 'images/lose_red.png'
+                                              : 'images/lose_grey.png'),
+                                    ),
+                                  )
                                 ],
                               ),
                     if (bet.mode != 'custom')
                       Row(
-                      children: [
-                        Icon(
-                          MdiIcons.tshirtCrew,
-                          color: HexColor(bet.match.awayShirtColor),
-                        ),
-                        SizedBox(width: 5),
-                        Text(
-                          bet.match != null ? bet.match.awayTeamName : '',
-                          maxLines: 1,
-                          style: TextStyle(color: Colors.white),
-                        )
-                      ],
-                    ),
+                        children: [
+                          Icon(
+                            MdiIcons.tshirtCrew,
+                            color: HexColor(bet.match.awayShirtColor),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            bet.match != null ? bet.match.awayTeamName : '',
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -223,11 +229,13 @@ class BetHistoryCell extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     Text(
-                      'vs ${bet.accepted.length} ${bet.accepted.length > 1 ? 'users' : 'user'}',
+                      bet.mode == "NGS"
+                          ? 'vs ${bet.accepted.length} ${bet.accepted.length > 1 ? 'users' : 'user'}'
+                          : 'vs 1 user',
                       style: TextStyle(color: Colors.white),
                     ),
                     Text(
-                      '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(bet.createdAt * 1000))}',
+                      '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(bet.createdAt))}',
                       style: TextStyle(color: Colors.white),
                     ),
                     Text(

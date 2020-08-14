@@ -1,6 +1,4 @@
 import 'package:betsquad/models/match_data.dart';
-import 'package:betsquad/screens/match/match_details_screen.dart';
-import 'package:betsquad/widgets/betsquad_logo_profile_balance_appbar.dart';
 import 'package:betsquad/screens/match/match_detail_tabs.dart';
 import 'package:betsquad/services/local_database.dart';
 import 'package:betsquad/styles/constants.dart';
@@ -40,7 +38,6 @@ class _MatchListScreenState extends State<MatchListScreen> {
     Match selectedMatch = Provider.of<MatchData>(context).selectedMatch;
 
     return Scaffold(
-//      appBar: BetSquadLogoProfileBalanceAppBar(),
       body: Container(
         decoration: kGrassTrimBoxDecoration,
         child: Column(

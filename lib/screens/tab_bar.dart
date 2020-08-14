@@ -5,16 +5,11 @@ import 'package:betsquad/screens/bet/bet_screen_tabs.dart';
 import 'package:betsquad/screens/match/match_list_screen.dart';
 import 'package:betsquad/screens/profile/squads_tab.dart';
 import 'package:betsquad/widgets/betsquad_logo_profile_balance_appbar.dart';
-import 'package:custom_navigator/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/widgets/fab_bottom_app_bar.dart';
 import 'package:betsquad/screens/chat_tab.dart';
-import 'package:betsquad/screens/squads_tab.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:custom_navigator/custom_navigator.dart';
-
-import 'match/match_detail_tabs.dart';
 
 class TabBarController extends StatefulWidget {
   static const String ID = 'tab_bar';
