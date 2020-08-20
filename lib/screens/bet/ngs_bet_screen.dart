@@ -1,13 +1,18 @@
 import 'package:betsquad/models/bet.dart';
+import 'package:betsquad/screens/bet/ngs_invited_page.dartt.dart';
 import 'package:betsquad/screens/select_opponent_screen.dart';
+import 'package:betsquad/services/database.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
 import 'package:betsquad/widgets/full_width_button.dart';
 import 'package:betsquad/widgets/match_header.dart';
+import 'package:betsquad/widgets/text_field_with_info.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import 'ngs_assignments_page.dart';
 
 class NGSBetScreen extends StatefulWidget {
   static const String ID = 'ngs_bet_screen';
@@ -35,18 +40,87 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
 
     return Scaffold(
       appBar: BetSquadLogoBalanceAppBar(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          MatchHeader(match: widget.bet.match),
-          Expanded(
-            child: Container(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            MatchHeader(match: widget.bet.match),
+            Container(
               color: Colors.black87,
               child: Column(
                 children: <Widget>[
-                  SizedBox(
-                    height: 30,
+                  GestureDetector(
+                    onTap: () {
+                      if (widget.bet.assignments != null) {
+                        //show invited
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => NGSAssignmentsPage(bet: widget.bet),
+                          ),
+                        );
+                      } else {
+                        //show assignments
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => NGSInvitedPage(bet: widget.bet),
+                          ),
+                        );
+                      }
+                    },
+                    child: Container(
+                      decoration: kGradientBoxDecoration,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  MdiIcons.tshirtVOutline,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'View Players/Allocations',
+                                  style: TextStyle(color: Colors.white, fontSize: 15),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
+                  Container(
+                    decoration: kGradientBoxDecoration,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.chat_bubble_outline,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                'In-bet Chat',
+                                style: TextStyle(color: Colors.white, fontSize: 15),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
                   TextFieldWithTitleInfo(
                     title: 'Bet amount per goal:',
                     isEnabled: false,
@@ -93,6 +167,8 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                       ],
                     ),
                   ),
+                  if (widget.bet.winners != null)
+                    Column(children: widget.bet.winners.values.map((e) => WinnerListItem(winner: e)).toList()),
                   if (widget.bet.userStatus == 'sent')
                     FullWidthButton('Invite Players +', () async {
                       var selectOpponents =
@@ -138,73 +214,61 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                     )
                 ],
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
-class TextFieldWithTitleInfo extends StatelessWidget {
-  @required
-  final String title;
-  final TextEditingController controller;
-  @required
-  final Function onInfoButtonPressed;
-  final bool isEnabled;
-  final Function onChanged;
+class WinnerListItem extends StatefulWidget {
+  final winner;
 
-  const TextFieldWithTitleInfo({this.controller, this.onInfoButtonPressed, this.isEnabled, this.title, this.onChanged});
+  const WinnerListItem({Key key, this.winner}) : super(key: key);
+
+  @override
+  _WinnerListItemState createState() => _WinnerListItemState();
+}
+
+class _WinnerListItemState extends State<WinnerListItem> {
+  String _username, _profilePicture;
+  DatabaseService databaseService = DatabaseService();
+
+  void getUserDetails(String uid) async {
+    var username = await databaseService.getUserUsername(uid);
+    var profilePic = await databaseService.getUserProfilePicture(uid);
+    setState(() {
+      _username = username;
+      _profilePicture = profilePic;
+    });
+  }
+
+  @override
+  void initState() {
+    getUserDetails(widget.winner['userID']);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: kGradientBoxDecoration,
-      height: 50,
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            flex: 3,
-            child: Text(
-              title,
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            flex: 2,
-            child: TextField(
-              decoration: kTextFieldInputDecoration,
-              style: TextStyle(color: Colors.white),
-              onChanged: onChanged,
-              controller: controller,
-              textAlign: TextAlign.center,
-              enabled: isEnabled ?? true,
-              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Expanded(
-            flex: 1,
-            child: GestureDetector(
-              onTap: () {
-                onInfoButtonPressed();
-              },
-              child: Icon(
-                MdiIcons.informationOutline,
-                color: Colors.white,
-              ),
-            ),
-          )
-        ],
+    return ListTile(
+      leading: CircleAvatar(
+        radius: 22,
+        backgroundColor: kBetSquadOrange,
+        child: CircleAvatar(
+          radius: 20,
+          backgroundImage:
+              _profilePicture != null ? NetworkImage(_profilePicture) : AssetImage('images/user_placeholder.png'),
+        ),
+      ),
+      title: Text(
+        _username ?? '',
+        style: GoogleFonts.roboto(color: Colors.white),
+      ),
+      subtitle: Text(
+        '${widget.winner['scoringPlayer']} - ${widget.winner['scoringTime']}\' ',
+        style: GoogleFonts.roboto(color: Colors.white),
       ),
     );
   }

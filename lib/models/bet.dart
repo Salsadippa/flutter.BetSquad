@@ -9,7 +9,7 @@ class Bet {
   bool rolloversEnabled;
   String name, vsUserID, vsUsername, status, id, opponentId, mode, from, rollovers, userStatus;
   int createdAt, priority, numTickets;
-  Map<dynamic, dynamic> accepted, assignments, invited;
+  Map<dynamic, dynamic> accepted, assignments, invited, winners;
   BetOption drawBet, homeBet, awayBet;
 
   Bet(
@@ -35,7 +35,8 @@ class Bet {
       this.numTickets,
       this.invited,
       this.accepted,
-      this.assignments});
+      this.assignments,
+      this.winners});
 
   factory Bet.fromMap(Map<dynamic, dynamic> json) {
     print(json['id']);
@@ -58,6 +59,7 @@ class Bet {
         numTickets: json['numTickets'],
         accepted: json['accepted'] ?? {},
         assignments: json['assignments'] ?? {},
+        winners: json['winners'] ?? {},
         invited: json['invited'] ?? {},
         match: json['match'],
         awayBet: json['awayBet'] == true

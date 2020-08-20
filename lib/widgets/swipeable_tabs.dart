@@ -8,6 +8,7 @@ class CustomTabView extends StatefulWidget {
   final ValueChanged<int> onPositionChange;
   final ValueChanged<double> onScroll;
   final int initPosition;
+  final double labelSpacing;
 
   CustomTabView({
     @required this.itemCount,
@@ -17,14 +18,14 @@ class CustomTabView extends StatefulWidget {
     this.onPositionChange,
     this.onScroll,
     this.initPosition,
+    this.labelSpacing,
   });
 
   @override
   _CustomTabsState createState() => _CustomTabsState();
 }
 
-class _CustomTabsState extends State<CustomTabView>
-    with TickerProviderStateMixin {
+class _CustomTabsState extends State<CustomTabView> with TickerProviderStateMixin {
   TabController controller;
   int _currentCount;
   int _currentPosition;
@@ -105,6 +106,7 @@ class _CustomTabsState extends State<CustomTabView>
           child: Material(
             color: Colors.orange,
             child: TabBar(
+              labelPadding: EdgeInsets.symmetric(horizontal: widget.labelSpacing ?? 0),
               isScrollable: true,
               controller: controller,
               labelColor: Colors.black,
@@ -119,7 +121,7 @@ class _CustomTabsState extends State<CustomTabView>
               ),
               tabs: List.generate(
                 widget.itemCount,
-                    (index) => widget.tabBuilder(context, index),
+                (index) => widget.tabBuilder(context, index),
               ),
             ),
           ),
@@ -129,7 +131,7 @@ class _CustomTabsState extends State<CustomTabView>
             controller: controller,
             children: List.generate(
               widget.itemCount,
-                  (index) => widget.pageBuilder(context, index),
+              (index) => widget.pageBuilder(context, index),
             ),
           ),
         ),

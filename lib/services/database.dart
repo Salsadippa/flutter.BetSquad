@@ -85,4 +85,17 @@ class DatabaseService {
     FirebaseUser user = await _firebaseAuth.currentUser();
     return user;
   }
+
+  Future<String> getUserProfilePicture(String uid) async {
+    String img;
+    await databaseReference.child('users').child(uid).child('image').once().then((value) => img = value.value);
+    return img;
+  }
+
+  Future<String> getUserUsername(String uid) async {
+    String username;
+    await databaseReference.child('users').child(uid).child('username').once().then((value) => username = value.value);
+    return username;
+  }
+
 }

@@ -58,7 +58,21 @@ const kTextFieldInputDecoration = InputDecoration(
 const kPitchBackgroundDecoration = BoxDecoration(
   image: DecorationImage(
     image: AssetImage('images/login_bg.jpg'),
-    fit: BoxFit.fitHeight,
+    fit: BoxFit.fill,
+  ),
+);
+
+const kAssignmentsHomePitchBackgroundDecoration = BoxDecoration(
+  image: DecorationImage(
+    image: AssetImage('images/allocationbg1.jpg'),
+    fit: BoxFit.fill,
+  ),
+);
+
+const kAssignmentsAwayPitchBackgroundDecoration = BoxDecoration(
+  image: DecorationImage(
+    image: AssetImage('images/allocationbg2.jpg'),
+    fit: BoxFit.fill,
   ),
 );
 
