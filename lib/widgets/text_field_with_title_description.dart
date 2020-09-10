@@ -22,7 +22,7 @@ class TextFieldWithTitleDesc extends StatelessWidget {
       title,
       textAlign: TextAlign.start,
       style: TextStyle(
-        color: Colors.orange,
+        color: kBetSquadOrange,
       ),
     );
 
@@ -54,7 +54,7 @@ class TextFieldWithTitleDesc extends StatelessWidget {
             spacing,
             Text(
               detail,
-              style: TextStyle(color: Colors.orange, fontSize: 12),
+              style: TextStyle(color: kBetSquadOrange, fontSize: 12),
             ),
           ],
           spacing,

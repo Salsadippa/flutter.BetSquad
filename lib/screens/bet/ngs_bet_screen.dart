@@ -1,6 +1,8 @@
+import 'package:betsquad/api/bet_api.dart';
 import 'package:betsquad/models/bet.dart';
-import 'package:betsquad/screens/bet/ngs_invited_page.dartt.dart';
-import 'package:betsquad/screens/select_opponent_screen.dart';
+import 'package:betsquad/screens/bet/ngs_invited_page.dart';
+import 'package:betsquad/screens/bet/ngs_winner_page.dart';
+import 'package:betsquad/screens/bet/select_opponent_screen.dart';
 import 'package:betsquad/services/database.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/utility.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../alert.dart';
 import 'ngs_assignments_page.dart';
 
 class NGSBetScreen extends StatefulWidget {
@@ -46,12 +49,12 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
           children: <Widget>[
             MatchHeader(match: widget.bet.match),
             Container(
-              color: Colors.black87,
+              decoration: kGradientBoxDecoration,
               child: Column(
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      if (widget.bet.assignments != null) {
+                      if (widget.bet.assignments.isNotEmpty) {
                         //show invited
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -168,7 +171,12 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                     ),
                   ),
                   if (widget.bet.winners != null)
-                    Column(children: widget.bet.winners.values.map((e) => WinnerListItem(winner: e)).toList()),
+                    Column(
+                        children: widget.bet.winners.values
+                            .map(
+                              (e) => WinnerListItem(winner: e, bet: widget.bet),
+                            )
+                            .toList()),
                   if (widget.bet.userStatus == 'sent')
                     FullWidthButton('Invite Players +', () async {
                       var selectOpponents =
@@ -189,8 +197,18 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                             child: FlatButton(
                               child: Text('Accept', style: TextStyle(color: Colors.white, fontSize: 18)),
                               color: Colors.green,
-                              onPressed: () {
+                              onPressed: () async {
                                 //accept bet
+                                Map acceptedBetResponse = await BetApi().acceptNGSBet(widget.bet);
+                                print(acceptedBetResponse);
+                                if (acceptedBetResponse['result'] == 'success') {
+                                  Navigator.of(context).pop();
+                                  Alert.showSuccessDialog(
+                                      context, 'Bet Accepted', acceptedBetResponse['message']);
+                                } else {
+                                  Alert.showSuccessDialog(
+                                      context, 'Accept Bet Failed', acceptedBetResponse['message']);
+                                }
                               },
                             ),
                           ),
@@ -204,8 +222,18 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                                 style: TextStyle(color: Colors.white, fontSize: 18),
                               ),
                               color: Colors.red,
-                              onPressed: () {
+                              onPressed: () async {
                                 //decline bet
+                                Map acceptedBetResponse = await BetApi().declineNGSBet(widget.bet);
+                                print(acceptedBetResponse);
+                                if (acceptedBetResponse['result'] == 'success') {
+                                  Navigator.of(context).pop();
+                                  Alert.showSuccessDialog(
+                                      context, 'Bet Declined', acceptedBetResponse['message']);
+                                } else {
+                                  Alert.showSuccessDialog(
+                                      context, 'Decline Bet Failed', acceptedBetResponse['message']);
+                                }
                               },
                             ),
                           ),
@@ -224,8 +252,9 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
 
 class WinnerListItem extends StatefulWidget {
   final winner;
+  final Bet bet;
 
-  const WinnerListItem({Key key, this.winner}) : super(key: key);
+  const WinnerListItem({Key key, this.winner, this.bet}) : super(key: key);
 
   @override
   _WinnerListItemState createState() => _WinnerListItemState();
@@ -253,6 +282,21 @@ class _WinnerListItemState extends State<WinnerListItem> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return NGSWinnerPage(
+                amount: widget.winner['amount'],
+                uid: widget.winner['userID'],
+                scoringPlayer: widget.winner['scoringPlayer'],
+                scoringTime: widget.winner['scoringTime'],
+                bet: widget.bet,
+              );
+            },
+          ),
+        );
+      },
       leading: CircleAvatar(
         radius: 22,
         backgroundColor: kBetSquadOrange,

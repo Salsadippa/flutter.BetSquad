@@ -42,17 +42,20 @@ class _MatchListScreenState extends State<MatchListScreen> {
         decoration: kGrassTrimBoxDecoration,
         child: Column(
           children: <Widget>[
-            CalendarStrip(
-              onDateSelected: (DateTime date) {
-                setState(() {
-                  selectedDay = date;
-                });
-                getMatches();
-              },
-              containerDecoration: BoxDecoration(color: Colors.white),
-              monthNameWidget: (monthLabel) => Container(
-                  child: Text(monthLabel),
-                  padding: EdgeInsets.only(top: 7, bottom: 3)),
+            Theme(
+              data: Theme.of(context).copyWith(buttonColor:   kBetSquadOrange),
+              child: CalendarStrip(
+                onDateSelected: (DateTime date) {
+                  setState(() {
+                    selectedDay = date;
+                  });
+                  getMatches();
+                },
+                containerDecoration: BoxDecoration(color: Colors.white),
+                monthNameWidget: (monthLabel) => Container(
+                    child: Text(monthLabel),
+                    padding: EdgeInsets.only(top: 7, bottom: 3)),
+              ),
             ),
             Expanded(
               child: new ListView.builder(
@@ -60,7 +63,7 @@ class _MatchListScreenState extends State<MatchListScreen> {
                 itemBuilder: (context, i) {
                   return custom.ExpansionTile(
                     initiallyExpanded: true,
-                    headerBackgroundColor: Colors.orange,
+                    headerBackgroundColor: kBetSquadOrange,
                     title: Container(
                       padding: EdgeInsets.only(left: 35),
                       child: Text(

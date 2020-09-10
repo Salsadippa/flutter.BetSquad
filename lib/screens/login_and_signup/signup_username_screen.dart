@@ -46,7 +46,7 @@ class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
     var photo = GestureDetector(
       onTap: () => getImage(),
       child:  CircleAvatar(
-        backgroundColor: Colors.orange,
+        backgroundColor: kBetSquadOrange,
         radius: 70,
         child: CircleAvatar(
           backgroundImage: _image != null ? FileImage(_image) : kUserPlaceholderImage,

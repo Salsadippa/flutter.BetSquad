@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BetSquadLogoBalanceAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -19,7 +20,7 @@ class _BetSquadLogoBalanceAppBarState extends State<BetSquadLogoBalanceAppBar> {
     print(user.uid);
     final dbRef = await FirebaseDatabase.instance.reference().child("users/${user.uid}").once();
     setState(() {
-      userBalance = dbRef.value['balance'];
+      userBalance = double.parse(dbRef.value['balance'].toString());
       userProfilePic = dbRef.value['image'];
     });
   }
@@ -42,6 +43,7 @@ class _BetSquadLogoBalanceAppBarState extends State<BetSquadLogoBalanceAppBar> {
       child: Text(
         '£${userBalance != null ? userBalance.toStringAsFixed(2) : 0.toStringAsFixed(2)}',
         textAlign: TextAlign.center,
+        style: GoogleFonts.roboto(fontSize: 16),
       ),
       onTap: () {},
     );

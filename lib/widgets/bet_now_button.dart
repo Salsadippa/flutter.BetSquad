@@ -1,5 +1,6 @@
 import 'package:betsquad/models/match_data.dart';
 import 'package:betsquad/screens/bet/bet_screen_tabs.dart';
+import 'package:betsquad/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:betsquad/models/match.dart';
@@ -19,7 +20,7 @@ class BetNowButton extends StatelessWidget {
       child: Visibility(
         visible: selectedMatch != null,
         child: FloatingActionButton(
-          shape: CircleBorder(side: BorderSide(color: Colors.orange, width: 2.0)),
+          shape: CircleBorder(side: BorderSide(color: kBetSquadOrange, width: 2.0)),
           onPressed: () {
             print("bet now");
             print(selectedMatch);

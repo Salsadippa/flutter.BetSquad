@@ -1,15 +1,18 @@
 import 'package:betsquad/models/bet.dart';
 import 'package:betsquad/screens/bet/h2h_bet_screen.dart';
+import 'package:betsquad/screens/bet/h2h_detail_page.dart';
 import 'package:betsquad/screens/bet/ngs_bet_screen.dart';
 import 'package:betsquad/services/database.dart';
+import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/hex_color.dart';
-import 'package:betsquad/widgets/betsquad_logo_profile_balance_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class BetHistoryPage extends StatefulWidget {
+  static const ID = 'bet_history_page';
+
   @override
   _BetHistoryPageState createState() => _BetHistoryPageState();
 }
@@ -46,6 +49,7 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
         length: 3,
         child: Scaffold(
           appBar: TabBar(
+            indicatorColor: kBetSquadOrange,
             tabs: [
               Tab(text: 'Open'),
               Tab(
@@ -57,33 +61,39 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
           body: TabBarView(
             children: [
               Scaffold(
-                backgroundColor: Colors.black54,
-                body: ListView.builder(
-                  itemBuilder: (context, index) {
-                    var bet = openBets[index];
-                    return BetHistoryCell(bet: bet);
-                  },
-                  itemCount: openBets.length,
+                body: Container(
+                  decoration: kGradientBoxDecoration,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      var bet = openBets[index];
+                      return BetHistoryCell(bet: bet);
+                    },
+                    itemCount: openBets.length,
+                  ),
                 ),
               ),
               Scaffold(
-                backgroundColor: Colors.black54,
-                body: ListView.builder(
-                  itemBuilder: (context, index) {
-                    var bet = recentBets[index];
-                    return BetHistoryCell(bet: bet);
-                  },
-                  itemCount: recentBets.length,
+                body: Container(
+                  decoration: kGradientBoxDecoration,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      var bet = recentBets[index];
+                      return BetHistoryCell(bet: bet);
+                    },
+                    itemCount: recentBets.length,
+                  ),
                 ),
               ),
               Scaffold(
-                backgroundColor: Colors.black54,
-                body: ListView.builder(
-                  itemBuilder: (context, index) {
-                    var bet = closedBets[index];
-                    return BetHistoryCell(bet: bet);
-                  },
-                  itemCount: closedBets.length,
+                body: Container(
+                  decoration: kGradientBoxDecoration,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      var bet = closedBets[index];
+                      return BetHistoryCell(bet: bet);
+                    },
+                    itemCount: closedBets.length,
+                  ),
                 ),
               ),
             ],
@@ -103,23 +113,16 @@ class BetHistoryCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-//        print(bet.status);
-//        print(bet.userStatus);
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
-              return bet.mode == "NGS" ? NGSBetScreen(bet) : Head2HeadBetScreen(bet);
+              return bet.mode == "NGS" ? NGSBetScreen(bet) : H2HDetailPage(bet);
             },
           ),
         );
       },
       child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.black87.withOpacity(0.7), Colors.black.withOpacity(0.8)]),
-        ),
+        decoration: kGradientBoxDecoration,
         child: Row(
           children: [
             Expanded(
@@ -136,7 +139,7 @@ class BetHistoryCell extends StatelessWidget {
                         children: [
                           Icon(
                             MdiIcons.tshirtCrew,
-                            color: HexColor(bet.match.homeShirtColor),
+                            color: HexColor(bet.match.homeShirtColor ?? '#FFFFFF'),
                           ),
                           SizedBox(width: 5),
                           Text(
@@ -154,7 +157,7 @@ class BetHistoryCell extends StatelessWidget {
                                 children: [
                                   Text(
                                     'NEXT GOAL SWEEPSTAKE',
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: kBetSquadOrange, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               )
@@ -196,7 +199,7 @@ class BetHistoryCell extends StatelessWidget {
                         children: [
                           Icon(
                             MdiIcons.tshirtCrew,
-                            color: HexColor(bet.match.awayShirtColor),
+                            color: HexColor(bet.match.awayShirtColor ?? '#FFFFFF'),
                           ),
                           SizedBox(width: 5),
                           Text(
@@ -213,7 +216,7 @@ class BetHistoryCell extends StatelessWidget {
             Container(
               width: 0.5,
               height: 100,
-              color: Colors.white,
+              color: kBetSquadOrange,
             ),
             Expanded(
               flex: 3,
@@ -239,7 +242,7 @@ class BetHistoryCell extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     Text(
-                      '${(bet.status == 'ongoing' || bet.status == 'expired') ? bet.status : bet.userStatus}',
+                      '${(bet.status == 'ongoing' || bet.status == 'expired' || bet.status == 'received' || bet.status == 'sent' || bet.status == 'won' || bet.status == 'lost') || bet.status == 'declined' ? bet.status : bet.userStatus}',
                       style: TextStyle(color: Colors.white),
                     )
                   ],

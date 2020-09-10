@@ -85,6 +85,10 @@ class FirebaseServices {
     return user != null;
   }
 
+  Future<FirebaseUser> currentUser() async {
+    var user = await _auth.currentUser();
+    return user;
+  }
 
 
 }

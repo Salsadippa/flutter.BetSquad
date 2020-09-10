@@ -21,8 +21,10 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
 
   getData() async {
     Map users = await UsersApi.getAllUsers();
+    var opponents = users.values.toList();
+    opponents.sort((a, b ) => a['username'].toString().toLowerCase().compareTo(b['username'].toString().toLowerCase()));
     setState(() {
-      allUsers = List.generate(users.length, (index) => ListItem(users.values.toList()[index]));
+      allUsers = List.generate(opponents.length, (index) => ListItem(opponents[index]));
     });
   }
 
@@ -63,7 +65,7 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
                 style: TextStyle(color: Colors.white),
               ),
               leading: CircleAvatar(
-                backgroundColor: Colors.orange,
+                backgroundColor: kBetSquadOrange,
                 radius: 22,
                 child: CircleAvatar(
                   backgroundImage: user['image'] != null && user['image'] != ''
@@ -75,7 +77,7 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
               trailing: allUsers[index].isSelected
                   ? Icon(
                       Icons.check,
-                      color: Colors.orange,
+                      color: kBetSquadOrange,
                     )
                   : null,
               onTap: () {

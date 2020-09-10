@@ -1,3 +1,4 @@
+import 'package:betsquad/styles/constants.dart';
 import 'package:flutter/material.dart';
 
 class FullWidthButton extends StatelessWidget {
@@ -19,7 +20,7 @@ class FullWidthButton extends StatelessWidget {
         title,
         style: TextStyle(color: Colors.black),
       ),
-      color: Colors.orange,
+      color: kBetSquadOrange,
     );
 
     return  Container(

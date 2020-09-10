@@ -12,7 +12,7 @@ class CheckboxWithDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     var checkbox = CheckboxListTile(
         dense: true,
-        activeColor: Colors.orange,
+        activeColor: kBetSquadOrange,
         title: Text(
           description,
           style: TextStyle(color: Colors.white70),

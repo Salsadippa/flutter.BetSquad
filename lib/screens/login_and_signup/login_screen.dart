@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: RaisedButton(
         shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(5.0)),
-        color: Colors.orange,
+        color: kBetSquadOrange,
         onPressed: () async {
           if (_email != null && _password != null)
             _signIn();

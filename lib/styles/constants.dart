@@ -76,10 +76,10 @@ const kAssignmentsAwayPitchBackgroundDecoration = BoxDecoration(
   ),
 );
 
-const kBetSquadOrange = Color(0xffF35820);
+const kBetSquadOrange = Color.fromRGBO(236, 99, 4, 1.0);
 
 const kVersionNumberTextStyle = TextStyle(
-  color: Colors.orange,
+  color: kBetSquadOrange,
   fontSize: 16,
 );
 

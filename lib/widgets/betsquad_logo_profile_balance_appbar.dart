@@ -3,6 +3,7 @@ import 'package:betsquad/styles/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BetSquadLogoProfileBalanceAppBar extends StatefulWidget implements PreferredSizeWidget {
 
@@ -22,7 +23,7 @@ class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBa
     print(user.uid);
     final dbRef = await FirebaseDatabase.instance.reference().child("users/${user.uid}").once();
     setState(() {
-      userBalance = dbRef.value['balance'];
+      userBalance = double.parse(dbRef.value['balance'].toString());
       userProfilePic = dbRef.value['image'];
     });
   }
@@ -44,6 +45,7 @@ class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBa
       child: Text(
         '£${userBalance != null ? userBalance.toStringAsFixed(2) : 0.toStringAsFixed(2)}',
         textAlign: TextAlign.center,
+        style: GoogleFonts.roboto(fontSize: 16),
       ),
       onTap: () {},
     );
@@ -71,7 +73,7 @@ class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBa
               },
               child: CircleAvatar(
                 radius: 22,
-                backgroundColor: Colors.orange,
+                backgroundColor: kBetSquadOrange,
                 child: CircleAvatar(
                   backgroundImage: userProfilePic != null ? NetworkImage(userProfilePic): kUserPlaceholderImage,
                   radius: 20,

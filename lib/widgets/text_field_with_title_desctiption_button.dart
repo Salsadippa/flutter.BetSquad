@@ -22,7 +22,7 @@ class TextFieldWithTitleDescButton extends StatelessWidget {
       title,
       textAlign: TextAlign.start,
       style: TextStyle(
-        color: Colors.orange,
+        color: kBetSquadOrange,
       ),
     );
 
@@ -46,7 +46,7 @@ class TextFieldWithTitleDescButton extends StatelessWidget {
       child: RaisedButton(
         shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(5.0)),
-        color: Colors.orange,
+        color: kBetSquadOrange,
         onPressed: () {
           this.onPressedButton();
         },

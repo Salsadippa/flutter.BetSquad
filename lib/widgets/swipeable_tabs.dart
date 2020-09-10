@@ -1,3 +1,4 @@
+import 'package:betsquad/styles/constants.dart';
 import 'package:flutter/material.dart';
 
 class CustomTabView extends StatefulWidget {
@@ -102,9 +103,9 @@ class _CustomTabsState extends State<CustomTabView> with TickerProviderStateMixi
         Container(
           alignment: Alignment.center,
           width: MediaQuery.of(context).size.width,
-          color: Colors.orange,
+          color: kBetSquadOrange,
           child: Material(
-            color: Colors.orange,
+            color: kBetSquadOrange,
             child: TabBar(
               labelPadding: EdgeInsets.symmetric(horizontal: widget.labelSpacing ?? 0),
               isScrollable: true,

@@ -1,9 +1,10 @@
 import 'package:betsquad/models/match_data.dart';
 import 'package:betsquad/models/match.dart';
-import 'package:betsquad/screens/bet/bet_history.dart';
+import 'package:betsquad/screens/bet/bet_history_page.dart';
 import 'package:betsquad/screens/bet/bet_screen_tabs.dart';
 import 'package:betsquad/screens/match/match_list_screen.dart';
 import 'package:betsquad/screens/profile/squads_tab.dart';
+import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/widgets/betsquad_logo_profile_balance_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/widgets/fab_bottom_app_bar.dart';
@@ -44,7 +45,7 @@ class _TabBarControllerState extends State<TabBarController> {
         body: PageStorage(bucket: bucket, child: screens[currentTab]),
           bottomNavigationBar: FABBottomAppBar(
             color: Colors.grey,
-            selectedColor: Colors.blueAccent,
+            selectedColor: kBetSquadOrange,
             notchedShape: CircularNotchedRectangle(),
             onTabSelected: _selectedTab,
             items: [
@@ -71,7 +72,7 @@ class BetNowButton extends StatelessWidget {
       child: Visibility(
         visible: selectedMatch != null,
         child: FloatingActionButton(
-          shape: CircleBorder(side: BorderSide(color: Colors.orange, width: 2.0)),
+          shape: CircleBorder(side: BorderSide(color: kBetSquadOrange, width: 2.0)),
           onPressed: () {
             print("bet now");
             print(selectedMatch);

@@ -22,7 +22,7 @@ class MatchHeader extends StatelessWidget {
         children: <Widget>[
           TeamShirtNameLogo(
               teamName: match.homeTeamName,
-              shirtColor: HexColor(match.homeShirtColor)),
+              shirtColor: HexColor(match.homeShirtColor  ?? '#FFFFFF')),
           Container(
             width: 75,
             height: 75,
@@ -33,7 +33,7 @@ class MatchHeader extends StatelessWidget {
           ),
           TeamShirtNameLogo(
               teamName: match.awayTeamName,
-              shirtColor: HexColor(match.awayShirtColor)),
+              shirtColor: HexColor(match.awayShirtColor  ?? '#FFFFFF')),
         ],
       ),
     );

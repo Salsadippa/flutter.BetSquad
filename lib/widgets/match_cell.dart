@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:betsquad/models/match.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/hex_color.dart';
@@ -26,7 +27,6 @@ class MatchCell extends StatelessWidget {
     } else {
       matchTimeText = '${match.homeGoals} - ${match.awayGoals}';
     }
-
     return GestureDetector(
       onTap: () {
         onMatchPressed();
@@ -41,7 +41,7 @@ class MatchCell extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [Colors.black87, Colors.black]),
-          border: Border.all(color: Colors.orange, width: 1.5),
+          border: Border.all(color: kBetSquadOrange, width: 1.5),
         ) :
         kGradientBoxDecoration,
         child: Row(
@@ -57,7 +57,7 @@ class MatchCell extends StatelessWidget {
                   ),
                   Icon(
                     MdiIcons.tshirtCrew,
-                    color: HexColor(match.homeShirtColor),
+                    color: HexColor(match.homeShirtColor ?? '#FFFFFF'),
                     size: 20,
                   ),
                   SizedBox(
@@ -68,7 +68,7 @@ class MatchCell extends StatelessWidget {
                           child: Text(
                             match.homeTeamName,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 13, color: Colors.white),
+                            style: GoogleFonts.roboto(fontSize: 14, color: Colors.white),
                           ))),
                 ],
               ),
@@ -77,7 +77,7 @@ class MatchCell extends StatelessWidget {
               child: Text(
                 matchTimeText,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.orange, fontSize: 13),
+                style: TextStyle(color: kBetSquadOrange, fontSize: 14),
               ),
               flex: 1,
             ),
@@ -88,7 +88,7 @@ class MatchCell extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     MdiIcons.tshirtCrew,
-                    color: HexColor(match.awayShirtColor),
+                    color: HexColor(match.awayShirtColor  ?? '#FFFFFF'),
                     size: 20,
                   ),
                   SizedBox(
@@ -99,7 +99,7 @@ class MatchCell extends StatelessWidget {
                           child: Text(
                             match.awayTeamName,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 13, color: Colors.white),
+                            style: GoogleFonts.roboto(fontSize: 14, color: Colors.white),
                           ))),
                   SizedBox(
                     width: 10,

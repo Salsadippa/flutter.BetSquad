@@ -22,17 +22,24 @@ class DatabaseService {
 
   Future<String> getTeamColours(String teamName) async{
     var colours = await databaseReference.child('team_colours').child(teamName).child('colour').once();
-    return colours.value;
+    return colours.value ?? '#FFFFFF';
   }
   
   dynamic getUserBetHistory() async {
     Future<Map> getBet(String betId, String value) async {
       var b = await databaseReference.child('bets').child(betId).once();
       var bet = b.value;
-      if (bet['mode'] != 'custom') {
+
+      if (bet == null) {
+        print("RETURNING NUKKK");
+        return null;
+      }
+
+      if (bet != null && bet['mode'] != 'custom' && bet['matchID'] != null) {
         var match = await getMatch(bet['matchID']);
         bet['match'] = match;
       }
+
       bet['id'] = betId;
       bet['userStatus'] = value;
 
@@ -46,6 +53,7 @@ class DatabaseService {
       betIdList = value.value;
       if (betIdList != null) {
         betIdList.forEach((key, value) async {
+          print(key);
           futures.add(getBet(key, value));
         });
       }

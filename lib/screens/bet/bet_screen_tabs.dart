@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:betsquad/api/bet_api.dart';
 import 'package:betsquad/models/bet.dart';
-import 'package:betsquad/screens/bet/bet_history.dart';
+import 'package:betsquad/screens/bet/bet_history_page.dart';
+import 'package:betsquad/screens/profile/squads_tab.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/hex_color.dart';
 import 'package:betsquad/utilities/utility.dart';
@@ -20,8 +21,7 @@ import 'package:betsquad/widgets/swipeable_tabs.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../chat_tab.dart';
-import '../select_opponent_screen.dart';
-import '../squads_tab.dart';
+import 'select_opponent_screen.dart';
 import '../alert.dart';
 
 class BetScreenTabs extends StatefulWidget {
@@ -83,7 +83,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
       child: FractionallySizedBox(
         heightFactor: 0.75,
         child: Container(
-          color: Colors.black,
+          decoration: kGradientBoxDecoration,
           child: Column(
             children: <Widget>[
               Container(
@@ -92,7 +92,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                   offset: Offset(0.0, -30.0),
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundColor: Colors.orange,
+                    backgroundColor: kBetSquadOrange,
                     child: CircleAvatar(
                       backgroundImage: userProfilePic != null ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
                       radius: 48,
@@ -102,7 +102,6 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
               ),
               Expanded(
                 child: Container(
-                  color: Colors.black,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -252,7 +251,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(MdiIcons.tshirtCrew, color: HexColor(match.homeShirtColor)),
+                                Icon(MdiIcons.tshirtCrew, color: HexColor(match.homeShirtColor ?? '#FFFFFF')),
                                 SizedBox(
                                   width: 5,
                                 ),
@@ -381,7 +380,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                                 SizedBox(
                                   width: 5,
                                 ),
-                                Icon(MdiIcons.tshirtCrew, color: HexColor(match.awayShirtColor)),
+                                Icon(MdiIcons.tshirtCrew, color: HexColor(match.awayShirtColor ?? '#FFFFFF')),
                                 SizedBox(
                                   width: 5,
                                 ),
@@ -418,7 +417,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                     },
                     child: CircleAvatar(
                       radius: 50,
-                      backgroundColor: Colors.orange,
+                      backgroundColor: kBetSquadOrange,
                       child: CircleAvatar(
                         backgroundImage: selectedOpponent != null &&
                                 selectedOpponent['image'] != null &&
@@ -443,7 +442,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
         MatchHeader(match: match),
         Expanded(
           child: Container(
-            color: Colors.black87,
+            decoration: kGradientBoxDecoration,
             child: Column(
               children: <Widget>[
                 SizedBox(
@@ -556,7 +555,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
       betScreens,
       BetHistoryPage(),
       ChatTabScreen(),
-      SquadsTabScreen(),
+      SquadsTab(),
     ];
 
     return Scaffold(
@@ -564,7 +563,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
       body: screens[currentIndex],
       bottomNavigationBar: FABBottomAppBar(
         color: Colors.grey,
-        selectedColor: Colors.blueAccent,
+        selectedColor: kBetSquadOrange,
         notchedShape: CircularNotchedRectangle(),
         onTabSelected: (int selected) {
           setState(() {
@@ -584,7 +583,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
         height: 100,
         child: Visibility(
           child: FloatingActionButton(
-            shape: CircleBorder(side: BorderSide(color: Colors.orange, width: 2.0)),
+            shape: CircleBorder(side: BorderSide(color: kBetSquadOrange, width: 2.0)),
             onPressed: () async {
               if (initPosition == 0) {
                 print("send H2H bet");
@@ -605,7 +604,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                   return;
                 }
 
-                if (h2hBet.opponentId == null) {
+                if (h2hBet.vsUserID == null) {
                   print("no opponent");
                   Utility.getInstance().showErrorAlertDialog(context, 'Select Opponent',
                       'Please select who your bet opponent by clicking the user profille image.');
@@ -614,7 +613,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
 
                 Map createBetResponse = await BetApi().sendH2HBet(h2hBet);
                 if (createBetResponse['result'] == 'success') {
-                  print('bet sent');
+                  Navigator.pop(context);
                   Alert.showSuccessDialog(
                       context, 'Bet Sent', 'Your bet on ${match.homeTeamName} vs ${match.awayTeamName} has been sent');
                 } else {

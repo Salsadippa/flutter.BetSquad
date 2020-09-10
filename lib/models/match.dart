@@ -27,8 +27,8 @@ class Match {
       awayTeamId;
 
   Match(
-      {this.awayShirtColor,
-      this.homeShirtColor,
+      {this.awayShirtColor = '#FFFFFF',
+      this.homeShirtColor  = '#FFFFFF',
       this.competitionName,
       this.date,
       this.homeTeamName,

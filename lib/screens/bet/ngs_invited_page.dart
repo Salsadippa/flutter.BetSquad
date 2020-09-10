@@ -34,7 +34,7 @@ class _NGSInvitedPageState extends State<NGSInvitedPage> {
                     print(user);
                     return UserListItem(user: user, uid: widget.bet.invited.keys.toList()[index]);
                   },
-                  itemCount: widget.bet.invited.length,
+                  itemCount: widget.bet.invited.values.toList().length,
                 ),
               )
           ],
@@ -77,7 +77,7 @@ class _UserListItemState extends State<UserListItem> {
         ),
       ),
       title: Text(
-        widget.user['name'],
+        widget.user['name'] ?? '',
         style: GoogleFonts.roboto(color: Colors.white),
       ),
       subtitle: widget.user['accepted'] == true ? Text('Accepted', style: GoogleFonts.roboto(color: Colors.white),) :

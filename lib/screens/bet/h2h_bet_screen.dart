@@ -4,10 +4,11 @@ import 'package:betsquad/utilities/hex_color.dart';
 import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:currency_textfield/currency_textfield.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:betsquad/screens/select_opponent_screen.dart';
+import 'package:betsquad/screens/bet/select_opponent_screen.dart';
 
 class Head2HeadBetScreen extends StatefulWidget {
   static const String ID = 'head2head_bet_screen';
@@ -19,7 +20,7 @@ class Head2HeadBetScreen extends StatefulWidget {
 }
 
 class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
-  var whiteTextStyle = TextStyle(color: Colors.white);
+  var whiteTextStyle = GoogleFonts.roboto(color: Colors.white);
   CurrencyTextFieldController currencyTextFieldController =
       CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
 
@@ -49,8 +50,9 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
       body: Center(
         child: Container(
           decoration: kGrassTrimBoxDecoration,
+          height: MediaQuery.of(context).size.height,
           child: FractionallySizedBox(
-            heightFactor: 0.70,
+            heightFactor: 0.7,
             child: Container(
               color: Colors.black,
               child: Column(
@@ -61,7 +63,7 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
                       offset: Offset(0, -30),
                       child: CircleAvatar(
                         radius: 50,
-                        backgroundColor: Colors.orange,
+                        backgroundColor: kBetSquadOrange,
                         child: CircleAvatar(
                           backgroundImage: userProfilePic != null ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
                           radius: 48,
@@ -108,7 +110,7 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(MdiIcons.tshirtCrew, color: HexColor(widget.bet.match.homeShirtColor)),
+                                    Icon(MdiIcons.tshirtCrew, color: HexColor(widget.bet.match.homeShirtColor ?? '#FFFFFF')),
                                     SizedBox(
                                       width: 5,
                                     ),
@@ -264,7 +266,7 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
                         },
                         child: CircleAvatar(
                           radius: 50,
-                          backgroundColor: Colors.orange,
+                          backgroundColor: kBetSquadOrange,
                           child: CircleAvatar(
                             backgroundImage: selectedOpponent != null &&
                                     selectedOpponent['image'] != null &&
