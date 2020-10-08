@@ -5,6 +5,7 @@ import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/styles/constants.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String ID = 'login_screen';
@@ -16,14 +17,27 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String _email, _password = '';
   FirebaseServices _firebaseHelper = FirebaseServices();
+  bool _loading = false;
 
   _signIn() async {
+    setState(() {
+      _loading = true;
+    });
     await _firebaseHelper.signIn(_email, _password, onSuccess: () {
+      setState(() {
+        _loading = false;
+      });
       Navigator.pushReplacementNamed(context, TabBarController.ID);
     }, bannedCallback: (duration) {
+      setState(() {
+        _loading = false;
+      });
       Utility().showErrorAlertDialog(context, 'Account Suspended',
           'This account has been suspended until $duration');
     }, onError: (e){
+      setState(() {
+        _loading = false;
+      });
       Utility().showErrorAlertDialog(context, 'Error', e.toString());
     });
   }
@@ -127,22 +141,25 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
 
-    return Scaffold(
-      body: Container(
-        decoration: kPitchBackgroundDecoration,
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              betSquadLogo,
-              spacing,
-              pleaseLoginText,
-              emailTextField,
-              passwordTextField,
-              signInButton,
-              forgotPasswordAndSignupButtons
-            ],
+    return ModalProgressHUD(
+      inAsyncCall: _loading,
+      child: Scaffold(
+        body: Container(
+          decoration: kPitchBackgroundDecoration,
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                betSquadLogo,
+                spacing,
+                pleaseLoginText,
+                emailTextField,
+                passwordTextField,
+                signInButton,
+                forgotPasswordAndSignupButtons
+              ],
+            ),
           ),
         ),
       ),

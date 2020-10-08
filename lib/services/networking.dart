@@ -48,4 +48,12 @@ class NetworkHelper {
       print(response.statusCode);
     }
   }
+
+  Future post(String url, Map<String, String> headers, body) {
+    return http.post(
+      url,
+      headers: headers,
+      body: body);
+  }
+
 }

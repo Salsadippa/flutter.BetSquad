@@ -1,3 +1,7 @@
+import 'package:betsquad/screens/payments/deposit_page.dart';
+import 'package:betsquad/screens/payments/transactions_page.dart';
+import 'package:betsquad/screens/payments/withdrawal_page.dart';
+import 'package:betsquad/screens/profile/account_info_page.dart';
 import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BetSquadLogoProfileBalanceAppBar extends StatefulWidget implements PreferredSizeWidget {
-
   @override
   _BetSquadLogoProfileBalanceAppBarState createState() => _BetSquadLogoProfileBalanceAppBarState();
 
@@ -33,6 +36,7 @@ class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBa
     getUserInfo();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     var betSquadLogo = Image.asset(
@@ -47,7 +51,46 @@ class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBa
         textAlign: TextAlign.center,
         style: GoogleFonts.roboto(fontSize: 16),
       ),
-      onTap: () {},
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => ListView(
+            shrinkWrap: true,
+            children: [
+              ListTile(
+                title: Text(
+                  'Transactions',
+                  textAlign: TextAlign.center,
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TransactionsPage(),
+                  ));
+                },
+              ),
+              ListTile(
+                title: Text('Deposit Funds', textAlign: TextAlign.center),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => DepositPage(),
+                  ));
+                },
+              ),
+              ListTile(
+                title: Text('Withdraw Funds', textAlign: TextAlign.center),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => WithdrawalPage(),
+                  ));
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
 
     return AppBar(
@@ -67,15 +110,20 @@ class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBa
             SizedBox(width: 10),
             GestureDetector(
               onTap: () {
-                FirebaseServices fbHelper = FirebaseServices();
-                fbHelper.signOut();
-                Navigator.pushReplacementNamed(context, 'login_screen');
+                // FirebaseServices fbHelper = FirebaseServices();
+                // fbHelper.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AccountInfoPage(),
+                  ),
+                );
               },
               child: CircleAvatar(
                 radius: 22,
                 backgroundColor: kBetSquadOrange,
                 child: CircleAvatar(
-                  backgroundImage: userProfilePic != null ? NetworkImage(userProfilePic): kUserPlaceholderImage,
+                  backgroundImage: userProfilePic != null ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
                   radius: 20,
                 ),
               ),

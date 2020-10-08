@@ -154,7 +154,7 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
             cityTextField,
             countyTextField,
             skipButton,
-            doneButton,
+            doneButton
           ],
         ),
       ),

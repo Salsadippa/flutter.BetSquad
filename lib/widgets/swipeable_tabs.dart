@@ -19,7 +19,7 @@ class CustomTabView extends StatefulWidget {
     this.onPositionChange,
     this.onScroll,
     this.initPosition,
-    this.labelSpacing,
+    this.labelSpacing = 15.0,
   });
 
   @override

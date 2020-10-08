@@ -1,9 +1,16 @@
+import 'package:betsquad/screens/payments/deposit_page.dart';
+import 'package:betsquad/screens/payments/transactions_page.dart';
+import 'package:betsquad/screens/payments/withdrawal_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BetSquadLogoBalanceAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final IconButton leading;
+
+  const BetSquadLogoBalanceAppBar({Key key, this.leading}) : super(key: key);
+
   @override
   _BetSquadLogoBalanceAppBarState createState() => _BetSquadLogoBalanceAppBarState();
 
@@ -45,10 +52,46 @@ class _BetSquadLogoBalanceAppBarState extends State<BetSquadLogoBalanceAppBar> {
         textAlign: TextAlign.center,
         style: GoogleFonts.roboto(fontSize: 16),
       ),
-      onTap: () {},
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => ListView(
+            children: [
+              ListTile(
+                title: Text('Transactions', textAlign: TextAlign.center),
+                onTap: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TransactionsPage(),
+                  ));
+                },
+              ),
+              ListTile(
+                title: Text('Deposit Funds', textAlign: TextAlign.center),
+                onTap: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => DepositPage(),
+                  ));
+                },
+              ),
+              ListTile(
+                title: Text('Withdraw Funds', textAlign: TextAlign.center),
+                onTap: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => WithdrawalPage(),
+                  ));
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
 
     return AppBar(
+      leading: widget.leading,
       elevation: 0,
       actions: <Widget>[
         Row(

@@ -77,8 +77,13 @@ class _MatchListScreenState extends State<MatchListScreen> {
                     ),
                     children: _buildExpandableContent(
                         matches[matches.keys.toList()[i]], (Match match) {
-                      Provider.of<MatchData>(context, listen: false)
-                          .updateSelectedMatch(match);
+                          if (match.currentState == 0) {
+                            Provider.of<MatchData>(context, listen: false)
+                                .updateSelectedMatch(match);
+                          } else {
+                            Navigator.pushNamed(context, MatchDetailTabs.ID,
+                                arguments: match);
+                          }
                     }, (Match match) {
                       Navigator.pushNamed(context, MatchDetailTabs.ID,
                           arguments: match);

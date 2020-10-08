@@ -90,5 +90,20 @@ class FirebaseServices {
     return user;
   }
 
+  Future<bool> deleteUser(String email, String password) async {
+    try {
+      FirebaseUser user = await _auth.currentUser();
+      AuthCredential credentials =
+      EmailAuthProvider.getCredential(email: email, password: password);
+      print(user);
+      AuthResult result = await user.reauthenticateWithCredential(credentials);
+      //delete user from database
+      await result.user.delete();
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
 
 }
