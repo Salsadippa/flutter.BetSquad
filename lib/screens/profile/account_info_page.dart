@@ -1,6 +1,7 @@
 import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/screens/login_and_signup/login_screen.dart';
 import 'package:betsquad/screens/payments/deposit_limits_page.dart';
+import 'package:betsquad/screens/payments/formatting_helpers.dart';
 import 'package:betsquad/screens/payments/transactions_page.dart';
 import 'package:betsquad/screens/profile/delete_account_page.dart';
 import 'package:betsquad/screens/profile/self_exclusion_page.dart';
@@ -10,6 +11,7 @@ import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
 import 'package:betsquad/widgets/swipeable_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -212,6 +214,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                     SizedBox(width: 20),
                                     Expanded(
                                       child: TextField(
+                                        readOnly: true,
                                         style: GoogleFonts.roboto(color: Colors.white),
                                         controller: emailController,
                                         decoration: InputDecoration(
@@ -243,6 +246,11 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                         decoration: InputDecoration(
                                             enabledBorder: UnderlineInputBorder(borderSide: BorderSide.none),
                                             focusedBorder: UnderlineInputBorder(borderSide: BorderSide.none)),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.digitsOnly,
+                                          new LengthLimitingTextInputFormatter(8),
+                                          new BirthdayInputFormatter()
+                                        ],
                                       ),
                                     )
                                   ],

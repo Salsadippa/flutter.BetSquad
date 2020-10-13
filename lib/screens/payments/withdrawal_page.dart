@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:betsquad/styles/constants.dart';
 
+import '../alert.dart';
 import 'formatting_helpers.dart';
 
 class WithdrawalPage extends StatefulWidget {
@@ -179,12 +180,17 @@ class _WithdrawalPageState extends State<WithdrawalPage> {
                   color: kBetSquadOrange,
                   onPressed: () async {
                     var expirySplit = _expiry.split(new RegExp(r'(\/)'));
-                    await PaymentApi.withdrawFunds(
+                    var res = await PaymentApi.withdrawFunds(
                         amount: _amount,
                         cvv: _cvv,
                         cardNumber: _cardNumber,
                         expiryMonth: expirySplit[0],
                         expiryYear: expirySplit[1]);
+                    if (res['status'] == 200) {
+                      Alert.showSuccessDialog(context, 'Successful Withdraw', res['message']);
+                    } else {
+                      Alert.showErrorDialog(context, 'Withdraw Failed', res['message']);
+                    }
                   },
                   child: Text(
                     'Done',

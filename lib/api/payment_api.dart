@@ -9,7 +9,7 @@ class PaymentApi {
   static Future<Map> withdrawFunds({double amount, String cardNumber, String expiryMonth, String expiryYear, String
   cvv}) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.PAYMENT_SERVER);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
 
     Map profileDetails = await UsersApi.getProfileDetails();
@@ -36,12 +36,12 @@ class PaymentApi {
         'zip_code': profileDetails['zip_code'],
         'country': 'GB'
       }),
-      'auth': idToken.token
+      'auth': idToken
     };
 
     print(params);
 
-    return {};
+    // return {};
 
     Response result = await networkHelper.post('https://api.bet-squad.com/payments/withdraw/new', {}, params);
     print(result.statusCode);
@@ -54,7 +54,7 @@ class PaymentApi {
   expiryMonth, String expiryYear, String email, String phoneNumber, String building, String street, String city,
       String county, String postcode, String dob, String cvv}) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.PAYMENT_SERVER);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var params = {
       'usage': '',
@@ -76,7 +76,7 @@ class PaymentApi {
         'zip_code': postcode,
         'country': 'GB'
       }),
-      'auth': idToken.token
+      'auth': idToken
     };
 
     Response result = await networkHelper.post('https://api.bet-squad.com/payments/payment/new', {}, params);
@@ -87,13 +87,13 @@ class PaymentApi {
 
   static Future<Map> updateDepositLimits(String newLimit, String period) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     Map<String,String> queryParameters = {
       'userID': user.uid,
       'newLimit': newLimit,
       'newPeriod': period,
-      'idToken': idToken.token
+      'idToken': idToken
     };
     var response = await networkHelper.getJSON('/updateLimits', queryParameters);
     return response;
@@ -101,11 +101,11 @@ class PaymentApi {
 
   static Future<Map> getDepositLimits() async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     Map<String,String> queryParameters = {
       'senderId': user.uid,
-      'idToken': idToken.token
+      'idToken': idToken
     };
     var response = await networkHelper.getJSON('/getDepositLimits', queryParameters);
     print(response);

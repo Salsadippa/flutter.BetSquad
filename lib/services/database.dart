@@ -20,11 +20,11 @@ class DatabaseService {
     return match;
   }
 
-  Future<String> getTeamColours(String teamName) async{
+  Future<String> getTeamColours(String teamName) async {
     var colours = await databaseReference.child('team_colours').child(teamName).child('colour').once();
     return colours.value ?? '#FFFFFF';
   }
-  
+
   dynamic getUserBetHistory() async {
     Future<Map> getBet(String betId, String value) async {
       var b = await databaseReference.child('bets').child(betId).once();
@@ -48,7 +48,7 @@ class DatabaseService {
 
     var futures = <Future>[];
     Map<dynamic, dynamic> betIdList;
-    FirebaseUser currentUser = await getCurrentUser();
+    User currentUser = getCurrentUser();
     await databaseReference.child('users').child(currentUser.uid).child('bets').once().then((DataSnapshot value) {
       betIdList = value.value;
       if (betIdList != null) {
@@ -61,14 +61,18 @@ class DatabaseService {
 
     if (futures.length == 0) {
       List<Bet> open = [], recent = [], closed = [];
-      return [open,recent,closed];
+      return [open, recent, closed];
     }
 
     var bets = await Future.wait(futures);
-    bets.sort((a,b) => a['created'] > b['created'] ? -1 : a['created'] == b['created'] ? 0 : 1 );
+    bets.sort((a, b) => a['created'] > b['created']
+        ? -1
+        : a['created'] == b['created']
+            ? 0
+            : 1);
     List<Bet> open = [], recent = [], closed = [];
     var sevenDaysAgo = DateTime.now().subtract(Duration(days: 7)).millisecondsSinceEpoch;
-    for(var i = 0; i < bets.length; i++) {
+    for (var i = 0; i < bets.length; i++) {
       var bet = bets[i];
       if (['ongoing', 'sent', 'received', 'reversal', 'requested', 'open'].contains(bet['status']) &&
           bet['userStatus'] != 'declined') {
@@ -76,21 +80,20 @@ class DatabaseService {
       } else if (['won', 'lost', 'requested reversal', 'reversed'].contains(bet['status']) ||
           (bet['status'] == 'closed' && (bet['userStatus'] == 'won' || bet['userStatus'] == 'lost'))) {
         var created = bet['created'];
-        if (created > sevenDaysAgo){
+        if (created > sevenDaysAgo) {
           recent.add(Bet.fromMap(bet));
         } else {
           closed.add(Bet.fromMap(bet));
         }
-      }
-      else {
+      } else {
         closed.add(Bet.fromMap(bet));
       }
     }
-    return [open,recent,closed];
+    return [open, recent, closed];
   }
 
-  Future<FirebaseUser> getCurrentUser() async {
-    FirebaseUser user = await _firebaseAuth.currentUser();
+  User getCurrentUser() {
+    User user = _firebaseAuth.currentUser;
     return user;
   }
 
@@ -105,5 +108,4 @@ class DatabaseService {
     await databaseReference.child('users').child(uid).child('username').once().then((value) => username = value.value);
     return username;
   }
-
 }

@@ -35,7 +35,7 @@ class BetApi {
     Map<String,String> queryParameters = {
       'matchPath': '${bet.match.date}/${bet.match.homeTeamName}',
       'senderId': bet.from,
-      'betTotal': bet.amount.toString(),
+      'betTotal': (bet.amount * int.parse(bet.rollovers)).toStringAsFixed(2),
       'invited': json.encode(invited),
       'maxRollovers': bet.rollovers
     };

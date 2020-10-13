@@ -25,27 +25,27 @@ class UsersApi {
 
   static Future getAllUsers() async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
-    Map allUsers = await networkHelper.getJSON('getAllUsers', {'idToken': idToken.token});
+    Map allUsers = await networkHelper.getJSON('getAllUsers', {'idToken': idToken});
     return allUsers;
   }
 
   static Future<List> searchUsers(String query) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
-    var users = await networkHelper.getJSON('searchUsers', {'idToken': idToken.token, 'searchQuery': query});
+    var users = await networkHelper.getJSON('searchUsers', {'idToken': idToken, 'searchQuery': query});
     print(users);
     return users;
   }
 
   static Future sendFriendRequest(String friendId) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('sendFriendRequest', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
       'friendId': friendId,
     });
@@ -54,10 +54,10 @@ class UsersApi {
 
   static Future getFriendRequests() async{
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('getFriendRequests', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
     });
     return result;
@@ -65,10 +65,10 @@ class UsersApi {
 
   static Future acceptFriendRequest(String friendId) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('acceptFriendRequest', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
       'friendId': friendId,
     });
@@ -77,10 +77,10 @@ class UsersApi {
 
   static Future declineFriendRequest(String friendId) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('declineFriendRequest', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
       'friendId': friendId,
     });
@@ -89,10 +89,10 @@ class UsersApi {
 
   static Future<Map> getSquadInfo(String squadId) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('getSquadInfo', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'squadId': squadId,
     });
     return result;
@@ -102,10 +102,10 @@ class UsersApi {
     print(squadId);
     print(squad);
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('setSquadInfo', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
       'squadId': squadId,
       'squad': json.encode(squad),
@@ -115,10 +115,10 @@ class UsersApi {
 
   static Future<List> getFriends(List friendIds) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('getFriends', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'friendIds': json.encode(friendIds),
     });
     return result;
@@ -126,10 +126,10 @@ class UsersApi {
 
   static Future<Map> checkLimitsLastUpdate() async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('checkLimitsLastUpdate', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
     });
     return result;
@@ -137,10 +137,10 @@ class UsersApi {
 
   static Future<Map> checkUserHasAmlCheck() async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('userHasAmlCheck', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
     });
     return result;
@@ -149,10 +149,10 @@ class UsersApi {
   static Future<Map> checkValidDeposit(double amount) async {
     print(amount);
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.GOOGLE_APP_ENGINE);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('despositAmountForUser', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'userID': user.uid,
       'amount': amount.toString()
     });
@@ -161,10 +161,10 @@ class UsersApi {
 
   static Future<List> getUsersTransactions() async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('getUsersTransactions', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
     });
     return result;
@@ -172,10 +172,10 @@ class UsersApi {
 
   static Future<Map> getProfileDetails() async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var result = await networkHelper.getJSON('getProfileDetails', {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
     });
     return result;
@@ -184,10 +184,10 @@ class UsersApi {
   static Future<Map> saveProfileDetails({String firstName, String lastName, String username, String email, String dob,
       String building, String street, String city, String county, String postcode, String phoneNumber}) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var userDetails = {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'senderId': user.uid,
       'firstName': firstName,
       'lastName': lastName,
@@ -207,10 +207,10 @@ class UsersApi {
 
   static Future<Map> selfExclusion(int exclusionPeriod) async{
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    var user = await FirebaseAuth.instance.currentUser();
+    var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var userDetails = {
-      'idToken': idToken.token,
+      'idToken': idToken,
       'email': user.email.replaceAll('.', ''),
       'exclusionPeriod': exclusionPeriod
     };

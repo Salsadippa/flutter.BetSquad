@@ -32,13 +32,65 @@ class _DepositPageState extends State<DepositPage> {
       _postcode,
       _phoneNumber,
       _dob;
+
   CurrencyTextFieldController currencyTextFieldController =
       CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
+
+  TextEditingController firstNameController = TextEditingController(),
+      lastNameController = TextEditingController(),
+      usernameController = TextEditingController(),
+      emailController = TextEditingController(),
+      dobController = TextEditingController(),
+      buildingController = TextEditingController(),
+      streetController = TextEditingController(),
+      cityController = TextEditingController(),
+      countyController = TextEditingController(),
+      postcodeController = TextEditingController(),
+      phoneNumberController = TextEditingController();
+
+  void getProfileDetails() async {
+    Map userDetails = await UsersApi.getProfileDetails();
+    firstNameController.text = userDetails['firstName'] != null ? userDetails['firstName'] : '';
+    _firstName = userDetails['firstName'] != null ? userDetails['firstName'] : '';
+
+    lastNameController.text = userDetails['lastName'] != null ? userDetails['lastName'] : '';
+    _lastName = userDetails['lastName'] != null ? userDetails['lastName'] : '';
+
+    emailController.text = userDetails['email'] != null ? userDetails['email'] : '';
+    _email = userDetails['email'] != null ? userDetails['email'] : '';
+
+    dobController.text = userDetails['dob'] != null ? userDetails['dob'] : '';
+    _dob = userDetails['dob'] != null ? userDetails['dob'] : '';
+
+    buildingController.text = userDetails['building'] != null ? userDetails['building'] : '';
+    _building = userDetails['building'] != null ? userDetails['building'] : '';
+
+    streetController.text = userDetails['street'] != null ? userDetails['street'] : '';
+    _street = userDetails['street'] != null ? userDetails['street'] : '';
+
+    cityController.text = userDetails['city'] != null ? userDetails['city'] : '';
+    _city = userDetails['city'] != null ? userDetails['city'] : '';
+
+    countyController.text = userDetails['county'] != null ? userDetails['county'] : '';
+    _county = userDetails['county'] != null ? userDetails['county'] : '';
+
+    postcodeController.text = userDetails['zip_code'] != null ? userDetails['zip_code'] : '';
+    _postcode = userDetails['zip_code'] != null ? userDetails['zip_code'] : '';
+
+    phoneNumberController.text = userDetails['customer_phone'] != null ? userDetails['customer_phone'] : '';
+    _phoneNumber = userDetails['customer_phone'] != null ? userDetails['customer_phone'] : '';
+  }
 
   _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     }
+  }
+
+  @override
+  void initState() {
+    getProfileDetails();
+    super.initState();
   }
 
   @override
@@ -207,6 +259,7 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: firstNameController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -229,6 +282,7 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: lastNameController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -251,6 +305,8 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    readOnly: true,
+                    controller: emailController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -273,6 +329,7 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: buildingController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -295,6 +352,7 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: streetController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -317,6 +375,7 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: cityController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -339,6 +398,7 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: countyController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -361,6 +421,7 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: postcodeController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -383,6 +444,7 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: phoneNumberController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
@@ -406,6 +468,7 @@ class _DepositPageState extends State<DepositPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: dobController,
                     style: GoogleFonts.roboto(color: Colors.white),
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(

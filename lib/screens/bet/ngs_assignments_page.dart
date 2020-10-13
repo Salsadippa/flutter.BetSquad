@@ -71,142 +71,158 @@ class _NGSAssignmentsPageState extends State<NGSAssignmentsPage> {
                     case 0:
                       return Scaffold(
                         body: Container(
+                          height: MediaQuery.of(context).size.height,
                           decoration: kAssignmentsHomePitchBackgroundDecoration,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
+                          child: Center(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  AllocationView(
-                                      userId: homeTeamPlayers[0]['userID'],
-                                      playerNumber: homeTeamPlayers[0]['number'],
-                                      playerName: homeTeamPlayers[0]['name']),
+                                  Row(
+                                    children: [
+                                      AllocationView(
+                                          userId: homeTeamPlayers[0]['userID'],
+                                          playerNumber: homeTeamPlayers[0]['number'],
+                                          playerName: homeTeamPlayers[0]['name']),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      AllocationView(
+                                          userId: homeTeamPlayers[1]['userID'],
+                                          playerNumber: homeTeamPlayers[1]['number'],
+                                          playerName: homeTeamPlayers[1]['name']),
+                                      AllocationView(
+                                          userId: homeTeamPlayers[2]['userID'],
+                                          playerNumber: homeTeamPlayers[2]['number'],
+                                          playerName: homeTeamPlayers[2]['name']),
+                                      AllocationView(
+                                          userId: homeTeamPlayers[3]['userID'],
+                                          playerNumber: homeTeamPlayers[3]['number'],
+                                          playerName: homeTeamPlayers[3]['name']),
+                                      AllocationView(
+                                          userId: homeTeamPlayers[4]['userID'],
+                                          playerNumber: homeTeamPlayers[4]['number'],
+                                          playerName: homeTeamPlayers[4]['name']),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      AllocationView(
+                                          userId: homeTeamPlayers[5]['userID'],
+                                          playerNumber: homeTeamPlayers[5]['number'],
+                                          playerName: homeTeamPlayers[5]['name']),
+                                      AllocationView(
+                                          userId: homeTeamPlayers[6]['userID'],
+                                          playerNumber: homeTeamPlayers[6]['number'],
+                                          playerName: homeTeamPlayers[6]['name']),
+                                      AllocationView(
+                                          userId: homeTeamPlayers[7]['userID'],
+                                          playerNumber: homeTeamPlayers[7]['number'],
+                                          playerName: homeTeamPlayers[7]['name']),
+                                      AllocationView(
+                                          userId: homeTeamPlayers[8]['userID'],
+                                          playerNumber: homeTeamPlayers[8]['number'],
+                                          playerName: homeTeamPlayers[8]['name']),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      AllocationView(
+                                          userId: homeTeamPlayers[9]['userID'],
+                                          playerNumber: homeTeamPlayers[9]['number'],
+                                          playerName: homeTeamPlayers[9]['name']),
+                                      AllocationView(
+                                          userId: homeTeamPlayers[10]['userID'],
+                                          playerNumber: homeTeamPlayers[10]['number'],
+                                          playerName: homeTeamPlayers[10]['name']),
+                                    ],
+                                  )
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  AllocationView(
-                                      userId: homeTeamPlayers[1]['userID'],
-                                      playerNumber: homeTeamPlayers[1]['number'],
-                                      playerName: homeTeamPlayers[1]['name']),
-                                  AllocationView(
-                                      userId: homeTeamPlayers[2]['userID'],
-                                      playerNumber: homeTeamPlayers[2]['number'],
-                                      playerName: homeTeamPlayers[2]['name']),
-                                  AllocationView(
-                                      userId: homeTeamPlayers[3]['userID'],
-                                      playerNumber: homeTeamPlayers[3]['number'],
-                                      playerName: homeTeamPlayers[3]['name']),
-                                  AllocationView(
-                                      userId: homeTeamPlayers[4]['userID'],
-                                      playerNumber: homeTeamPlayers[4]['number'],
-                                      playerName: homeTeamPlayers[4]['name']),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  AllocationView(
-                                      userId: homeTeamPlayers[5]['userID'],
-                                      playerNumber: homeTeamPlayers[5]['number'],
-                                      playerName: homeTeamPlayers[5]['name']),
-                                  AllocationView(
-                                      userId: homeTeamPlayers[6]['userID'],
-                                      playerNumber: homeTeamPlayers[6]['number'],
-                                      playerName: homeTeamPlayers[6]['name']),
-                                  AllocationView(
-                                      userId: homeTeamPlayers[7]['userID'],
-                                      playerNumber: homeTeamPlayers[7]['number'],
-                                      playerName: homeTeamPlayers[7]['name']),
-                                  AllocationView(
-                                      userId: homeTeamPlayers[8]['userID'],
-                                      playerNumber: homeTeamPlayers[8]['number'],
-                                      playerName: homeTeamPlayers[8]['name']),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  AllocationView(
-                                      userId: homeTeamPlayers[9]['userID'],
-                                      playerNumber: homeTeamPlayers[9]['number'],
-                                      playerName: homeTeamPlayers[9]['name']),
-                                  AllocationView(
-                                      userId: homeTeamPlayers[10]['userID'],
-                                      playerNumber: homeTeamPlayers[10]['number'],
-                                      playerName: homeTeamPlayers[10]['name']),
-                                ],
-                              )
-                            ],
+                            ),
                           ),
                         ),
                       );
                     default:
                       return Scaffold(
                         body: Container(
+                          height: MediaQuery.of(context).size.height,
                           decoration: kAssignmentsAwayPitchBackgroundDecoration,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
+                          child: Center(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  AllocationView(
-                                      userId: awayTeamPlayers[0]['userID'],
-                                      playerNumber: awayTeamPlayers[0]['number'],
-                                      playerName: awayTeamPlayers[0]['name']),
-                                ],
+                                  Row(
+                                    children: [
+                                      AllocationView(
+                                          userId: awayTeamPlayers[0]['userID'],
+                                          playerNumber: awayTeamPlayers[0]['number'],
+                                          playerName: awayTeamPlayers[0]['name']),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      AllocationView(
+                                          userId: awayTeamPlayers[1]['userID'],
+                                          playerNumber: awayTeamPlayers[1]['number'],
+                                          playerName: awayTeamPlayers[1]['name']),
+                                      AllocationView(
+                                          userId: awayTeamPlayers[2]['userID'],
+                                          playerNumber: awayTeamPlayers[2]['number'],
+                                          playerName: awayTeamPlayers[2]['name']),
+                                      AllocationView(
+                                          userId: awayTeamPlayers[3]['userID'],
+                                          playerNumber: awayTeamPlayers[3]['number'],
+                                          playerName: awayTeamPlayers[3]['name']),
+                                      AllocationView(
+                                          userId: awayTeamPlayers[4]['userID'],
+                                          playerNumber: awayTeamPlayers[4]['number'],
+                                          playerName: awayTeamPlayers[4]['name']),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      AllocationView(
+                                          userId: awayTeamPlayers[5]['userID'],
+                                          playerNumber: awayTeamPlayers[5]['number'],
+                                          playerName: awayTeamPlayers[5]['name']),
+                                      AllocationView(
+                                          userId: awayTeamPlayers[6]['userID'],
+                                          playerNumber: awayTeamPlayers[6]['number'],
+                                          playerName: awayTeamPlayers[6]['name']),
+                                      AllocationView(
+                                          userId: awayTeamPlayers[7]['userID'],
+                                          playerNumber: awayTeamPlayers[7]['number'],
+                                          playerName: awayTeamPlayers[7]['name']),
+                                      AllocationView(
+                                          userId: awayTeamPlayers[8]['userID'],
+                                          playerNumber: awayTeamPlayers[8]['number'],
+                                          playerName: awayTeamPlayers[8]['name']),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      AllocationView(
+                                          userId: awayTeamPlayers[9]['userID'],
+                                          playerNumber: awayTeamPlayers[9]['number'],
+                                          playerName: awayTeamPlayers[9]['name']),
+                                      AllocationView(
+                                          userId: awayTeamPlayers[10]['userID'],
+                                          playerNumber: awayTeamPlayers[10]['number'],
+                                          playerName: awayTeamPlayers[10]['name']),
+                                    ],
+                                  )
+                                ].reversed.toList(),
                               ),
-                              Row(
-                                children: [
-                                  AllocationView(
-                                      userId: awayTeamPlayers[1]['userID'],
-                                      playerNumber: awayTeamPlayers[1]['number'],
-                                      playerName: awayTeamPlayers[1]['name']),
-                                  AllocationView(
-                                      userId: awayTeamPlayers[2]['userID'],
-                                      playerNumber: awayTeamPlayers[2]['number'],
-                                      playerName: awayTeamPlayers[2]['name']),
-                                  AllocationView(
-                                      userId: awayTeamPlayers[3]['userID'],
-                                      playerNumber: awayTeamPlayers[3]['number'],
-                                      playerName: awayTeamPlayers[3]['name']),
-                                  AllocationView(
-                                      userId: awayTeamPlayers[4]['userID'],
-                                      playerNumber: awayTeamPlayers[4]['number'],
-                                      playerName: awayTeamPlayers[4]['name']),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  AllocationView(
-                                      userId: awayTeamPlayers[5]['userID'],
-                                      playerNumber: awayTeamPlayers[5]['number'],
-                                      playerName: awayTeamPlayers[5]['name']),
-                                  AllocationView(
-                                      userId: awayTeamPlayers[6]['userID'],
-                                      playerNumber: awayTeamPlayers[6]['number'],
-                                      playerName: awayTeamPlayers[6]['name']),
-                                  AllocationView(
-                                      userId: awayTeamPlayers[7]['userID'],
-                                      playerNumber: awayTeamPlayers[7]['number'],
-                                      playerName: awayTeamPlayers[7]['name']),
-                                  AllocationView(
-                                      userId: awayTeamPlayers[8]['userID'],
-                                      playerNumber: awayTeamPlayers[8]['number'],
-                                      playerName: awayTeamPlayers[8]['name']),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  AllocationView(
-                                      userId: awayTeamPlayers[9]['userID'],
-                                      playerNumber: awayTeamPlayers[9]['number'],
-                                      playerName: awayTeamPlayers[9]['name']),
-                                  AllocationView(
-                                      userId: awayTeamPlayers[10]['userID'],
-                                      playerNumber: awayTeamPlayers[10]['number'],
-                                      playerName: awayTeamPlayers[10]['name']),
-                                ],
-                              )
-                            ].reversed.toList(),
+                            ),
                           ),
                         ),
                       );

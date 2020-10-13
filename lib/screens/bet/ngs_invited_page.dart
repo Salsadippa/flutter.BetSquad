@@ -26,15 +26,18 @@ class _NGSInvitedPageState extends State<NGSInvitedPage> {
         child: Column(
           children: [
             MatchHeader(match: widget.bet.match),
-              Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    var user = widget.bet.invited.values.toList()[index];
-                    print(user);
-                    return UserListItem(user: user, uid: widget.bet.invited.keys.toList()[index]);
-                  },
-                  itemCount: widget.bet.invited.values.toList().length,
+              Expanded(
+                child: Container(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    primary: false,
+                    itemBuilder: (context, index) {
+                      var user = widget.bet.invited.values.toList()[index];
+                      print(user);
+                      return UserListItem(user: user, uid: widget.bet.invited.keys.toList()[index]);
+                    },
+                    itemCount: widget.bet.invited.values.toList().length,
+                  ),
                 ),
               )
           ],

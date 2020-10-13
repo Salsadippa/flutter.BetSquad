@@ -38,6 +38,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
 
   var h2hBet = Bet(mode: 'head2head', amount: 0);
   var ngsBet = Bet(mode: 'NGS', amount: 0);
+  double ngsTotalStake = 0;
   var userProfilePic;
   var selectedOpponent;
   var whiteTextStyle = TextStyle(color: Colors.white);
@@ -52,7 +53,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
   TextEditingController textEditingController2 = TextEditingController();
 
   getCurrentUserImageUrl() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = FirebaseAuth.instance.currentUser;
     print(user.uid);
     setState(() {
       h2hBet.from = user.uid;
@@ -456,13 +457,16 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                         "Just before the game kicks off, all users will receive their random allocation of players.  If your player scores you will win the pot.  You will then receive a new allocation of players for the next bet.  There are 21 players available, which is the 10 outfield players from each team and 1 Goalkeepers/ own goals/ no goal.  If either goalkeeper scores or there is an own goal or the game ends, you will win the pot.");
                   },
                   onChanged: (value) {
+                    setState(() {
+                      ngsBet.amount = currencyTextFieldController2.doubleValue;
+                    });
                     if (currencyTextFieldController2.text.isNotEmpty && textEditingController2.text.isNotEmpty) {
                       double totalStake =
                           currencyTextFieldController2.doubleValue * double.parse(textEditingController2.text);
                       textEditingController.text = "£${totalStake.toStringAsFixed(2)}";
                       setState(() {
                         print("settingg amount");
-                        ngsBet.amount = totalStake;
+                        ngsTotalStake = totalStake;
                       });
                     }
                   },
@@ -483,7 +487,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                           currencyTextFieldController2.doubleValue * double.parse(textEditingController2.text);
                       textEditingController.text = "£${(totalStake).toStringAsFixed(2)}";
                       setState(() {
-                        ngsBet.amount = totalStake;
+                        ngsTotalStake = totalStake;
                         ngsBet.rollovers = textEditingController2.text.toString();
                       });
                     }
@@ -625,6 +629,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 print("send NGS bet");
                 print(ngsBet.amount);
 
+                print(ngsTotalStake);
+
                 if (ngsBet.rollovers == null) {
                   print("rollovers null");
                   Utility.getInstance().showErrorAlertDialog(context, 'Enter max bets',
@@ -632,7 +638,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                   return;
                 }
 
-                if (ngsBet.amount < 2) {
+                if (ngsTotalStake < 2) {
                   Utility.getInstance().showErrorAlertDialog(
                       context,
                       'Minimum £2 bet',

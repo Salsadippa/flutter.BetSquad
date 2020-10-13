@@ -54,7 +54,7 @@ class FirebaseServices {
       onError(e);
     }
 
-    final FirebaseUser user = await _auth.currentUser();
+    final User user = _auth.currentUser;
     final uid = user.uid;
 
     userDetails['userID'] = uid;
@@ -81,22 +81,22 @@ class FirebaseServices {
   }
 
   Future<bool> loggedInUser() async {
-    var user = await _auth.currentUser();
+    var user =  _auth.currentUser;
     return user != null;
   }
 
-  Future<FirebaseUser> currentUser() async {
-    var user = await _auth.currentUser();
+  Future<User> currentUser() async {
+    var user = _auth.currentUser;
     return user;
   }
 
   Future<bool> deleteUser(String email, String password) async {
     try {
-      FirebaseUser user = await _auth.currentUser();
+      User user = _auth.currentUser;
       AuthCredential credentials =
       EmailAuthProvider.getCredential(email: email, password: password);
       print(user);
-      AuthResult result = await user.reauthenticateWithCredential(credentials);
+      var result = await user.reauthenticateWithCredential(credentials);
       //delete user from database
       await result.user.delete();
       return true;

@@ -20,7 +20,7 @@ class _SquadsTabState extends State<SquadsTab> {
   Query friends;
 
   void createStreams() async {
-    var currentUser = await FirebaseAuth.instance.currentUser();
+    var currentUser = FirebaseAuth.instance.currentUser;
     setState(() {
       squads = FirebaseDatabase().reference().child('users').child(currentUser.uid).child('squads');
       friends = FirebaseDatabase().reference().child('users').child(currentUser.uid).child('friends');

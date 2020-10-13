@@ -29,7 +29,7 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
   var selectedOpponent;
 
   getCurrentUserImageUrl() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = FirebaseAuth.instance.currentUser;
     print(user.uid);
     final dbRef = await FirebaseDatabase.instance.reference().child("users/${user.uid}").once();
     setState(() {

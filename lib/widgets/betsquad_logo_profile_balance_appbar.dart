@@ -18,15 +18,13 @@ class BetSquadLogoProfileBalanceAppBar extends StatefulWidget implements Preferr
 }
 
 class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBalanceAppBar> {
-  double userBalance;
   String userProfilePic;
 
   getUserInfo() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = FirebaseAuth.instance.currentUser;
     print(user.uid);
     final dbRef = await FirebaseDatabase.instance.reference().child("users/${user.uid}").once();
     setState(() {
-      userBalance = double.parse(dbRef.value['balance'].toString());
       userProfilePic = dbRef.value['image'];
     });
   }
@@ -46,10 +44,21 @@ class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBa
     );
 
     var balanceButton = GestureDetector(
-      child: Text(
-        '£${userBalance != null ? userBalance.toStringAsFixed(2) : 0.toStringAsFixed(2)}',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.roboto(fontSize: 16),
+      child: StreamBuilder<Event>(
+        stream: FirebaseDatabase.instance
+            .reference()
+            .child('users/' + FirebaseAuth.instance.currentUser.uid + '/balance')
+            .onValue,
+        builder: (context, snapshot) {
+          if (snapshot.hasError || !snapshot.hasData) {
+            return Text('');
+          }
+          return Text(
+            '£${snapshot.data.snapshot.value.toStringAsFixed(2)}',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.roboto(fontSize: 16),
+          );
+        },
       ),
       onTap: () {
         showModalBottomSheet(
