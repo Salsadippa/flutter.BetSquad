@@ -34,7 +34,8 @@ class _DepositPageState extends State<DepositPage> {
       _dob;
 
   CurrencyTextFieldController currencyTextFieldController =
-      CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
+      CurrencyTextFieldController(
+          rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
 
   TextEditingController firstNameController = TextEditingController(),
       lastNameController = TextEditingController(),
@@ -50,35 +51,48 @@ class _DepositPageState extends State<DepositPage> {
 
   void getProfileDetails() async {
     Map userDetails = await UsersApi.getProfileDetails();
-    firstNameController.text = userDetails['firstName'] != null ? userDetails['firstName'] : '';
-    _firstName = userDetails['firstName'] != null ? userDetails['firstName'] : '';
+    firstNameController.text =
+        userDetails['firstName'] != null ? userDetails['firstName'] : '';
+    _firstName =
+        userDetails['firstName'] != null ? userDetails['firstName'] : '';
 
-    lastNameController.text = userDetails['lastName'] != null ? userDetails['lastName'] : '';
+    lastNameController.text =
+        userDetails['lastName'] != null ? userDetails['lastName'] : '';
     _lastName = userDetails['lastName'] != null ? userDetails['lastName'] : '';
 
-    emailController.text = userDetails['email'] != null ? userDetails['email'] : '';
+    emailController.text =
+        userDetails['email'] != null ? userDetails['email'] : '';
     _email = userDetails['email'] != null ? userDetails['email'] : '';
 
     dobController.text = userDetails['dob'] != null ? userDetails['dob'] : '';
     _dob = userDetails['dob'] != null ? userDetails['dob'] : '';
 
-    buildingController.text = userDetails['building'] != null ? userDetails['building'] : '';
+    buildingController.text =
+        userDetails['building'] != null ? userDetails['building'] : '';
     _building = userDetails['building'] != null ? userDetails['building'] : '';
 
-    streetController.text = userDetails['street'] != null ? userDetails['street'] : '';
+    streetController.text =
+        userDetails['street'] != null ? userDetails['street'] : '';
     _street = userDetails['street'] != null ? userDetails['street'] : '';
 
-    cityController.text = userDetails['city'] != null ? userDetails['city'] : '';
+    cityController.text =
+        userDetails['city'] != null ? userDetails['city'] : '';
     _city = userDetails['city'] != null ? userDetails['city'] : '';
 
-    countyController.text = userDetails['county'] != null ? userDetails['county'] : '';
+    countyController.text =
+        userDetails['county'] != null ? userDetails['county'] : '';
     _county = userDetails['county'] != null ? userDetails['county'] : '';
 
-    postcodeController.text = userDetails['zip_code'] != null ? userDetails['zip_code'] : '';
+    postcodeController.text =
+        userDetails['zip_code'] != null ? userDetails['zip_code'] : '';
     _postcode = userDetails['zip_code'] != null ? userDetails['zip_code'] : '';
 
-    phoneNumberController.text = userDetails['customer_phone'] != null ? userDetails['customer_phone'] : '';
-    _phoneNumber = userDetails['customer_phone'] != null ? userDetails['customer_phone'] : '';
+    phoneNumberController.text = userDetails['customer_phone'] != null
+        ? userDetails['customer_phone']
+        : '';
+    _phoneNumber = userDetails['customer_phone'] != null
+        ? userDetails['customer_phone']
+        : '';
   }
 
   _launchURL(String url) async {
@@ -112,13 +126,15 @@ class _DepositPageState extends State<DepositPage> {
                     SizedBox(height: 20),
                     Text(
                       'iTech Gaming Ltd.\nGreenville Court, Britwell Road\nBurnham, Bucks\nSL1 8DF',
-                      style: GoogleFonts.roboto(color: Colors.white, fontSize: 16),
+                      style:
+                          GoogleFonts.roboto(color: Colors.white, fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 20),
                     Container(
                       height: 30,
-                      child: Image.asset('images/payment-logos.png', height: 80, fit: BoxFit.contain),
+                      child: Image.asset('images/payment-logos.png',
+                          height: 80, fit: BoxFit.contain),
                     ),
                     SizedBox(height: 20),
                   ],
@@ -127,11 +143,14 @@ class _DepositPageState extends State<DepositPage> {
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text('AMOUNT', style: GoogleFonts.roboto(color: Colors.white)),
+                child: Text('AMOUNT',
+                    style: GoogleFonts.roboto(color: Colors.white)),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: Text('Please note that there is a 10p + 2.05% charge for deposits',
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                child: Text(
+                    'Please note that there is a 10p + 2.05% charge for deposits',
                     style: GoogleFonts.roboto(color: Colors.grey)),
               ),
               Container(
@@ -160,11 +179,14 @@ class _DepositPageState extends State<DepositPage> {
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text('CARD DETAILS', style: GoogleFonts.roboto(color: Colors.white)),
+                child: Text('CARD DETAILS',
+                    style: GoogleFonts.roboto(color: Colors.white)),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: Text('Your transactions will show on your account as BetSquad +44 (0) 203 289 6518',
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                child: Text(
+                    'Your transactions will show on your account as BetSquad +44 (0) 203 289 6518',
                     style: GoogleFonts.roboto(color: Colors.grey)),
               ),
               Container(
@@ -251,8 +273,10 @@ class _DepositPageState extends State<DepositPage> {
               ),
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Text('CARDHOLDER DETAILS', style: GoogleFonts.roboto(color: Colors.white)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Text('CARDHOLDER DETAILS',
+                    style: GoogleFonts.roboto(color: Colors.white)),
               ),
               Container(
                 height: 55,
@@ -509,12 +533,14 @@ class _DepositPageState extends State<DepositPage> {
                         StringUtils.isNullOrEmpty(_postcode) ||
                         StringUtils.isNullOrEmpty(_phoneNumber) ||
                         StringUtils.isNullOrEmpty(_dob)) {
-                      Alert.showErrorDialog(context, 'Missing Details', 'Please fill in all details before proceeding');
+                      Alert.showErrorDialog(context, 'Missing Details',
+                          'Please fill in all details before proceeding');
                       return;
                     }
 
                     if (_amount < 10.0) {
-                      Alert.showErrorDialog(context, '£10 Minimum Deposit', 'You must deposit at least £10');
+                      Alert.showErrorDialog(context, '£10 Minimum Deposit',
+                          'You must deposit at least £10');
                       return;
                     }
 
@@ -529,13 +555,11 @@ class _DepositPageState extends State<DepositPage> {
                       print(res);
 
                       if (res['amlCheck']) {
-
                         //deposit limits check
                         Map res = await UsersApi.checkValidDeposit(_amount);
                         print(res);
 
                         if (res['approved']) {
-
                           var expirySplit = _expiry.split(new RegExp(r'(\/)'));
 
                           Map deposit = await PaymentApi.depositFunds(
@@ -569,13 +593,15 @@ class _DepositPageState extends State<DepositPage> {
                       print("must set limits");
 
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => DepositLimitsPage()),
+                        MaterialPageRoute(
+                            builder: (context) => DepositLimitsPage()),
                       );
                     }
                   },
                   child: Text(
                     'Done',
-                    style: GoogleFonts.roboto(color: Colors.white, fontSize: 19),
+                    style:
+                        GoogleFonts.roboto(color: Colors.white, fontSize: 19),
                   ),
                 ),
               ),
