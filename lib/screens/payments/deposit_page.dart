@@ -148,6 +148,7 @@ class _DepositPageState extends State<DepositPage> {
                         focusedBorder: InputBorder.none,
                         hintText: '£0.00',
                         hintStyle: GoogleFonts.roboto(color: Colors.white)),
+                    keyboardType: TextInputType.number,
                     onChanged: (value) {
                       setState(() {
                         _amount = currencyTextFieldController.doubleValue;
