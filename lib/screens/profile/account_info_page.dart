@@ -9,6 +9,8 @@ import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
 import 'package:betsquad/widgets/swipeable_tabs.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -94,13 +96,23 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
               child: Center(
                 child: GestureDetector(
                   onTap: getImage,
-                  child: CircleAvatar(
-                    radius: 53,
-                    backgroundColor: kBetSquadOrange,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage('images/user_placeholder.png'),
-                    ),
+                  child: StreamBuilder<Event>(
+                      stream: FirebaseDatabase.instance.reference().child('users').child(FirebaseAuth.instance
+                          .currentUser.uid).child('image').onValue,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError || !snapshot.hasData){
+                          return CircleAvatar(backgroundImage: kUserPlaceholderImage);
+                        }
+                        var image = snapshot.data.snapshot.value;
+                        return  CircleAvatar(
+                          radius: 53,
+                          backgroundColor: kBetSquadOrange,
+                          child: CircleAvatar(
+                            backgroundImage: image != null ? NetworkImage(image) : kUserPlaceholderImage,
+                            radius: 50,
+                          ),
+                        );
+                      }
                   ),
                 ),
               ),

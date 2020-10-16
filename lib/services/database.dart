@@ -31,7 +31,6 @@ class DatabaseService {
       var bet = b.value;
 
       if (bet == null) {
-        print("RETURNING NUKKK");
         return null;
       }
 
@@ -53,7 +52,6 @@ class DatabaseService {
       betIdList = value.value;
       if (betIdList != null) {
         betIdList.forEach((key, value) async {
-          print(key);
           futures.add(getBet(key, value));
         });
       }

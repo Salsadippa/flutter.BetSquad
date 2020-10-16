@@ -55,13 +55,23 @@ class _SquadsTabState extends State<SquadsTab> {
               child: Center(
                 child: GestureDetector(
                   onTap: getImage,
-                  child: CircleAvatar(
-                    radius: 53,
-                    backgroundColor: kBetSquadOrange,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage('images/user_placeholder.png'),
-                    ),
+                  child: StreamBuilder<Event>(
+                      stream: FirebaseDatabase.instance.reference().child('users').child(FirebaseAuth.instance
+                          .currentUser.uid).child('image').onValue,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError || !snapshot.hasData){
+                          return CircleAvatar(backgroundImage: kUserPlaceholderImage);
+                        }
+                        var image = snapshot.data.snapshot.value;
+                        return  CircleAvatar(
+                          radius: 53,
+                          backgroundColor: kBetSquadOrange,
+                          child: CircleAvatar(
+                            backgroundImage: image != null ? NetworkImage(image) : kUserPlaceholderImage,
+                            radius: 50,
+                          ),
+                        );
+                      }
                   ),
                 ),
               ),

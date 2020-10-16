@@ -18,20 +18,9 @@ class BetSquadLogoProfileBalanceAppBar extends StatefulWidget implements Preferr
 }
 
 class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBalanceAppBar> {
-  String userProfilePic;
-
-  getUserInfo() async {
-    User user = FirebaseAuth.instance.currentUser;
-    print(user.uid);
-    final dbRef = await FirebaseDatabase.instance.reference().child("users/${user.uid}").once();
-    setState(() {
-      userProfilePic = dbRef.value['image'];
-    });
-  }
 
   @override
   void initState() {
-    getUserInfo();
     super.initState();
   }
 
@@ -131,9 +120,19 @@ class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBa
               child: CircleAvatar(
                 radius: 22,
                 backgroundColor: kBetSquadOrange,
-                child: CircleAvatar(
-                  backgroundImage: userProfilePic != null ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
-                  radius: 20,
+                child: StreamBuilder<Event>(
+                  stream: FirebaseDatabase.instance.reference().child('users').child(FirebaseAuth.instance
+                      .currentUser.uid).child('image').onValue,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError || !snapshot.hasData){
+                      return CircleAvatar(backgroundImage: kUserPlaceholderImage);
+                    }
+                    var image = snapshot.data.snapshot.value;
+                    return  CircleAvatar(
+                      backgroundImage: image != null ? NetworkImage(image) : kUserPlaceholderImage,
+                      radius: 20,
+                    );
+                  }
                 ),
               ),
             ),

@@ -47,6 +47,56 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Container(
+              height: 50,
+              decoration: kGrassTrimBoxDecoration,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet<dynamic>(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (BuildContext bc) {
+                            return Wrap(children: <Widget>[
+                              Container(
+                                color: Colors.black87,
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  children: [
+                                    ListTile(
+                                      title: Text(
+                                        'Withdraw Bet',
+                                        style: GoogleFonts.roboto(color: kBetSquadOrange, fontSize: 18),
+                                      ),
+                                      onTap: () async {
+                                        if (widget.bet.userStatus == 'sent') {
+                                          var res = await BetApi().withdrawNGSBet(widget.bet);
+                                          Navigator.of(context).pop();
+                                          Alert.showSuccessDialog(context, 'Bet Withdrawn', res['message']);
+                                        } else {
+                                          Navigator.of(context).pop();
+                                          Alert.showErrorDialog(context, 'Cannot Withdraw Bet', 'You cannot withdraw '
+                                              'this bet at this time.');
+                                        }
+                                      },
+                                    )
+                                  ],
+                                ),
+                              )
+                            ]);
+                          });
+                    },
+                    child: Icon(
+                      Icons.edit,
+                      color: kBetSquadOrange,
+                    ),
+                  ),
+                  SizedBox(width: 20)
+                ],
+              ),
+            ),
             MatchHeader(match: widget.bet.match),
             Container(
               decoration: kGradientBoxDecoration,
@@ -203,11 +253,9 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                                 print(acceptedBetResponse);
                                 if (acceptedBetResponse['result'] == 'success') {
                                   Navigator.of(context).pop();
-                                  Alert.showSuccessDialog(
-                                      context, 'Bet Accepted', acceptedBetResponse['message']);
+                                  Alert.showSuccessDialog(context, 'Bet Accepted', acceptedBetResponse['message']);
                                 } else {
-                                  Alert.showSuccessDialog(
-                                      context, 'Accept Bet Failed', acceptedBetResponse['message']);
+                                  Alert.showSuccessDialog(context, 'Accept Bet Failed', acceptedBetResponse['message']);
                                 }
                               },
                             ),
@@ -228,8 +276,7 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                                 print(acceptedBetResponse);
                                 if (acceptedBetResponse['result'] == 'success') {
                                   Navigator.of(context).pop();
-                                  Alert.showSuccessDialog(
-                                      context, 'Bet Declined', acceptedBetResponse['message']);
+                                  Alert.showSuccessDialog(context, 'Bet Declined', acceptedBetResponse['message']);
                                 } else {
                                   Alert.showSuccessDialog(
                                       context, 'Decline Bet Failed', acceptedBetResponse['message']);

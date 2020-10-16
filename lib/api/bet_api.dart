@@ -75,7 +75,7 @@ class BetApi {
 
   Future<Map> acceptNGSBet(Bet bet) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    FirebaseUser currentUser = await FirebaseServices().currentUser();
+    User currentUser = await FirebaseServices().currentUser();
 
     Map<String,String> queryParameters = {
       'senderId': currentUser.uid,
@@ -93,7 +93,7 @@ class BetApi {
 
   Future<Map> declineNGSBet(Bet bet) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    FirebaseUser currentUser = await FirebaseServices().currentUser();
+    User currentUser = await FirebaseServices().currentUser();
 
     Map<String,String> queryParameters = {
       'senderId': currentUser.uid,
@@ -101,6 +101,40 @@ class BetApi {
     };
 
     var response = await networkHelper.getJSON('/declineNGSBet', queryParameters);
+    return response;
+  }
+
+  Future<Map> withdrawNGSBet(Bet bet) async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    User currentUser = await FirebaseServices().currentUser();
+    String token = await currentUser.getIdToken();
+
+    Map<String,String> queryParameters = {
+      'senderId': currentUser.uid,
+      'betID': bet.id,
+      'idToken': token
+    };
+
+    var response = await networkHelper.getJSON('/withdrawNGSBet', queryParameters);
+    return response;
+  }
+
+  Future<Map> withdrawH2HBet(Bet bet) async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    User currentUser = await FirebaseServices().currentUser();
+    String token = await currentUser.getIdToken();
+
+    Map<String,String> queryParameters = {
+      'userID': currentUser.uid,
+      'betID': bet.id,
+      'matchID': '${bet.match.homeTeamName}/${bet.match.date}/${bet.match.awayTeamName}',
+      'opponentBetID': bet.opponentId,
+      'betAmount': bet.amount.toString(),
+      'detail': '${bet.match.homeTeamName} vs ${bet.match.awayTeamName}',
+      'idToken': token
+    };
+
+    var response = await networkHelper.getJSON('/withdrawBet', queryParameters);
     return response;
   }
 

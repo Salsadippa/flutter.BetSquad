@@ -5,6 +5,8 @@ import 'package:betsquad/screens/bet/ngs_bet_screen.dart';
 import 'package:betsquad/services/database.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/hex_color.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,31 +20,35 @@ class BetHistoryPage extends StatefulWidget {
 }
 
 class _BetHistoryPageState extends State<BetHistoryPage> {
-  List<Bet> openBets = [], recentBets = [], closedBets = [];
   var isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    this.getBets();
   }
 
-  void getBets() async {
-    setState(() {
-      isLoading = true;
-    });
-    DatabaseService dbService = DatabaseService();
-    var bets = await dbService.getUserBetHistory();
-    setState(() {
-      isLoading = false;
-      openBets = bets[0];
-      recentBets = bets[1];
-      closedBets = bets[2];
-    });
+  Future<Map> getBet(String betId, String value) async {
+    var b = await FirebaseDatabase.instance.reference().child('bets').child(betId).once();
+    var bet = b.value;
+
+    if (bet == null) {
+      return null;
+    }
+
+    if (bet != null && bet['mode'] != 'custom' && bet['matchID'] != null) {
+      var match = await DatabaseService().getMatch(bet['matchID']);
+      bet['match'] = match;
+    }
+
+    bet['id'] = betId;
+    bet['userStatus'] = value;
+
+    return bet;
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
 //      appBar: BetSquadLogoProfileBalanceAppBar(),
       body: DefaultTabController(
@@ -58,46 +64,104 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
               Tab(text: 'Closed'),
             ],
           ),
-          body: TabBarView(
-            children: [
-              Scaffold(
-                body: Container(
-                  decoration: kGradientBoxDecoration,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      var bet = openBets[index];
-                      return BetHistoryCell(bet: bet);
-                    },
-                    itemCount: openBets.length,
-                  ),
-                ),
-              ),
-              Scaffold(
-                body: Container(
-                  decoration: kGradientBoxDecoration,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      var bet = recentBets[index];
-                      return BetHistoryCell(bet: bet);
-                    },
-                    itemCount: recentBets.length,
-                  ),
-                ),
-              ),
-              Scaffold(
-                body: Container(
-                  decoration: kGradientBoxDecoration,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      var bet = closedBets[index];
-                      return BetHistoryCell(bet: bet);
-                    },
-                    itemCount: closedBets.length,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          body: StreamBuilder<Event>(
+              stream: FirebaseDatabase.instance
+                  .reference()
+                  .child('users')
+                  .child(FirebaseAuth.instance.currentUser.uid)
+                  .child('bets')
+                  .onValue,
+              builder: (context, snapshot) {
+                if (snapshot.hasError || !snapshot.hasData) {
+                  return Container();
+                }
+                Map usersBetsMap = snapshot.data.snapshot.value;
+                // print(usersBetsMap);
+
+                var futures = <Future>[];
+                usersBetsMap.forEach((key, value) async {
+                  futures.add(getBet(key, value));
+                });
+
+                var betFutures = Future.wait(futures);
+
+                return FutureBuilder(
+                  future: betFutures,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError || !snapshot.hasData) {
+                      return Container();
+                    }
+
+                    var bets = snapshot.data;
+
+                    bets.sort((a, b) => a['created'] > b['created']
+                        ? -1
+                        : a['created'] == b['created']
+                            ? 0
+                            : 1);
+                    List<Bet> open = [], recent = [], closed = [];
+                    var sevenDaysAgo = DateTime.now().subtract(Duration(days: 7)).millisecondsSinceEpoch;
+                    for (var i = 0; i < bets.length; i++) {
+                      var bet = bets[i];
+                      if (['ongoing', 'sent', 'received', 'reversal', 'requested', 'open'].contains(bet['status']) &&
+                          bet['userStatus'] != 'declined') {
+                        open.add(Bet.fromMap(bet));
+                      } else if (['won', 'lost', 'requested reversal', 'reversed'].contains(bet['status']) ||
+                          (bet['status'] == 'closed' && (bet['userStatus'] == 'won' || bet['userStatus'] == 'lost'))) {
+                        var created = bet['created'];
+                        if (created > sevenDaysAgo) {
+                          recent.add(Bet.fromMap(bet));
+                        } else {
+                          closed.add(Bet.fromMap(bet));
+                        }
+                      } else {
+                        closed.add(Bet.fromMap(bet));
+                      }
+                    }
+
+                    return TabBarView(
+                      children: [
+                        Scaffold(
+                          body: Container(
+                            decoration: kGradientBoxDecoration,
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                var bet = open[index];
+                                return BetHistoryCell(bet: bet);
+                              },
+                              itemCount: open.length,
+                            ),
+                          ),
+                        ),
+                        Scaffold(
+                          body: Container(
+                            decoration: kGradientBoxDecoration,
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                var bet = recent[index];
+                                return BetHistoryCell(bet: bet);
+                              },
+                              itemCount: recent.length,
+                            ),
+                          ),
+                        ),
+                        Scaffold(
+                          body: Container(
+                            decoration: kGradientBoxDecoration,
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                var bet = closed[index];
+                                return BetHistoryCell(bet: bet);
+                              },
+                              itemCount: closed.length,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }),
         ),
       ),
     );
@@ -113,6 +177,7 @@ class BetHistoryCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print(bet.id);
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
@@ -121,137 +186,149 @@ class BetHistoryCell extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        decoration: kGradientBoxDecoration,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 4,
-              child: Container(
-                padding: EdgeInsets.only(left: 20, right: 10),
-                height: 120,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    if (bet.mode != 'custom')
-                      Row(
+      child: StreamBuilder<Event>(
+          stream: FirebaseDatabase.instance.reference().child('bets').child(bet.id).onValue,
+          builder: (context, snapshot) {
+            if (snapshot.hasError || !snapshot.hasData) {
+              return Container();
+            }
+
+            var liveBet = bet;
+            // Bet.fromMap(snapshot.data.snapshot.value);
+            // liveBet.match = bet.match;
+
+            return Container(
+              decoration: kGradientBoxDecoration,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                      padding: EdgeInsets.only(left: 20, right: 10),
+                      height: 120,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Icon(
-                            MdiIcons.tshirtCrew,
-                            color: HexColor(bet.match.homeShirtColor ?? '#FFFFFF'),
-                          ),
-                          SizedBox(width: 5),
+                          if (liveBet.mode != 'custom')
+                            Row(
+                              children: [
+                                Icon(
+                                  MdiIcons.tshirtCrew,
+                                  color: HexColor(bet.match.homeShirtColor ?? '#FFFFFF'),
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  liveBet.match != null ? liveBet.match.homeTeamName : '',
+                                  maxLines: 1,
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              ],
+                            ),
+                          liveBet.mode == 'custom'
+                              ? Text('${liveBet.name.toUpperCase()}\n\nCustom Bet',
+                                  style: TextStyle(color: Colors.white), maxLines: 5)
+                              : liveBet.mode == 'NGS'
+                                  ? Row(
+                                      children: [
+                                        Text(
+                                          'NEXT GOAL SWEEPSTAKE',
+                                          style: TextStyle(color: kBetSquadOrange, fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    )
+                                  : Row(
+                                      children: [
+                                        Expanded(
+                                          //win button
+                                          child: Image.asset(
+                                            liveBet.homeBet == BetOption.Positive
+                                                ? 'images/win_green.png'
+                                                : (liveBet.homeBet == BetOption.Negative
+                                                    ? 'images/win_red.png'
+                                                    : 'images/win_grey.png'),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          //draw button
+                                          child: Image.asset(
+                                            liveBet.drawBet == BetOption.Positive
+                                                ? 'images/draw_green.png'
+                                                : (liveBet.drawBet == BetOption.Negative
+                                                    ? 'images/draw_red.png'
+                                                    : 'images/draw_grey.png'),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Image.asset(
+                                            liveBet.awayBet == BetOption.Positive
+                                                ? 'images/lose_green.png'
+                                                : (liveBet.awayBet == BetOption.Negative
+                                                    ? 'images/lose_red.png'
+                                                    : 'images/lose_grey.png'),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                          if (liveBet.mode != 'custom')
+                            Row(
+                              children: [
+                                Icon(
+                                  MdiIcons.tshirtCrew,
+                                  color: HexColor(liveBet.match.awayShirtColor ?? '#FFFFFF'),
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  liveBet.match != null ? liveBet.match.awayTeamName : '',
+                                  maxLines: 1,
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 0.5,
+                    height: 100,
+                    color: kBetSquadOrange,
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      padding: EdgeInsets.only(left: 20),
+                      height: 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            bet.match != null ? bet.match.homeTeamName : '',
-                            maxLines: 1,
+                            '£${liveBet.amount.toStringAsFixed(2)} bet',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            liveBet.mode == "NGS"
+                                ? 'vs ${liveBet.accepted.length} ${liveBet.accepted.length > 1 ? 'users' : 'user'}'
+                                : 'vs 1 user',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(liveBet.createdAt))}',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            '${(liveBet.status == 'ongoing' || liveBet.status == 'expired' || liveBet.status == 'received' || liveBet.status == 'sent' || liveBet.status == 'won' || liveBet.status == 'lost') || liveBet.status == 'declined' ? liveBet.status : liveBet.userStatus}',
                             style: TextStyle(color: Colors.white),
                           )
                         ],
                       ),
-                    bet.mode == 'custom'
-                        ? Text('${bet.name.toUpperCase()}\n\nCustom Bet',
-                            style: TextStyle(color: Colors.white), maxLines: 5)
-                        : bet.mode == 'NGS'
-                            ? Row(
-                                children: [
-                                  Text(
-                                    'NEXT GOAL SWEEPSTAKE',
-                                    style: TextStyle(color: kBetSquadOrange, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )
-                            : Row(
-                                children: [
-                                  Expanded(
-                                    //win button
-                                    child: Image.asset(
-                                      bet.homeBet == BetOption.Positive
-                                          ? 'images/win_green.png'
-                                          : (bet.homeBet == BetOption.Negative
-                                              ? 'images/win_red.png'
-                                              : 'images/win_grey.png'),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    //draw button
-                                    child: Image.asset(
-                                      bet.drawBet == BetOption.Positive
-                                          ? 'images/draw_green.png'
-                                          : (bet.drawBet == BetOption.Negative
-                                              ? 'images/draw_red.png'
-                                              : 'images/draw_grey.png'),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Image.asset(
-                                      bet.awayBet == BetOption.Positive
-                                          ? 'images/lose_green.png'
-                                          : (bet.awayBet == BetOption.Negative
-                                              ? 'images/lose_red.png'
-                                              : 'images/lose_grey.png'),
-                                    ),
-                                  )
-                                ],
-                              ),
-                    if (bet.mode != 'custom')
-                      Row(
-                        children: [
-                          Icon(
-                            MdiIcons.tshirtCrew,
-                            color: HexColor(bet.match.awayShirtColor ?? '#FFFFFF'),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            bet.match != null ? bet.match.awayTeamName : '',
-                            maxLines: 1,
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
-                      ),
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-            ),
-            Container(
-              width: 0.5,
-              height: 100,
-              color: kBetSquadOrange,
-            ),
-            Expanded(
-              flex: 3,
-              child: Container(
-                padding: EdgeInsets.only(left: 20),
-                height: 100,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '£${bet.amount.toStringAsFixed(2)} bet',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      bet.mode == "NGS"
-                          ? 'vs ${bet.accepted.length} ${bet.accepted.length > 1 ? 'users' : 'user'}'
-                          : 'vs 1 user',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(bet.createdAt))}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      '${(bet.status == 'ongoing' || bet.status == 'expired' || bet.status == 'received' || bet.status == 'sent' || bet.status == 'won' || bet.status == 'lost') || bet.status == 'declined' ? bet.status : bet.userStatus}',
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+            );
+          }),
     );
   }
 }

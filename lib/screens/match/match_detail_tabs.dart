@@ -1,3 +1,4 @@
+import 'package:betsquad/screens/match/match_chat_screen.dart';
 import 'package:betsquad/screens/match/match_stats_screen.dart';
 import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
 import 'package:betsquad/screens/match/match_feed_screen.dart';
@@ -47,7 +48,7 @@ class _MatchDetailTabsState extends State<MatchDetailTabs> {
                   case 3:
                     return MatchLineupScreen(match);
                   default:
-                    return MatchFeedScreen(match);
+                    return MatchChatScreen();
                 }
               },
               onPositionChange: (index) {
