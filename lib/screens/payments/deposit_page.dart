@@ -97,7 +97,7 @@ class _DepositPageState extends State<DepositPage> {
 
   _launchURL(String url) async {
     if (await canLaunch(url)) {
-      await launch(url);
+      await launch(url, forceWebView: true, forceSafariVC: true);
     }
   }
 

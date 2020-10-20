@@ -30,7 +30,6 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
 
   getCurrentUserImageUrl() async {
     User user = FirebaseAuth.instance.currentUser;
-    print(user.uid);
     final dbRef = await FirebaseDatabase.instance.reference().child("users/${user.uid}").once();
     setState(() {
       userProfilePic = dbRef.value['image'];

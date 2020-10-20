@@ -41,7 +41,12 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
     }
 
     bet['id'] = betId;
-    bet['userStatus'] = value;
+
+    if (bet['mode'] == "head2head") {
+      bet['opponentId'] = value;
+    } else {
+      bet['userStatus'] = value;
+    }
 
     return bet;
   }
@@ -74,6 +79,9 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasError || !snapshot.hasData) {
                   return Container();
+                }
+                if (snapshot.data.snapshot.value == null) {
+                  return Container(decoration: kGradientBoxDecoration,);
                 }
                 Map usersBetsMap = snapshot.data.snapshot.value;
                 // print(usersBetsMap);
@@ -177,7 +185,6 @@ class BetHistoryCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(bet.id);
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
@@ -218,10 +225,13 @@ class BetHistoryCell extends StatelessWidget {
                                   color: HexColor(bet.match.homeShirtColor ?? '#FFFFFF'),
                                 ),
                                 SizedBox(width: 5),
-                                Text(
-                                  liveBet.match != null ? liveBet.match.homeTeamName : '',
-                                  maxLines: 1,
-                                  style: TextStyle(color: Colors.white),
+                                Flexible(
+                                  child: Text(
+                                    liveBet.match != null ? liveBet.match.homeTeamName : '',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 )
                               ],
                             ),
@@ -278,10 +288,13 @@ class BetHistoryCell extends StatelessWidget {
                                   color: HexColor(liveBet.match.awayShirtColor ?? '#FFFFFF'),
                                 ),
                                 SizedBox(width: 5),
-                                Text(
-                                  liveBet.match != null ? liveBet.match.awayTeamName : '',
-                                  maxLines: 1,
-                                  style: TextStyle(color: Colors.white),
+                                Flexible(
+                                  child: Text(
+                                    liveBet.match != null ? liveBet.match.awayTeamName : '',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 )
                               ],
                             ),

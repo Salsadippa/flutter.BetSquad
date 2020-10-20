@@ -39,7 +39,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {});
+    FirebaseServices().uploadProfilePhotoForExistingUser(image);
   }
 
   void getProfileDetails() async {

@@ -17,10 +17,8 @@ class BetApi {
       'homeBet': bet.homeBet == BetOption.Positive ? 'true' : 'false',
       'awayBet': bet.awayBet == BetOption.Positive ? 'true' : 'false',
     };
-    print(queryParameters);
 
     var response = await networkHelper.getJSON('/newH2HBet', queryParameters);
-    print(response);
     return response;
   }
 
@@ -30,19 +28,17 @@ class BetApi {
       invited.add({'username': user['username'], 'messagingToken': user['messagingToken'], 'uid':
       user['uid']});
     }
-    print(json.encode(invited));
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     Map<String,String> queryParameters = {
       'matchPath': '${bet.match.date}/${bet.match.homeTeamName}',
       'senderId': bet.from,
       'betTotal': (bet.amount * int.parse(bet.rollovers)).toStringAsFixed(2),
+      'betAmount': bet.amount.toStringAsFixed(2),
       'invited': json.encode(invited),
       'maxRollovers': bet.rollovers
     };
-    print(queryParameters);
 
     var response = await networkHelper.getJSON('/newNGSBet', queryParameters);
-    print(response);
     return response;
   }
 
@@ -52,7 +48,8 @@ class BetApi {
       'senderId': bet.from,
       'betId': bet.id,
       'homeTeamName': bet.match.homeTeamName,
-      'awayTeamName': bet.match.awayTeamName
+      'awayTeamName': bet.match.awayTeamName,
+      'opponentBetId': bet.opponentId
     };
 
     var response = await networkHelper.getJSON('/acceptH2HBet', queryParameters);

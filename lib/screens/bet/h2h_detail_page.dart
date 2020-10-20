@@ -27,7 +27,6 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
 
   void getUserDetails() async {
     User user = FirebaseAuth.instance.currentUser;
-    print(user.uid);
     var profilePic = await databaseService.getUserProfilePicture(user.uid);
     var opponentProfilePicture = await databaseService.getUserProfilePicture(widget.bet.vsUserID);
     var selectedOpponentUsername = await databaseService.getUserUsername(widget.bet.vsUserID);

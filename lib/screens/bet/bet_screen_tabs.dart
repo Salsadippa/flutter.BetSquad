@@ -451,6 +451,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 ),
                 TextFieldWithTitleInfo(
                   title: 'Bet amount per goal:',
+                  keyboardType: TextInputType.number,
                   controller: currencyTextFieldController2,
                   onInfoButtonPressed: () {
                     Utility.getInstance().showErrorAlertDialog(context, "Bet per goal",
@@ -473,6 +474,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 ),
                 TextFieldWithTitleInfo(
                   title: 'Max bets per match:',
+                  keyboardType: TextInputType.number,
                   onInfoButtonPressed: () {
                     Utility.getInstance().showErrorAlertDialog(
                         context,

@@ -1,5 +1,6 @@
 import 'package:betsquad/services/networking.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -58,11 +59,12 @@ class FirebaseServices {
     final uid = user.uid;
 
     userDetails['userID'] = uid;
+    userDetails['balance'] = 0.0;
     userDetails.remove('password');
 
     if (userDetails['image'] != null)
       userDetails['image'] =
-          await uploadProfilePhoto(userDetails['image'], uid);
+          await uploadProfilePhotoForNewUser(userDetails['image'], uid);
 
     var parameters = userDetails.map((k, v) => MapEntry(k, v.toString()));
     print(parameters);
@@ -71,13 +73,23 @@ class FirebaseServices {
     onSuccess();
   }
 
-  Future<String> uploadProfilePhoto(var image, var uid) async {
+  Future<String> uploadProfilePhotoForNewUser(var image, var uid) async {
     StorageReference firebaseStorageReference =
         FirebaseStorage.instance.ref().child('profilePicture/$uid/image');
     StorageUploadTask uploadTask = firebaseStorageReference.putFile(image);
     var download = await (await uploadTask.onComplete).ref.getDownloadURL();
     var url = download.toString();
     return url;
+  }
+
+  Future<void> uploadProfilePhotoForExistingUser(var image) async {
+    String uid = FirebaseAuth.instance.currentUser.uid;
+    StorageReference firebaseStorageReference =
+    FirebaseStorage.instance.ref().child('profilePicture/$uid/image');
+    StorageUploadTask uploadTask = firebaseStorageReference.putFile(image);
+    var download = await (await uploadTask.onComplete).ref.getDownloadURL();
+    var url = download.toString();
+    return await FirebaseDatabase.instance.reference().child('users').child(uid).child('image').set(url);
   }
 
   Future<bool> loggedInUser() async {

@@ -1,13 +1,19 @@
+import 'dart:convert';
+
+import 'package:betsquad/models/goal.dart';
 import 'package:betsquad/models/match_data.dart';
+import 'package:betsquad/models/substitution.dart';
 import 'package:betsquad/screens/match/match_detail_tabs.dart';
 import 'package:betsquad/services/local_database.dart';
 import 'package:betsquad/styles/constants.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:calendar_strip/calendar_strip.dart';
 import 'package:betsquad/widgets/custom_expansion_tile.dart' as custom;
 import 'package:betsquad/models/match.dart';
 import 'package:betsquad/widgets/match_cell.dart';
 import 'package:provider/provider.dart';
+import 'package:betsquad/models/card.dart' as BSCard;
 
 class MatchListScreen extends StatefulWidget {
   static const String ID = 'match_list_screen';
@@ -43,7 +49,7 @@ class _MatchListScreenState extends State<MatchListScreen> {
         child: Column(
           children: <Widget>[
             Theme(
-              data: Theme.of(context).copyWith(buttonColor:   kBetSquadOrange),
+              data: Theme.of(context).copyWith(buttonColor: kBetSquadOrange),
               child: CalendarStrip(
                 onDateSelected: (DateTime date) {
                   setState(() {
@@ -52,9 +58,8 @@ class _MatchListScreenState extends State<MatchListScreen> {
                   getMatches();
                 },
                 containerDecoration: BoxDecoration(color: Colors.white),
-                monthNameWidget: (monthLabel) => Container(
-                    child: Text(monthLabel),
-                    padding: EdgeInsets.only(top: 7, bottom: 3)),
+                monthNameWidget: (monthLabel) =>
+                    Container(child: Text(monthLabel), padding: EdgeInsets.only(top: 7, bottom: 3)),
               ),
             ),
             Expanded(
@@ -68,25 +73,18 @@ class _MatchListScreenState extends State<MatchListScreen> {
                       padding: EdgeInsets.only(left: 35),
                       child: Text(
                         matches.keys.toList()[i],
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    children: _buildExpandableContent(
-                        matches[matches.keys.toList()[i]], (Match match) {
-                          if (match.currentState == 0) {
-                            Provider.of<MatchData>(context, listen: false)
-                                .updateSelectedMatch(match);
-                          } else {
-                            Navigator.pushNamed(context, MatchDetailTabs.ID,
-                                arguments: match);
-                          }
+                    children: _buildExpandableContent(matches[matches.keys.toList()[i]], (Match match) {
+                      if (match.currentState == 0) {
+                        Provider.of<MatchData>(context, listen: false).updateSelectedMatch(match);
+                      } else {
+                        Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
+                      }
                     }, (Match match) {
-                      Navigator.pushNamed(context, MatchDetailTabs.ID,
-                          arguments: match);
+                      Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
                     }, selectedMatch),
                   );
                 },
@@ -98,15 +96,109 @@ class _MatchListScreenState extends State<MatchListScreen> {
     );
   }
 
-  _buildExpandableContent(List<Match> matches, Function onPressed,
-      Function onLongPressed, Match selectedMatch) {
+  _buildExpandableContent(List<Match> matches, Function onPressed, Function onLongPressed, Match selectedMatch) {
     List<Widget> expandableContent = [];
     for (Match match in matches) {
-      expandableContent.add(MatchCell(match, match == selectedMatch, () {
-        onPressed(match);
-      }, () {
-        onLongPressed(match);
-      }));
+      expandableContent.add(
+        StreamBuilder<Event>(
+          stream: FirebaseDatabase.instance.reference().child('sm_matches').child(match.date + '/' + match.homeTeamName).onValue,
+          builder: (context, snapshot) {
+            if (snapshot.hasError || !snapshot.hasData) {
+              return MatchCell(match, match == selectedMatch, () {
+                onPressed(match);
+              }, () {
+                onLongPressed(match);
+              });
+            }
+            List<Future<dynamic>> futures = [];
+
+            var matchSnapshot = snapshot.data.snapshot.value;
+
+            print(matchSnapshot);
+            Match m = Match(
+              id: matchSnapshot["id"],
+              awayShirtColor: match.awayShirtColor,
+              homeShirtColor: match.homeShirtColor,
+              awayTeamId: matchSnapshot["awayTeam"]["dbid"],
+              homeTeamId: matchSnapshot["homeTeam"]["dbid"],
+              awayGoals: matchSnapshot["awayGoals"] ?? 0,
+              homeGoals: matchSnapshot["homeGoals"] ?? 0,
+              awayPenalties: matchSnapshot["awayPenalties"] ?? -1,
+              homePenalties: matchSnapshot["homePenalties"] ?? -1,
+              awayTeamName: matchSnapshot["awayTeam"]["name"],
+              competitionId: matchSnapshot["competition"]["dbid"],
+              competitionName: matchSnapshot["competition"]["name"],
+              currentState: matchSnapshot["currentState"],
+              date: matchSnapshot["date"],
+              homeTeamName: matchSnapshot["homeTeam"]["name"],
+              lastPolled: matchSnapshot["lastPolled"],
+              minute: matchSnapshot["minute"],
+              nextState: matchSnapshot["nextState"],
+              round: matchSnapshot["round"] != null ? matchSnapshot["round"]["name"].toString() : "-",
+              startTimestamp: matchSnapshot["start"],
+              venue: matchSnapshot["venue"] != null ? matchSnapshot["venue"]["name"] : "-",
+              stage: matchSnapshot["stage"] != null ? matchSnapshot["stage"]["name"] + " " + matchSnapshot["stage"]["type"] : "-",
+              stats: matchSnapshot["stats"] != null ? json.encode(matchSnapshot["stats"]) : null,
+              homeLineup: matchSnapshot["homePlayers"] != null ? json.encode(matchSnapshot["homePlayers"]) : null,
+              awayLineup: matchSnapshot["awayPlayers"] != null ? json.encode(matchSnapshot["awayPlayers"]) : null,
+            );
+
+            futures.add(DBProvider.db.insertMatch(m));
+
+            if (matchSnapshot["goals"] != null) {
+              for (final goal in matchSnapshot["goals"]) {
+                Goal g = Goal(
+                    id: goal['id'],
+                    type: goal["goalType"],
+                    side: goal["side"],
+                    scoringPlayer: goal["scoringPlayer"],
+                    matchId: m.id,
+                    playerId: goal["playerId"],
+                    minute: goal["minute"]);
+                futures.add(DBProvider.db.insertGoal(g));
+              }
+            }
+
+            if (matchSnapshot["cards"] != null) {
+              for (final card in matchSnapshot["cards"]) {
+                BSCard.Card c = BSCard.Card(
+                    id: card['id'],
+                    cardType: card["cardType"],
+                    minute: card["minute"],
+                    player: card["player"],
+                    playerId: card["playerId"],
+                    side: card["side"],
+                    matchId: m.id);
+                futures.add(DBProvider.db.insertCard(c));
+              }
+            }
+
+            if (matchSnapshot["substitutions"] != null) {
+              for (final sub in matchSnapshot["substitutions"]) {
+                Substitution s = Substitution(
+                    id: sub['id'],
+                    matchId: m.id,
+                    side: sub["side"],
+                    minute: sub["minute"],
+                    playerIn: sub["playerIn"],
+                    playerInId: sub["playerInId"],
+                    playerOut: sub["playerOut"],
+                    playerOutId: sub["playerOutId"]);
+                futures.add(DBProvider.db.insertSub(s));
+              }
+            }
+
+            //update local db
+            Future.wait(futures);
+
+            return MatchCell(match, match == selectedMatch, () {
+              onPressed(match);
+            }, () {
+              onLongPressed(match);
+            });
+          }
+        ),
+      );
     }
     return expandableContent;
   }

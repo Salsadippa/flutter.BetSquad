@@ -3,6 +3,7 @@ import 'package:betsquad/screens/profile/create_squad_page.dart';
 import 'package:betsquad/screens/profile/edit_squad_page.dart';
 import 'package:betsquad/screens/profile/friend_requests_page.dart';
 import 'package:betsquad/screens/profile/search_friends.dart';
+import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -39,7 +40,7 @@ class _SquadsTabState extends State<SquadsTab> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {});
+    FirebaseServices().uploadProfilePhotoForExistingUser(image);
   }
 
   @override
@@ -133,7 +134,9 @@ class _SquadsTabState extends State<SquadsTab> {
                     ? StreamBuilder<Event>(
                         stream: friends.onValue,
                         builder: (context, snapshot) {
-                          if (snapshot.hasData && !snapshot.hasError) {
+                          if (!snapshot.hasData || snapshot.hasError || snapshot.data.snapshot.value == null) {
+                            return Container(height: 20,);
+                          }
                             Map friendsList = snapshot.data.snapshot.value;
                             List friendIds = friendsList.keys.toList();
                             return FutureBuilder(
@@ -177,9 +180,6 @@ class _SquadsTabState extends State<SquadsTab> {
                                 );
                               },
                             );
-                          } else {
-                            return Container();
-                          }
                         })
                     : Container(),
                 Padding(

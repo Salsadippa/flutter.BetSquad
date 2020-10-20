@@ -21,7 +21,7 @@ class MatchDetailTabs extends StatefulWidget {
 
 class _MatchDetailTabsState extends State<MatchDetailTabs> {
   List<String> tabs = ['Feed', 'Details', 'Stats', 'Lineups', 'Chat'];
-  int initPosition = 1;
+  int initPosition = 0;
 
   @override
   Widget build(BuildContext context) {

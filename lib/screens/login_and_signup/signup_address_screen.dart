@@ -1,12 +1,16 @@
 import 'package:betsquad/api/users_api.dart';
+import 'package:betsquad/screens/tab_bar.dart';
+import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/widgets/betsquad_logo_appbar.dart';
 import 'package:betsquad/widgets/full_width_button.dart';
 import 'package:betsquad/widgets/text_field_with_title_description.dart';
 import 'package:betsquad/widgets/text_field_with_title_desctiption_button.dart';
 import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/utilities/utility.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class SignupAddressScreen extends StatefulWidget {
   static const String ID = 'signup_address_screen';
@@ -22,6 +26,7 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
       _cityController = TextEditingController(),
       _countyController = TextEditingController();
   FirebaseServices _firebaseHelper = FirebaseServices();
+  var storage = FirebaseStorage.instance;
 
   _selectedAddress(String address) {
     List parts = address.split(',');
@@ -131,18 +136,31 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
 
         await _firebaseHelper.signUp(userDetails, onSuccess: () {
           print('new user signed up');
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TabBarController(),),);
         }, onError: (e) {
           Utility().showErrorAlertDialog(context, 'Error', e.toString());
         });
 
       } else {
+        // StorageTaskSnapshot snapshot = await storage
+        //     .ref()
+        //     .child("profilePicture/$user.uid")
+        //     .putFile(userDetails['image'])
+        //     .onComplete;
+        // if (snapshot.error == null) {
+        //   final String downloadUrl =
+        //       await snapshot.ref.getDownloadURL();
+        //   await FirebaseDatabase.instance.reference().child('users').child(user.uid).child('image').set(downloadUrl);
+        //
+        // print(userDetails['image']);
+
         Utility().showErrorAlertDialog(context, "Missing fields",
             "Please enter all the fields and try again or skip this step.");
       }
     });
 
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.black87,
       appBar: BetSquadLogoAppBar(),
       body: SingleChildScrollView(
         child: Column(
@@ -153,7 +171,9 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
             streetTextField,
             cityTextField,
             countyTextField,
+            SizedBox(height: 10),
             skipButton,
+            SizedBox(height: 10),
             doneButton
           ],
         ),

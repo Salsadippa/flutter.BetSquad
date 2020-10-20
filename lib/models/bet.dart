@@ -39,8 +39,6 @@ class Bet {
       this.winners});
 
   factory Bet.fromMap(Map<dynamic, dynamic> json) {
-    print(json['id']);
-    print(json['status']);
     return Bet(
         id: json['id'],
         mode: json['mode'],
@@ -51,7 +49,7 @@ class Bet {
         vsUserID: json['vs'],
         vsUsername: json['vsUsername'],
         status: json['status'],
-        opponentId: '',
+        opponentId: json['opponentId'],
         from: json['from'],
         rollovers: json['rollovers'],
         userStatus: json['userStatus'],

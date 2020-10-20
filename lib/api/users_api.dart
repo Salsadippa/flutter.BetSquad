@@ -36,7 +36,6 @@ class UsersApi {
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var users = await networkHelper.getJSON('searchUsers', {'idToken': idToken, 'searchQuery': query});
-    print(users);
     return users;
   }
 
@@ -99,8 +98,6 @@ class UsersApi {
   }
 
   static Future<Map> setSquadInfo(String squadId, Map squad) async {
-    print(squadId);
-    print(squad);
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
@@ -147,7 +144,6 @@ class UsersApi {
   }
 
   static Future<Map> checkValidDeposit(double amount) async {
-    print(amount);
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.GOOGLE_APP_ENGINE);
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();

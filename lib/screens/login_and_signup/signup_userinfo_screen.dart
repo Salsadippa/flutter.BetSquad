@@ -43,6 +43,8 @@ class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
   Widget build(BuildContext context) {
     final Map<String,Object> userDetails = ModalRoute.of(context).settings.arguments;
 
+    print(userDetails['image']);
+
     var dobTextField = TextFieldWithDatePicker(
       title: 'D.O.B',
       value: _dob != null ? _formatter.format(_dob) : '',
