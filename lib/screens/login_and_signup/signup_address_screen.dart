@@ -1,13 +1,11 @@
 import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/screens/tab_bar.dart';
-import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/widgets/betsquad_logo_appbar.dart';
 import 'package:betsquad/widgets/full_width_button.dart';
 import 'package:betsquad/widgets/text_field_with_title_description.dart';
 import 'package:betsquad/widgets/text_field_with_title_desctiption_button.dart';
 import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/utilities/utility.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -128,7 +126,7 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
           _street.isNotEmpty &&
           _city.isNotEmpty &&
           _county.isNotEmpty) {
-        userDetails["postcode"] = _postcode;
+        userDetails["zip_code"] = _postcode;
         userDetails["building"] = _building;
         userDetails["street"] = _street;
         userDetails["city"] = _city;
@@ -140,20 +138,7 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
         }, onError: (e) {
           Utility().showErrorAlertDialog(context, 'Error', e.toString());
         });
-
       } else {
-        // StorageTaskSnapshot snapshot = await storage
-        //     .ref()
-        //     .child("profilePicture/$user.uid")
-        //     .putFile(userDetails['image'])
-        //     .onComplete;
-        // if (snapshot.error == null) {
-        //   final String downloadUrl =
-        //       await snapshot.ref.getDownloadURL();
-        //   await FirebaseDatabase.instance.reference().child('users').child(user.uid).child('image').set(downloadUrl);
-        //
-        // print(userDetails['image']);
-
         Utility().showErrorAlertDialog(context, "Missing fields",
             "Please enter all the fields and try again or skip this step.");
       }

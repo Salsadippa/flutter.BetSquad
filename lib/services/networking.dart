@@ -41,6 +41,7 @@ class NetworkHelper {
   Future getJSON(String endpoint, Map<String, String> parameters) async {
     var uri = Uri.http(this.baseURL, endpoint, parameters);
     var response = await http.get(uri);
+    print(response);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       return data;

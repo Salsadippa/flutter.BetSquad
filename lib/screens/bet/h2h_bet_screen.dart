@@ -64,7 +64,7 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
                         radius: 50,
                         backgroundColor: kBetSquadOrange,
                         child: CircleAvatar(
-                          backgroundImage: userProfilePic != null ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
+                          backgroundImage: userProfilePic != null || userProfilePic == '' ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
                           radius: 48,
                         ),
                       ),

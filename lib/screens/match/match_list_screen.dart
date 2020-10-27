@@ -6,6 +6,8 @@ import 'package:betsquad/models/substitution.dart';
 import 'package:betsquad/screens/match/match_detail_tabs.dart';
 import 'package:betsquad/services/local_database.dart';
 import 'package:betsquad/styles/constants.dart';
+import 'package:betsquad/utilities/utility.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:calendar_strip/calendar_strip.dart';
@@ -30,6 +32,7 @@ class _MatchListScreenState extends State<MatchListScreen> {
   void initState() {
     super.initState();
     getMatches();
+    // FirebaseAuth.instance.signOut();
   }
 
   getMatches() async {
@@ -42,7 +45,6 @@ class _MatchListScreenState extends State<MatchListScreen> {
   @override
   Widget build(BuildContext context) {
     Match selectedMatch = Provider.of<MatchData>(context).selectedMatch;
-
     return Scaffold(
       body: Container(
         decoration: kGrassTrimBoxDecoration,
@@ -114,7 +116,6 @@ class _MatchListScreenState extends State<MatchListScreen> {
 
             var matchSnapshot = snapshot.data.snapshot.value;
 
-            print(matchSnapshot);
             Match m = Match(
               id: matchSnapshot["id"],
               awayShirtColor: match.awayShirtColor,

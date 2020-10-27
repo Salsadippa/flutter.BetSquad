@@ -48,6 +48,8 @@ class FirebaseServices {
   }
 
   signUp(Map<String, Object> userDetails, {@required Function onSuccess, @required Function onError}) async {
+    NetworkHelper appEngineNetworkHelper = NetworkHelper(BASE_URL.GOOGLE_APP_ENGINE);
+
     try {
       await _auth.createUserWithEmailAndPassword(
           email: userDetails["email"], password: userDetails["password"]);
@@ -58,22 +60,36 @@ class FirebaseServices {
     final User user = _auth.currentUser;
     final uid = user.uid;
 
-    userDetails['userID'] = uid;
     userDetails['balance'] = 0.0;
+    userDetails['uid'] = uid;
     userDetails.remove('password');
 
-    if (userDetails['image'] != null)
+    if (userDetails['image'] != null && userDetails['image'] != '') {
       userDetails['image'] =
-          await uploadProfilePhotoForNewUser(userDetails['image'], uid);
+      await uploadProfilePhotoForNewUser(userDetails['image'], uid);
+    } else {
+      userDetails['image'] = '';
+    }
 
     var parameters = userDetails.map((k, v) => MapEntry(k, v.toString()));
     print(parameters);
     await cloudFunctionsNetworkHelper.getJSON(
         'writeNewUserToDatabase', parameters);
+
+    Map<String, String> p = {'userEmail': userDetails['email']};
+    Map<String, Object> bannedInfo = await cloudFunctionsNetworkHelper.getJSON(
+        'checkIfUserIsBanned', p);
+
+    var token = await user.getIdToken();
+    var params = {'userID': uid, 'auth': token};
+    print(params);
+    var res = await appEngineNetworkHelper.getJSON('amlCheck', params);
+    print(res);
     onSuccess();
   }
 
   Future<String> uploadProfilePhotoForNewUser(var image, var uid) async {
+    if (image == null) {return null;}
     StorageReference firebaseStorageReference =
         FirebaseStorage.instance.ref().child('profilePicture/$uid/image');
     StorageUploadTask uploadTask = firebaseStorageReference.putFile(image);

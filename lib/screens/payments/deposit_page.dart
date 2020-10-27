@@ -3,6 +3,7 @@ import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/screens/payments/deposit_limits_page.dart';
 import 'package:betsquad/string_utils.dart';
 import 'package:betsquad/styles/constants.dart';
+import 'package:betsquad/utilities/utility.dart';
 import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
 import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/material.dart';
@@ -541,6 +542,13 @@ class _DepositPageState extends State<DepositPage> {
                     if (_amount < 10.0) {
                       Alert.showErrorDialog(context, '£10 Minimum Deposit',
                           'You must deposit at least £10');
+                      return;
+                    }
+
+                    if (!(await Utility().isInTheUk())) {
+                      Alert.showErrorDialog(context, 'UK Deposits Only',
+                          'You are not in the UK or we could not verify your location so you cannot deposit funds. '
+                              'Make sure location access is enabled.');
                       return;
                     }
 

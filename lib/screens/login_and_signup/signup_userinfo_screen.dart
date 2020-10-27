@@ -20,7 +20,7 @@ class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
   String _firstName = '', _lastName = '', _email = '', _password = '', _confirmPassword = '';
   bool _termsAndConditionsOptIn = false;
   bool _marketingOptIn = false;
-  var _formatter = new DateFormat('dd-MM-yyyy');
+  var _formatter = new DateFormat('dd/MM/yyyy');
 
   int _calculateAge(DateTime birthDate) {
     DateTime currentDate = DateTime.now();

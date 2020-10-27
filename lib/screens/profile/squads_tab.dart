@@ -60,8 +60,8 @@ class _SquadsTabState extends State<SquadsTab> {
                       stream: FirebaseDatabase.instance.reference().child('users').child(FirebaseAuth.instance
                           .currentUser.uid).child('image').onValue,
                       builder: (context, snapshot) {
-                        if (snapshot.hasError || !snapshot.hasData){
-                          return CircleAvatar(backgroundImage: kUserPlaceholderImage);
+                        if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == ''){
+                          return CircleAvatar(backgroundImage: kUserPlaceholderImage, radius: 50,);
                         }
                         var image = snapshot.data.snapshot.value;
                         return  CircleAvatar(

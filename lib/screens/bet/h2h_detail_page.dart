@@ -121,7 +121,7 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                               backgroundColor: kBetSquadOrange,
                               child: CircleAvatar(
                                 backgroundImage:
-                                    _profilePicture != null ? NetworkImage(_profilePicture) : kUserPlaceholderImage,
+                                    _profilePicture != null || _profilePicture == '' ? NetworkImage(_profilePicture) : kUserPlaceholderImage,
                                 radius: 48,
                               ),
                             ),

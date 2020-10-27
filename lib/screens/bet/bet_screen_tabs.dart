@@ -95,7 +95,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                     radius: 50,
                     backgroundColor: kBetSquadOrange,
                     child: CircleAvatar(
-                      backgroundImage: userProfilePic != null ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
+                      backgroundImage: userProfilePic != null || userProfilePic == '' ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
                       radius: 48,
                     ),
                   ),
@@ -466,7 +466,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                           currencyTextFieldController2.doubleValue * double.parse(textEditingController2.text);
                       textEditingController.text = "£${totalStake.toStringAsFixed(2)}";
                       setState(() {
-                        print("settingg amount");
+                        print("setting amount");
                         ngsTotalStake = totalStake;
                       });
                     }
