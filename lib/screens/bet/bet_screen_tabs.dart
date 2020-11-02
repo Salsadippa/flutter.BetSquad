@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:betsquad/api/bet_api.dart';
+import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/models/bet.dart';
 import 'package:betsquad/screens/bet/bet_history_page.dart';
 import 'package:betsquad/screens/profile/squads_tab.dart';
@@ -617,6 +618,12 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                   return;
                 }
 
+                bool compliant = await UsersApi.complianceCheck();
+                if (!compliant) {
+                  Alert.showErrorDialog(
+                      context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
+                }
+
                 Map createBetResponse = await BetApi().sendH2HBet(h2hBet);
                 if (createBetResponse['result'] == 'success') {
                   Navigator.pop(context);
@@ -656,6 +663,12 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                       'You must invite at least 1 '
                           'user to this bet');
                   return;
+                }
+
+                bool compliant = await UsersApi.complianceCheck();
+                if (!compliant) {
+                  Alert.showErrorDialog(
+                      context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
                 }
 
                 Map createBetResponse = await BetApi().sendNGSBet(ngsBet, invitedUsers);

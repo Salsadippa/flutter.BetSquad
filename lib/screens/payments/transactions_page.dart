@@ -114,21 +114,22 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       }
                       print("bal: " + balance.toString());
                       balances.add(balance);
-                    }
 
-                    _transactions.add({
-                      'amount': amount,
-                      'betID': value['betID'],
-                      'currency': value['currency'],
-                      'detail': value['detail'],
-                      'receiver': value['receiver'],
-                      'sender': value['sender'],
-                      'timestamp': value['timestamp'],
-                      'type': value['type'],
-                      'isCredit': isCredit
-                    });
+                      _transactions.add({
+                        'amount': amount,
+                        'betID': value['betID'],
+                        'currency': value['currency'],
+                        'detail': value['detail'],
+                        'receiver': value['receiver'],
+                        'sender': value['sender'],
+                        'timestamp': value['timestamp'],
+                        'type': value['type'],
+                        'isCredit': isCredit
+                      });
+                    }
                   });
 
+                  _transactions.sort((a,b)=> Comparable.compare(b['timestamp'], a['timestamp']));
                   balances = balances.reversed.toList();
 
                   return ListView.builder(

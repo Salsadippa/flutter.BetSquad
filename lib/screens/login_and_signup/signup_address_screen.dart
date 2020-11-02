@@ -117,8 +117,13 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
           _county = value.trim();
         });
 
-    var skipButton = FullWidthButton('Skip', () {
-      print("skip");
+    var skipButton = FullWidthButton('Skip', () async {
+      await _firebaseHelper.signUp(userDetails, onSuccess: () {
+        print('new user signed up');
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TabBarController(),),);
+      }, onError: (e) {
+        Utility().showErrorAlertDialog(context, 'Error', e.toString());
+      });
     });
     var doneButton = FullWidthButton('Done', () async {
       if (_postcode.isNotEmpty &&

@@ -1,4 +1,5 @@
 import 'package:betsquad/api/bet_api.dart';
+import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/models/bet.dart';
 import 'package:betsquad/screens/bet/ngs_invited_page.dart';
 import 'package:betsquad/screens/bet/ngs_winner_page.dart';
@@ -248,6 +249,12 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                               child: Text('Accept', style: TextStyle(color: Colors.white, fontSize: 18)),
                               color: Colors.green,
                               onPressed: () async {
+                                bool compliant = await UsersApi.complianceCheck();
+                                if (!compliant) {
+                                  Alert.showErrorDialog(
+                                      context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
+                                }
+
                                 //accept bet
                                 Map acceptedBetResponse = await BetApi().acceptNGSBet(widget.bet);
                                 print(acceptedBetResponse);

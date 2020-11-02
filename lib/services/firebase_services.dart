@@ -77,14 +77,12 @@ class FirebaseServices {
         'writeNewUserToDatabase', parameters);
 
     Map<String, String> p = {'userEmail': userDetails['email']};
-    Map<String, Object> bannedInfo = await cloudFunctionsNetworkHelper.getJSON(
+    cloudFunctionsNetworkHelper.getJSON(
         'checkIfUserIsBanned', p);
 
     var token = await user.getIdToken();
     var params = {'userID': uid, 'auth': token};
-    print(params);
-    var res = await appEngineNetworkHelper.getJSON('amlCheck', params);
-    print(res);
+    appEngineNetworkHelper.getJSON('amlCheck', params);
     onSuccess();
   }
 

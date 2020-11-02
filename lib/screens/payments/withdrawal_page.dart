@@ -187,9 +187,9 @@ class _WithdrawalPageState extends State<WithdrawalPage> {
                         expiryMonth: expirySplit[0],
                         expiryYear: expirySplit[1]);
                     if (res['status'] == 200) {
-                      Alert.showSuccessDialog(context, 'Successful Withdraw', res['message']);
+                      Alert.showSuccessDialog(context, 'Successful Withdraw', res['body']['message']);
                     } else {
-                      Alert.showErrorDialog(context, 'Withdraw Failed', res['message']);
+                      Alert.showErrorDialog(context, 'Withdraw Failed', res['body']['message']);
                     }
                   },
                   child: Text(

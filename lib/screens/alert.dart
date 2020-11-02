@@ -30,6 +30,9 @@ class Alert {
               textAlign: TextAlign.center,
             ),
             alertType: RichAlertType.ERROR,
+            actions: [
+
+            ],
           );
         });
   }

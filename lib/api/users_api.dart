@@ -214,5 +214,17 @@ class UsersApi {
     return result;
   }
 
+  static Future<bool> complianceCheck() async{
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
+    var userDetails = {
+      'auth': idToken,
+      'senderId': user.uid,
+    };
+    var result = await networkHelper.getJSON('userComplianceCheck', userDetails);
+    return result['compliant'];
+  }
+
 }
 

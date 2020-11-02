@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/models/goal.dart';
 import 'package:betsquad/models/match_data.dart';
 import 'package:betsquad/models/substitution.dart';
@@ -33,6 +34,11 @@ class _MatchListScreenState extends State<MatchListScreen> {
     super.initState();
     getMatches();
     // FirebaseAuth.instance.signOut();
+    compliance();
+  }
+  
+  compliance(){
+    UsersApi.complianceCheck();
   }
 
   getMatches() async {
@@ -105,7 +111,7 @@ class _MatchListScreenState extends State<MatchListScreen> {
         StreamBuilder<Event>(
           stream: FirebaseDatabase.instance.reference().child('sm_matches').child(match.date + '/' + match.homeTeamName).onValue,
           builder: (context, snapshot) {
-            if (snapshot.hasError || !snapshot.hasData) {
+            if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == null) {
               return MatchCell(match, match == selectedMatch, () {
                 onPressed(match);
               }, () {
