@@ -12,10 +12,12 @@ import 'package:betsquad/widgets/swipeable_tabs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountInfoPage extends StatefulWidget {
   @override
@@ -62,6 +64,37 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
     super.initState();
     getProfileDetails();
   }
+
+  Widget gamblingCommissionInfo = Column(
+    children: [
+      Container(
+        height: 100,
+        child: Image.asset('images/gambling_commission_logo.png'),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(children: [
+            TextSpan(
+              text:
+              'BetSquad is operated by iTech Gaming Limited (Company Number 10668656), a UK '
+                  'company licensed and regulated by the UK Gambling Commission ',
+              style: GoogleFonts.roboto(color: Colors.white),
+            ),
+            TextSpan(
+                text: '(License number 50996)',
+                style: GoogleFonts.roboto(color: Colors.orange),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    launch('https://secure.gamblingcommission.gov'
+                        '.uk/PublicRegister/Search/Detail/50996');
+                  })
+          ]),
+        ),
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -449,16 +482,8 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                 ),
                               ),
                               SizedBox(height: 30),
-                              Container(
-                                height: 100,
-                                child: Image.asset('images/gambling_commission_logo.png'),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                child: Text('BetSquad is operated by iTech Gaming Limited (Company Number 10668656), a UK '
-                                    'company licensed and regulated by the UK Gambling Commission (License number '
-                                    '50996)', style: GoogleFonts.roboto(color: Colors.white),textAlign: TextAlign.center,),
-                              )
+                              gamblingCommissionInfo,
+                              SizedBox(height: 30)
                             ],
                           ),
                         ),
@@ -616,16 +641,8 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                 ],
                               ),
                             ),
-                            Container(
-                              height: 100,
-                              child: Image.asset('images/gambling_commission_logo.png'),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              child: Text('BetSquad is operated by iTech Gaming Limited (Company Number 10668656), a UK '
-                                  'company licensed and regulated by the UK Gambling Commission (License number '
-                                  '50996)', style: GoogleFonts.roboto(color: Colors.white),textAlign: TextAlign.center,),
-                            )
+                            gamblingCommissionInfo,
+                            SizedBox(height: 30)
                           ],
                         ),
                       ));
