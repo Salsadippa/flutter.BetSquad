@@ -97,14 +97,21 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                 child: GestureDetector(
                   onTap: getImage,
                   child: StreamBuilder<Event>(
-                      stream: FirebaseDatabase.instance.reference().child('users').child(FirebaseAuth.instance
-                          .currentUser.uid).child('image').onValue,
+                      stream: FirebaseDatabase.instance
+                          .reference()
+                          .child('users')
+                          .child(FirebaseAuth.instance.currentUser.uid)
+                          .child('image')
+                          .onValue,
                       builder: (context, snapshot) {
-                        if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == ''){
-                          return CircleAvatar(backgroundImage: kUserPlaceholderImage, radius: 50,);
+                        if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == '') {
+                          return CircleAvatar(
+                            backgroundImage: kUserPlaceholderImage,
+                            radius: 50,
+                          );
                         }
                         var image = snapshot.data.snapshot.value;
-                        return  CircleAvatar(
+                        return CircleAvatar(
                           radius: 53,
                           backgroundColor: kBetSquadOrange,
                           child: CircleAvatar(
@@ -112,8 +119,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                             radius: 50,
                           ),
                         );
-                      }
-                  ),
+                      }),
                 ),
               ),
             ),
@@ -430,7 +436,10 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                 height: 45,
                                 color: kBetSquadOrange,
                                 child: FlatButton(
-                                  child: Text('Log Out', style: GoogleFonts.roboto(color: Colors.white, fontSize: 18),),
+                                  child: Text(
+                                    'Log Out',
+                                    style: GoogleFonts.roboto(color: Colors.white, fontSize: 18),
+                                  ),
                                   onPressed: () async {
                                     await FirebaseServices().signOut();
                                     Navigator.of(context, rootNavigator: true).pushReplacement(
@@ -440,6 +449,16 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                 ),
                               ),
                               SizedBox(height: 30),
+                              Container(
+                                height: 100,
+                                child: Image.asset('images/gambling_commission_logo.png'),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Text('BetSquad is operated by iTech Gaming Limited (Company Number 10668656), a UK '
+                                    'company licensed and regulated by the UK Gambling Commission (License number '
+                                    '50996)', style: GoogleFonts.roboto(color: Colors.white),textAlign: TextAlign.center,),
+                              )
                             ],
                           ),
                         ),
@@ -459,7 +478,10 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                     title: Text('Please gamble responsibly.'),
                                     actions: [
                                       CupertinoActionSheetAction(
-                                        child: Text('Delete Account', style: GoogleFonts.roboto(color: Colors.red),),
+                                        child: Text(
+                                          'Delete Account',
+                                          style: GoogleFonts.roboto(color: Colors.red),
+                                        ),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).push(
@@ -472,7 +494,10 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                         },
                                       ),
                                       CupertinoActionSheetAction(
-                                        child: Text('Self Exclusion', style: GoogleFonts.roboto(color: Colors.black),),
+                                        child: Text(
+                                          'Self Exclusion',
+                                          style: GoogleFonts.roboto(color: Colors.black),
+                                        ),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).push(
@@ -485,8 +510,10 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                         },
                                       ),
                                       CupertinoActionSheetAction(
-                                        child: Text('Set Deposit Limits', style: GoogleFonts.roboto(color: Colors
-                                            .black),),
+                                        child: Text(
+                                          'Set Deposit Limits',
+                                          style: GoogleFonts.roboto(color: Colors.black),
+                                        ),
                                         onPressed: () {
                                           Navigator.of(context).pop();
 
@@ -589,6 +616,16 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                 ],
                               ),
                             ),
+                            Container(
+                              height: 100,
+                              child: Image.asset('images/gambling_commission_logo.png'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              child: Text('BetSquad is operated by iTech Gaming Limited (Company Number 10668656), a UK '
+                                  'company licensed and regulated by the UK Gambling Commission (License number '
+                                  '50996)', style: GoogleFonts.roboto(color: Colors.white),textAlign: TextAlign.center,),
+                            )
                           ],
                         ),
                       ));
