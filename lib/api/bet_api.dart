@@ -77,7 +77,7 @@ class BetApi {
     Map<String,String> queryParameters = {
       'senderId': currentUser.uid,
       'betId': bet.id,
-      'betTotal': bet.amount.toString(),
+      'betTotal': (bet.amount * int.parse(bet.rollovers)).toStringAsFixed(2),
       'rollovers': bet.rollovers,
       'from': bet.from,
       'homeTeamName': bet.match.homeTeamName,
