@@ -1,45 +1,66 @@
 import 'package:betsquad/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/api/users_api.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class SelectOpponentScreen extends StatefulWidget {
+  final Map alreadyInvited;
+  final List alreadySelected;
+  final bool multipleSelection;
+
   static const String ID = 'select_opponent_screen';
+
+  SelectOpponentScreen({this.alreadyInvited = const {}, this.multipleSelection = false, this.alreadySelected = const
+  []});
 
   @override
   _SelectOpponentScreenState createState() => _SelectOpponentScreenState();
 }
 
 class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
-  List<ListItem<Map<String,dynamic>>> allUsers = [];
+  List<ListItem<Map<String, dynamic>>> allUsers = [];
   var selectedUsers = [];
+  bool _loading = false;
 
   @override
   void initState() {
     super.initState();
     getData();
+    print(widget.alreadySelected);
   }
 
   getData() async {
+    setState(() {
+      _loading = true;
+    });
     Map users = await UsersApi.getAllUsers();
     var opponents = users.values.toList();
-    opponents.sort((a, b ) => a['username'].toString().toLowerCase().compareTo(b['username'].toString().toLowerCase()));
+    opponents.sort((a, b) => a['username'].toString().toLowerCase().compareTo(b['username'].toString().toLowerCase()));
+    opponents.removeWhere((element) => widget.alreadyInvited.keys.contains(element['uid']));
     setState(() {
-      allUsers = List.generate(opponents.length, (index) => ListItem(opponents[index]));
+      allUsers = List.generate(opponents.length, (index) {
+        ListItem<Map<String,dynamic>> item = ListItem(opponents[index]);
+        bool selected = (widget.alreadySelected.contains(opponents[index]['uid']));
+        if (selected){
+          selectedUsers.add(opponents[index]);
+        }
+        item.isSelected = selected;
+        return item;
+      });
+      _loading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool multipleSelection = ModalRoute.of(context).settings.arguments;
-
     return Scaffold(
       appBar: AppBar(
         actions: [
-          multipleSelection != null && multipleSelection
+          widget.multipleSelection != null && widget.multipleSelection
               ? Padding(
                   padding: const EdgeInsets.only(right: 15.0),
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context, selectedUsers);
                     },
                     child: Center(
@@ -52,53 +73,53 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
               : Text('')
         ],
       ),
-      body: Container(
-        color: Colors.black87,
-        child: ListView.builder(
-          itemCount: allUsers.length,
-          itemBuilder: (context, index) {
-            var user = allUsers[index].data;
-            return ListTile(
-              key: ObjectKey(user),
-              title: Text(
-                user['username'],
-                style: TextStyle(color: Colors.white),
-              ),
-              leading: CircleAvatar(
-                backgroundColor: kBetSquadOrange,
-                radius: 22,
-                child: CircleAvatar(
-                  backgroundImage: user['image'] != null && user['image'] != ''
-                      ? NetworkImage(user['image'])
-                      : kUserPlaceholderImage,
-                  radius: 20,
+      body: ModalProgressHUD(
+        inAsyncCall: _loading,
+        child: Container(
+          color: Colors.black87,
+          child: ListView.builder(
+            itemCount: allUsers.length,
+            itemBuilder: (context, index) {
+              var user = allUsers[index].data;
+              return ListTile(
+                key: ObjectKey(user),
+                title: Text(
+                  user['username'],
+                  style: TextStyle(color: Colors.white),
                 ),
-              ),
-              trailing: allUsers[index].isSelected
-                  ? Icon(
-                      Icons.check,
-                      color: kBetSquadOrange,
-                    )
-                  : null,
-              onTap: () {
-                if (multipleSelection) {
-                  setState(() {
-                    print("change");
-                    print(allUsers[index].isSelected);
-                    if (allUsers[index].isSelected) {
-                      selectedUsers.remove(user);
-                    } else {
-                      selectedUsers.add(user);
-                    }
-                    allUsers[index].isSelected = !allUsers[index].isSelected;
-                    print(selectedUsers.length);
-                  });
-                } else {
-                  Navigator.pop(context, user);
-                }
-              },
-            );
-          },
+                leading: CircleAvatar(
+                  backgroundColor: kBetSquadOrange,
+                  radius: 22,
+                  child: CircleAvatar(
+                    backgroundImage: user['image'] != null && user['image'] != ''
+                        ? NetworkImage(user['image'])
+                        : kUserPlaceholderImage,
+                    radius: 20,
+                  ),
+                ),
+                trailing: allUsers[index].isSelected
+                    ? Icon(
+                        Icons.check,
+                        color: kBetSquadOrange,
+                      )
+                    : null,
+                onTap: () {
+                  if (widget.multipleSelection) {
+                    setState(() {
+                      if (allUsers[index].isSelected) {
+                        selectedUsers.remove(user);
+                      } else {
+                        selectedUsers.add(user);
+                      }
+                      allUsers[index].isSelected = !allUsers[index].isSelected;
+                    });
+                  } else {
+                    Navigator.pop(context, user);
+                  }
+                },
+              );
+            },
+          ),
         ),
       ),
     );

@@ -258,7 +258,7 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
                       offset: Offset(0.0, 30.0),
                       child: GestureDetector(
                         onTap: () async {
-                          var result = await Navigator.pushNamed(context, SelectOpponentScreen.ID, arguments: false);
+                          var result = await Navigator.pushNamed(context, SelectOpponentScreen.ID);
                           setState(() {
                             selectedOpponent = result;
                           });

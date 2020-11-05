@@ -72,6 +72,7 @@ class FirebaseServices {
     }
 
     var parameters = userDetails.map((k, v) => MapEntry(k, v.toString()));
+    parameters['idToken'] = await user.getIdToken();
     print(parameters);
     await cloudFunctionsNetworkHelper.getJSON(
         'writeNewUserToDatabase', parameters);

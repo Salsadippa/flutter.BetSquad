@@ -28,6 +28,7 @@ class UsersApi {
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     Map allUsers = await networkHelper.getJSON('getAllUsers', {'idToken': idToken});
+    allUsers.removeWhere((key, value) => key == user.uid);
     return allUsers;
   }
 

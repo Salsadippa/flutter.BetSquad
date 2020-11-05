@@ -8,6 +8,8 @@ class BetApi {
 
   Future<Map> sendH2HBet(Bet bet) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
     Map<String,String> queryParameters = {
       'matchPath': '${bet.match.date}/${bet.match.homeTeamName}',
       'senderId': bet.from,
@@ -16,6 +18,7 @@ class BetApi {
       'drawBet': bet.drawBet == BetOption.Positive ? 'true' : bet.drawBet == BetOption.Negative ? 'false' : 'neutral',
       'homeBet': bet.homeBet == BetOption.Positive ? 'true' : 'false',
       'awayBet': bet.awayBet == BetOption.Positive ? 'true' : 'false',
+      'idToken': idToken
     };
 
     var response = await networkHelper.getJSON('/newH2HBet', queryParameters);
@@ -28,6 +31,9 @@ class BetApi {
       invited.add({'username': user['username'], 'messagingToken': user['messagingToken'], 'uid':
       user['uid']});
     }
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
+
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     Map<String,String> queryParameters = {
       'matchPath': '${bet.match.date}/${bet.match.homeTeamName}',
@@ -35,7 +41,8 @@ class BetApi {
       'betTotal': (bet.amount * int.parse(bet.rollovers)).toStringAsFixed(2),
       'betAmount': bet.amount.toStringAsFixed(2),
       'invited': json.encode(invited),
-      'maxRollovers': bet.rollovers
+      'maxRollovers': bet.rollovers,
+      'idToken': idToken
     };
 
     var response = await networkHelper.getJSON('/newNGSBet', queryParameters);
@@ -44,12 +51,15 @@ class BetApi {
 
   Future<Map> acceptH2HBet(Bet bet) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
     Map<String,String> queryParameters = {
       'senderId': bet.from,
       'betId': bet.id,
       'homeTeamName': bet.match.homeTeamName,
       'awayTeamName': bet.match.awayTeamName,
-      'opponentBetId': bet.opponentId
+      'opponentBetId': bet.opponentId,
+      'idToken': idToken
     };
 
     var response = await networkHelper.getJSON('/acceptH2HBet', queryParameters);
@@ -58,12 +68,15 @@ class BetApi {
 
   Future<Map> declineH2HBet(Bet bet) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
     Map<String,String> queryParameters = {
       'senderId': bet.from,
       'betId': bet.id,
       'opponentBetId': bet.opponentId,
       'homeTeamName': bet.match.homeTeamName,
       'awayTeamName': bet.match.awayTeamName,
+      'idToken': idToken
     };
 
     var response = await networkHelper.getJSON('/declineH2HBet', queryParameters);
@@ -72,17 +85,22 @@ class BetApi {
 
   Future<Map> acceptNGSBet(Bet bet) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    User currentUser = await FirebaseServices().currentUser();
-
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
+    print(bet.amount);
+    print(bet.rollovers);
     Map<String,String> queryParameters = {
-      'senderId': currentUser.uid,
+      'senderId': user.uid,
       'betId': bet.id,
       'betTotal': (bet.amount * int.parse(bet.rollovers)).toStringAsFixed(2),
       'rollovers': bet.rollovers,
       'from': bet.from,
       'homeTeamName': bet.match.homeTeamName,
-      'awayTeamName': bet.match.awayTeamName
+      'awayTeamName': bet.match.awayTeamName,
+      'idToken': idToken
     };
+
+    print(queryParameters);
 
     var response = await networkHelper.getJSON('/acceptNGSBet', queryParameters);
     return response;
@@ -90,11 +108,12 @@ class BetApi {
 
   Future<Map> declineNGSBet(Bet bet) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
-    User currentUser = await FirebaseServices().currentUser();
-
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
     Map<String,String> queryParameters = {
-      'senderId': currentUser.uid,
+      'senderId': user.uid,
       'betId': bet.id,
+      'idToken': idToken
     };
 
     var response = await networkHelper.getJSON('/declineNGSBet', queryParameters);
@@ -125,11 +144,13 @@ class BetApi {
       'userID': currentUser.uid,
       'betID': bet.id,
       'matchID': '${bet.match.homeTeamName}/${bet.match.date}/${bet.match.awayTeamName}',
-      'opponentBetID': bet.opponentId,
+      'opponentID': bet.opponentId,
       'betAmount': bet.amount.toString(),
       'detail': '${bet.match.homeTeamName} vs ${bet.match.awayTeamName}',
       'idToken': token
     };
+
+    print(queryParameters);
 
     var response = await networkHelper.getJSON('/withdrawBet', queryParameters);
     return response;

@@ -53,7 +53,6 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
 //      appBar: BetSquadLogoProfileBalanceAppBar(),
       body: DefaultTabController(
@@ -81,7 +80,9 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                   return Container();
                 }
                 if (snapshot.data.snapshot.value == null) {
-                  return Container(decoration: kGradientBoxDecoration,);
+                  return Container(
+                    decoration: kGradientBoxDecoration,
+                  );
                 }
                 Map usersBetsMap = snapshot.data.snapshot.value;
                 // print(usersBetsMap);
@@ -201,6 +202,7 @@ class BetHistoryCell extends StatelessWidget {
             }
 
             var liveBet = bet;
+
             // Bet.fromMap(snapshot.data.snapshot.value);
             // liveBet.match = bet.match;
 
@@ -331,7 +333,8 @@ class BetHistoryCell extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
-                            '${(liveBet.status == 'ongoing' || liveBet.status == 'expired' || liveBet.status == 'received' || liveBet.status == 'sent' || liveBet.status == 'won' || liveBet.status == 'lost') || liveBet.status == 'declined' ? liveBet.status : liveBet.userStatus}',
+                            '${(liveBet.status == 'ongoing' || liveBet.status == 'withdrawn' || liveBet.status == 'expired' || liveBet.status == 'rec'
+                                'eived' || liveBet.status == 'sent' || liveBet.status == 'won' || liveBet.status == 'lost') || liveBet.status == 'declined' ? liveBet.status : liveBet.userStatus}',
                             style: TextStyle(color: Colors.white),
                           )
                         ],
