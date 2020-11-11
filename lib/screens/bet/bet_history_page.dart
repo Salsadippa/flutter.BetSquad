@@ -76,13 +76,8 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                   .child('bets')
                   .onValue,
               builder: (context, snapshot) {
-                if (snapshot.hasError || !snapshot.hasData) {
-                  return Container();
-                }
-                if (snapshot.data.snapshot.value == null) {
-                  return Container(
-                    decoration: kGradientBoxDecoration,
-                  );
+                if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == null) {
+                  return Container(decoration: kGradientBoxDecoration,);
                 }
                 Map usersBetsMap = snapshot.data.snapshot.value;
                 // print(usersBetsMap);
@@ -98,9 +93,8 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                   future: betFutures,
                   builder: (context, snapshot) {
                     if (snapshot.hasError || !snapshot.hasData) {
-                      return Container();
+                      return Container(decoration: kGradientBoxDecoration,);
                     }
-
                     var bets = snapshot.data;
 
                     bets.sort((a, b) => a['created'] > b['created']
@@ -186,6 +180,7 @@ class BetHistoryCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print(bet.id);
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
