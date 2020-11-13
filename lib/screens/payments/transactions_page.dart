@@ -80,7 +80,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     .onValue,
                 builder: (context, snapshot) {
                   if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == null) {
-                    return Container();
+                    return Container(decoration: kGradientBoxDecoration,);
                   }
 
                   var balances = [];
@@ -89,23 +89,28 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   double balance = 0;
 
                   transactions.forEach((key, value) {
-                    var type = value['type'];
-                    bool isCredit = [
-                      "DEPOSIT",
-                      "BET_WON",
-                      "BET_EXPIRED",
-                      "BET_RESERVED_PLUS",
-                      "BET_WITHDRAWN",
-                      "BET_"
-                          "DECLINED",
-                      "NGS_REFUND",
-                      "ADMIN_DEPOSIT"
-                    ].contains(type);
-                    double amount = (value['amount'] as num).toDouble();
-                    if (value['status'] != 'FAILED') {
+
+                    if (value['status'] != 'FAILED'){
+                      print(value);
+
+                      var type = value['type'];
+                      bool isCredit = [
+                        "DEPOSIT",
+                        "BET_WON",
+                        "BET_EXPIRED",
+                        "BET_RESERVED_PLUS",
+                        "BET_WITHDRAWN",
+                        "BET_"
+                            "DECLINED",
+                        "NGS_REFUND",
+                        "ADMIN_DEPOSIT"
+                      ].contains(type);
+
+                      double amount = (value['amount'] as num).toDouble();
+                      // if (value['status'] != 'FAILED') {
                       print("amount: " + amount.toString());
                       print("iscredit: " + isCredit.toString());
-                      print('\n');
+                      //   print('\n');
                       if (isCredit) {
                         balance = balance + amount;
                       }
@@ -129,7 +134,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     }
                   });
 
-                  _transactions.sort((a,b)=> Comparable.compare(b['timestamp'], a['timestamp']));
+                  _transactions = _transactions.reversed.toList();
                   balances = balances.reversed.toList();
 
                   return ListView.builder(
