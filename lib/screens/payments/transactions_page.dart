@@ -83,12 +83,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     return Container(decoration: kGradientBoxDecoration,);
                   }
 
-                  var balances = [];
                   List _transactions = [];
                   Map transactions = snapshot.data.snapshot.value;
-                  double balance = 0;
 
-                  transactions.forEach((key, value) {
+                  for (int i = 0; i < transactions.length; i ++ ) {
+                    Map value = transactions.values.toList()[i];
 
                     if (value['status'] != 'FAILED'){
                       print(value);
@@ -106,22 +105,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         "ADMIN_DEPOSIT"
                       ].contains(type);
 
-                      double amount = (value['amount'] as num).toDouble();
-                      // if (value['status'] != 'FAILED') {
-                      print("amount: " + amount.toString());
-                      print("iscredit: " + isCredit.toString());
-                      //   print('\n');
-                      if (isCredit) {
-                        balance = balance + amount;
-                      }
-                      else {
-                        balance = balance - amount;
-                      }
-                      print("bal: " + balance.toString());
-                      balances.add(balance);
-
                       _transactions.add({
-                        'amount': amount,
+                        'amount': value['amount'],
                         'betID': value['betID'],
                         'currency': value['currency'],
                         'detail': value['detail'],
@@ -129,13 +114,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         'sender': value['sender'],
                         'timestamp': value['timestamp'],
                         'type': value['type'],
-                        'isCredit': isCredit
+                        'isCredit': isCredit,
+                        'balance': value['balanceAfter']
                       });
                     }
-                  });
+                  }
 
                   _transactions = _transactions.reversed.toList();
-                  balances = balances.reversed.toList();
 
                   return ListView.builder(
                     shrinkWrap: true,
@@ -220,7 +205,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               flex: 2,
                               child: Container(
                                 child: Text(
-                                  '£${(balances[index] as num).toStringAsFixed(2)}',
+                                  '£${transaction['balance'].toStringAsFixed(2)}',
                                   style: GoogleFonts.roboto(color: Colors.white, fontSize: 15),
                                   textAlign: TextAlign.center,
                                 ),

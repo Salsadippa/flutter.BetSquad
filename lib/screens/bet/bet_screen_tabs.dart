@@ -663,9 +663,9 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                   Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
                 }
               } else {
+
                 print("send NGS bet");
                 print(ngsBet.amount);
-
                 print(ngsTotalStake);
 
                 if (ngsBet.rollovers == null) {
