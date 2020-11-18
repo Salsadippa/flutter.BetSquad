@@ -121,7 +121,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   }
 
                   _transactions.sort((a,b)=> Comparable.compare(b['timestamp'], a['timestamp']));
-                  _transactions = _transactions.reversed.toList();
 
                   return ListView.builder(
                     shrinkWrap: true,
