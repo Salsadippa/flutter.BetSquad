@@ -34,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       Utility().showErrorAlertDialog(context, 'Account Suspended',
           'This account has been suspended until $duration');
+
     }, onError: (e){
       setState(() {
         _loading = false;
@@ -72,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
         decoration: kEmailTextFieldInputDecoration,
         keyboardType: TextInputType.emailAddress,
         onChanged: (value) {
-          _email = value;
+          _email = value.trim();
         },
       ),
     );

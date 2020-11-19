@@ -34,11 +34,6 @@ class _MatchListScreenState extends State<MatchListScreen> {
     super.initState();
     getMatches();
     // FirebaseAuth.instance.signOut();
-    compliance();
-  }
-  
-  compliance(){
-    UsersApi.complianceCheck();
   }
 
   getMatches() async {

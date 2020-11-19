@@ -64,18 +64,18 @@ class _SignupUserInfoScreenState extends State<SignupUserInfoScreen> {
 
     var firstNameTextField = TextFieldWithTitleDesc(
         title: 'First Name',
-        onChangeTextField: (value) {
-          _firstName = value;
+        onChangeTextField: (String value) {
+          _firstName = value.trim();
         });
     var lastNameTextField = TextFieldWithTitleDesc(
         title: 'Last Name',
-        onChangeTextField: (value) {
-          _lastName = value;
+        onChangeTextField: (String value) {
+          _lastName = value.trim();
         });
     var emailTextField = TextFieldWithTitleDesc(
         title: 'Email',
-        onChangeTextField: (value) {
-          _email = value;
+        onChangeTextField: (String value) {
+          _email = value.trim();
         });
     var passwordTextField = TextFieldWithTitleDesc(
         title: 'Password',

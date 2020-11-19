@@ -120,7 +120,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     }
                   }
 
-                  _transactions.sort((a,b)=> Comparable.compare(b['timestamp'], a['timestamp']));
+                  _transactions.sort((a,b) => Comparable.compare(b['timestamp'], a['timestamp']));
 
                   return ListView.builder(
                     shrinkWrap: true,

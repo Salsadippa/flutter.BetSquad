@@ -22,6 +22,7 @@ class FirebaseServices {
       bool bannedUntil = bannedInfo["banned"];
       if (bannedUntil) {
         bannedCallback(bannedInfo["until"]);
+        return;
       }
     }
     try {

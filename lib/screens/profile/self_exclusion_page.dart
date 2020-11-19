@@ -112,7 +112,8 @@ class _SelfExclusionPageState extends State<SelfExclusionPage> {
                   } else {
                     return;
                   }
-                  Map res = await UsersApi.selfExclusion(exclusionPeriod);
+                  var res = await UsersApi.selfExclusion(exclusionPeriod: exclusionPeriod);
+                  print(res.runtimeType);
                   if (res['result'] == 'success') {
                     await FirebaseServices().signOut();
                     Navigator.of(context, rootNavigator: true).pushReplacement(

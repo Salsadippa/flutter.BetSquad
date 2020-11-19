@@ -143,7 +143,7 @@ class BetApi {
     Map<String,String> queryParameters = {
       'userID': currentUser.uid,
       'betID': bet.id,
-      'matchID': '${bet.match.homeTeamName}/${bet.match.date}/${bet.match.awayTeamName}',
+      'matchID': '${bet.match.date}/${bet.match.homeTeamName}',
       'opponentID': bet.opponentId,
       'betAmount': bet.amount.toString(),
       'detail': '${bet.match.homeTeamName} vs ${bet.match.awayTeamName}',

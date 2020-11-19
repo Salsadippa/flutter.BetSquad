@@ -202,14 +202,14 @@ class UsersApi {
     return result;
   }
 
-  static Future<Map> selfExclusion(int exclusionPeriod) async{
+  static Future<Map> selfExclusion({int exclusionPeriod}) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     var userDetails = {
       'idToken': idToken,
       'email': user.email.replaceAll('.', ''),
-      'exclusionPeriod': exclusionPeriod
+      'exclusionPeriod': exclusionPeriod.toString()
     };
     var result = await networkHelper.getJSON('selfExclusion', userDetails);
     return result;
