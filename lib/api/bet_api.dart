@@ -78,8 +78,9 @@ class BetApi {
       'awayTeamName': bet.match.awayTeamName,
       'idToken': idToken
     };
-
+    print(queryParameters);
     var response = await networkHelper.getJSON('/declineH2HBet', queryParameters);
+    print(response);
     return response;
   }
 

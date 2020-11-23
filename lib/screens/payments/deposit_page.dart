@@ -505,6 +505,8 @@ class _DepositPageState extends State<DepositPage> {
                   child: FlatButton(
                     color: kBetSquadOrange,
                     onPressed: () async {
+                      print("HEY DARRYLL::: DONE BUTTON PRESSED");
+
                       if (StringUtils.isNullOrEmpty(_firstName) ||
                           StringUtils.isNullOrEmpty(_lastName) ||
                           StringUtils.isNullOrEmpty(_email) ||
@@ -524,7 +526,13 @@ class _DepositPageState extends State<DepositPage> {
                         return;
                       }
 
+                      setState(() {
+                        _loading = true;
+                      });
+
+                      print("HEY DARRYLL::: I AM STARTING TO CHECK LOCATION");
                       if (!(await Utility().isInTheUk())) {
+                        print("HEY DARRYLL::: I AM DONE CHECKING LOCATION");
                         Alert.showErrorDialog(
                             context,
                             'UK Deposits Only',
@@ -533,26 +541,33 @@ class _DepositPageState extends State<DepositPage> {
                         return;
                       }
 
-                      setState(() {
-                        _loading = true;
-                      });
+                      print("HEY DARRYLL::: I AM STARTING TO CHECK LAST LIMITS UPDATE");
+
                       Map res = await UsersApi.checkLimitsLastUpdate();
-                      print(res);
+                      print("HEY DARRYLL::: I AM DONE CHECKING LAST LIMITS UPDATE");
+
+                      // print(res);
 
                       if (res['limitsExist']) {
                         // has set limits
 
+                        print("HEY DARRYLL::: I AM STARTING TO CHECK COMPLIANCE");
                         //run aml check
                         bool compliant = await UsersApi.complianceCheck();
                         print(compliant);
+                        print("HEY DARRYLL::: I AM DONE CHECKING COMPLIANCE");
 
                         if (compliant) {
                           //deposit limits check
+                          print("HEY DARRYLL::: I AM STARTING TO CHECK VALID DEPOSIT AMOUNT");
                           Map res = await UsersApi.checkValidDeposit(_amount);
-                          print(res);
+                          print("HEY DARRYLL::: I AM DONE CHECKING VALID DEPOSIT AMOUNT");
+
+                          // print(res);
 
                           if (res['approved']) {
                             var expirySplit = _expiry.split(new RegExp(r'(\/)'));
+                            print("HEY DARRYLL::: I AM CALLING PAYMENT SERVER");
 
                             Map deposit = await PaymentApi.depositFunds(
                                 amount: _amount,
@@ -570,6 +585,7 @@ class _DepositPageState extends State<DepositPage> {
                                 street: _street,
                                 dob: _dob,
                                 cvv: _cvv);
+                            print("HEY DARRYLL::: I AM DONE CALLING PAYMENT SERVER");
 
                             print(deposit);
 

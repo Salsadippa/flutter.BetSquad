@@ -39,6 +39,9 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
     opponents.removeWhere((element) => widget.alreadyInvited.keys.contains(element['uid']));
     setState(() {
       allUsers = List.generate(opponents.length, (index) {
+        if (opponents[index]['username'] == null ){
+          return null;
+        }
         ListItem<Map<String,dynamic>> item = ListItem(opponents[index]);
         bool selected = (widget.alreadySelected.contains(opponents[index]['uid']));
         if (selected){
@@ -46,7 +49,7 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
         }
         item.isSelected = selected;
         return item;
-      });
+      }).where((element) => element != null).toList();
       _loading = false;
     });
   }
@@ -84,7 +87,7 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
               return ListTile(
                 key: ObjectKey(user),
                 title: Text(
-                  user['username'],
+                  user['username'] ?? '',
                   style: TextStyle(color: Colors.white),
                 ),
                 leading: CircleAvatar(
@@ -104,6 +107,8 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
                       )
                     : null,
                 onTap: () {
+                  print(user);
+                  return;
                   if (widget.multipleSelection) {
                     setState(() {
                       if (allUsers[index].isSelected) {
