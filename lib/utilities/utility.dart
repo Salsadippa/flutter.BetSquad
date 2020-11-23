@@ -61,7 +61,7 @@ class Utility {
   }
 
   Future<String> getCountryName() async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.lowest);
+    Position position = await Geolocator.getLastKnownPosition();
     final coordinates = new Coordinates(position.latitude, position.longitude);
     var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
