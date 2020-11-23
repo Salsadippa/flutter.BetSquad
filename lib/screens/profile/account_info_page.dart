@@ -1,5 +1,6 @@
 import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/screens/login_and_signup/login_screen.dart';
+import 'package:betsquad/screens/other/web_view.dart';
 import 'package:betsquad/screens/payments/deposit_limits_page.dart';
 import 'package:betsquad/screens/payments/formatting_helpers.dart';
 import 'package:betsquad/screens/payments/transactions_page.dart';
@@ -77,8 +78,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
           textAlign: TextAlign.center,
           text: TextSpan(children: [
             TextSpan(
-              text:
-              'BetSquad is operated by iTech Gaming Limited (Company Number 10668656), a UK '
+              text: 'BetSquad is operated by iTech Gaming Limited (Company Number 10668656), a UK '
                   'company licensed and regulated by the UK Gambling Commission ',
               style: GoogleFonts.roboto(color: Colors.white),
             ),
@@ -504,6 +504,22 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                     actions: [
                                       CupertinoActionSheetAction(
                                         child: Text(
+                                          'Review Policy',
+                                          style: GoogleFonts.roboto(color: Colors.black),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) {
+                                                return WebViewPage(url: 'http://bet-squad.com/ResponsibleGaming.pdf');
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      CupertinoActionSheetAction(
+                                        child: Text(
                                           'Delete Account',
                                           style: GoogleFonts.roboto(color: Colors.red),
                                         ),
@@ -611,34 +627,56 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                               ),
                             ),
                             SizedBox(height: 50),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              height: 50,
-                              decoration: kGradientBoxDecoration,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Help',
-                                    style: GoogleFonts.roboto(color: Colors.white),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => WebViewPage(
+                                      url: 'http://bet-squad.com/HowToPlay.pdf',
+                                    ),
                                   ),
-                                  Icon(Icons.chevron_right, color: Colors.white)
-                                ],
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                height: 50,
+                                decoration: kGradientBoxDecoration,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Help',
+                                      style: GoogleFonts.roboto(color: Colors.white),
+                                    ),
+                                    Icon(Icons.chevron_right, color: Colors.white)
+                                  ],
+                                ),
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              height: 50,
-                              decoration: kGradientBoxDecoration,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Terms and Conditions',
-                                    style: GoogleFonts.roboto(color: Colors.white),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => WebViewPage(
+                                      url: 'http://bet-squad.com/TermsOfService.pdf',
+                                    ),
                                   ),
-                                  Icon(Icons.chevron_right, color: Colors.white)
-                                ],
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                height: 50,
+                                decoration: kGradientBoxDecoration,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Terms and Conditions',
+                                      style: GoogleFonts.roboto(color: Colors.white),
+                                    ),
+                                    Icon(Icons.chevron_right, color: Colors.white)
+                                  ],
+                                ),
                               ),
                             ),
                             gamblingCommissionInfo,
