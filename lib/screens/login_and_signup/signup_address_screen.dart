@@ -140,6 +140,7 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
 
         await _firebaseHelper.signUp(userDetails, onSuccess: () {
           print('new user signed up');
+
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TabBarController(),),);
         }, onError: (e) {
           Utility().showErrorAlertDialog(context, 'Error', e.toString());

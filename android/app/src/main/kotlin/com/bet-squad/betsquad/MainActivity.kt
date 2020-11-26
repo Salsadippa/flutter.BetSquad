@@ -1,4 +1,4 @@
-package com.betsquad.betsquad
+package com.bet-squad.betsquad
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

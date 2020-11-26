@@ -106,4 +106,10 @@ class DatabaseService {
     await databaseReference.child('users').child(uid).child('username').once().then((value) => username = value.value);
     return username;
   }
+
+  Future<void> updateMessagingToken(String messagingToken) async {
+    User currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null || messagingToken == null) return;
+    return await databaseReference.child('users').child(currentUser.uid).child('messagingToken').set(messagingToken);
+  }
 }

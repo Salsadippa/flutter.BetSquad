@@ -144,7 +144,11 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Text(
-                                    'You ${widget.bet.status == 'ongoing' ? 'have an ongoing' : widget.bet.status + ' a'}',
+                                    'You ${widget.bet.status == 'ongoing' ? 'have an ongoing' : widget.bet.status ==
+                                        'withdrawn' ? 'have a withdrawn' : widget.bet.status == 'expired' ? 'have an '
+                                        'expired'
+                                        : widget.bet.status +
+                                        ' a'}',
                                     style: whiteTextStyle),
                                 Text('£${widget.bet.amount.toStringAsFixed(2)}',
                                     style: GoogleFonts.roboto(color: Colors.white, fontSize: 30)),
@@ -155,6 +159,25 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                 Container(
                                   child: Column(
                                     children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Icon(MdiIcons.tshirtCrew, color: HexColor(widget.bet.match.homeShirtColor)),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            widget.bet.match.homeTeamName,
+                                            style: whiteTextStyle,
+                                          ),
+
+                                          Text(': \t${widget.bet.match.homeGoals}\t',
+                                              style: whiteTextStyle),
+                                        ],
+                                      ),
                                       SizedBox(
                                         height: 10,
                                       ),
@@ -212,17 +235,9 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                             widget.bet.match.awayTeamName,
                                             style: whiteTextStyle,
                                           ),
-                                          Text('\t(${widget.bet.match.homeGoals}\t - \t${widget.bet.match.awayGoals})\t',
+
+                                          Text(': \t${widget.bet.match.awayGoals}\t',
                                               style: whiteTextStyle),
-                                          Icon(MdiIcons.tshirtCrew,
-                                              color: HexColor(widget.bet.match.homeShirtColor ?? '#FFFFFF')),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            widget.bet.match.homeTeamName,
-                                            style: whiteTextStyle,
-                                          )
                                         ],
                                       ),
                                     ],

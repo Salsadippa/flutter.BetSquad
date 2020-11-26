@@ -4,6 +4,7 @@ import 'package:betsquad/models/goal.dart';
 import 'package:betsquad/models/match.dart';
 import 'package:betsquad/models/card.dart' as BSCard;
 import 'package:betsquad/models/substitution.dart';
+import 'package:betsquad/services/push_notifications.dart';
 import 'package:betsquad/widgets/dual_coloured_text.dart';
 import 'package:betsquad/screens/login_and_signup/login_screen.dart';
 import 'package:betsquad/screens/tab_bar.dart';
@@ -28,6 +29,8 @@ class _PreparationScreenState extends State<PreparationScreen> {
   void initState() {
     super.initState();
     saveMatches();
+    PushNotificationsManager pushNotificationsManager = PushNotificationsManager();
+    pushNotificationsManager.init();
   }
 
   saveMatches() async {

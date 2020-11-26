@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>949749564887-64h0epu2a7jfsm0ae7af96qs2a6h2crj.apps.googleusercontent.com</string>
+	<string>949749564887-76f0kqd0n011aeb3f8a89907a701mp6n.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.949749564887-64h0epu2a7jfsm0ae7af96qs2a6h2crj</string>
+	<string>com.googleusercontent.apps.949749564887-76f0kqd0n011aeb3f8a89907a701mp6n</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCVKFSAKrOVkN2qT9LA1IYpQqfdrjTWjN4</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.betsquad.betsquad</string>
+	<string>com.bet-squad.betsquad</string>
 	<key>PROJECT_ID</key>
 	<string>betsquad-314ef</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:949749564887:ios:58477eeba1daffec91f792</string>
+	<string>1:949749564887:ios:f76ba3c7abaefd1b91f792</string>
 	<key>DATABASE_URL</key>
 	<string>https://betsquad-314ef.firebaseio.com</string>
 </dict>

@@ -35,10 +35,13 @@ dependencies:
   geocoder: ^0.2.1
   webview_flutter: ^1.0.5
   rflutter_alert: ^1.1.0
+  firebase_messaging: ^7.0.3
+  flutter_local_notifications: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:
    sdk: flutter
+  change_app_package_name: ^0.1.2
 
 flutter:
   uses-material-design: true

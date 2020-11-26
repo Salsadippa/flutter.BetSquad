@@ -509,13 +509,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                         ),
                                         onPressed: () {
                                           Navigator.of(context).pop();
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) {
-                                                return WebViewPage(url: 'http://bet-squad.com/ResponsibleGaming.pdf');
-                                              },
-                                            ),
-                                          );
+                                          launch('http://bet-squad.com/ResponsibleGaming.pdf');
                                         },
                                       ),
                                       CupertinoActionSheetAction(
@@ -629,13 +623,8 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                             SizedBox(height: 50),
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => WebViewPage(
-                                      url: 'http://bet-squad.com/HowToPlay.pdf',
-                                    ),
-                                  ),
-                                );
+                                Navigator.of(context).pop();
+                                launch('http://bet-squad.com/HowToPlay.pdf');
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -655,13 +644,8 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => WebViewPage(
-                                      url: 'http://bet-squad.com/TermsOfService.pdf',
-                                    ),
-                                  ),
-                                );
+                                Navigator.of(context).pop();
+                                launch('http://bet-squad.com/TermsOfService.pdf');
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 20),
