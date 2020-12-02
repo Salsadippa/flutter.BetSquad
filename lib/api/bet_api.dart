@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:betsquad/models/bet.dart';
 import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/services/networking.dart';
+import 'package:betsquad/services/push_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class BetApi {
@@ -46,6 +47,11 @@ class BetApi {
     };
 
     var response = await networkHelper.getJSON('/newNGSBet', queryParameters);
+
+    if (response['result'] == 'success'){
+      PushNotificationsManager().firebaseMessaging.subscribeToTopic(response['betId']);
+    }
+
     return response;
   }
 
@@ -104,6 +110,11 @@ class BetApi {
     print(queryParameters);
 
     var response = await networkHelper.getJSON('/acceptNGSBet', queryParameters);
+
+    if (response['result'] == 'success'){
+      PushNotificationsManager().firebaseMessaging.subscribeToTopic(response['betId']);
+    }
+
     return response;
   }
 

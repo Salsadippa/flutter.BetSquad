@@ -37,11 +37,17 @@ dependencies:
   rflutter_alert: ^1.1.0
   firebase_messaging: ^7.0.3
   flutter_local_notifications: ^2.0.0+1
+  flutter_launcher_icons: ^0.7.5
 
 dev_dependencies:
   flutter_test:
    sdk: flutter
   change_app_package_name: ^0.1.2
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/icon.png"
 
 flutter:
   uses-material-design: true
