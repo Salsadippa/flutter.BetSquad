@@ -112,4 +112,17 @@ class PaymentApi {
     return response;
   }
 
+
+  static Future<Map> netDepositForUser() async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
+    var userDetails = {
+      'idToken': idToken,
+      'senderId': user.uid,
+    };
+    var result = await networkHelper.getJSON('netDepositForUser', userDetails);
+    return result;
+  }
+
 }

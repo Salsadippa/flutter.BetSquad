@@ -18,7 +18,7 @@ class DepositLimitsPage extends StatefulWidget {
 class _DepositLimitsPageState extends State<DepositLimitsPage> {
   int option1Value = 25, option2Value = 50, option3Value = 100;
   bool _option1 = false, _option2 = false, _option3 = false, _otherOption = false;
-  bool weekOption = false, monthOption = false;
+  bool weekOption = false, monthOption = false, dayOption = false;
   bool noLimits = false;
   double _otherAmount = 0.0;
   int lastUpdatedAt;
@@ -58,10 +58,18 @@ class _DepositLimitsPageState extends State<DepositLimitsPage> {
             weekOption = false;
           });
         }
+        else if (userLimits['limitPeriod'] == "day") {
+          setState(() {
+            dayOption = true;
+            monthOption = false;
+            weekOption = false;
+          });
+        }
       });
     }
     if (userLimits['limitAmount'] != null) {
       var amount = (userLimits['limitAmount'] as num).toDouble();
+      print(amount);
       if (amount == option1Value) {
         setState(() {
           _option1 = true;
@@ -92,6 +100,7 @@ class _DepositLimitsPageState extends State<DepositLimitsPage> {
           _option2 = false;
           _option3 = false;
           _otherOption = true;
+          _otherAmount = amount;
           currencyTextFieldController.text = amount.toStringAsFixed(2);
           noLimits = false;
         });
@@ -127,7 +136,7 @@ class _DepositLimitsPageState extends State<DepositLimitsPage> {
               children: [
                 SizedBox(height: 30),
                 Text(
-                  'I want to bet a maximum of: ',
+                  'Set Deposit Limits: ',
                   style: GoogleFonts.roboto(color: Colors.white, fontSize: 20),
                 ),
                 SizedBox(height: 20),
@@ -248,6 +257,26 @@ class _DepositLimitsPageState extends State<DepositLimitsPage> {
                     FlatButton(
                       onPressed: () {
                         setState(() {
+                          dayOption = true;
+                          weekOption = false;
+                          monthOption = false;
+                          noLimits = false;
+                        });
+                      },
+                      color: dayOption ? Colors.green : Colors.black54,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.black, width: 2, style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        'day',
+                        style: GoogleFonts.roboto(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          dayOption = false;
                           weekOption = true;
                           monthOption = false;
                           noLimits = false;
@@ -266,6 +295,7 @@ class _DepositLimitsPageState extends State<DepositLimitsPage> {
                     FlatButton(
                       onPressed: () {
                         setState(() {
+                          dayOption = false;
                           weekOption = false;
                           monthOption = true;
                           noLimits = false;
@@ -356,7 +386,7 @@ class _DepositLimitsPageState extends State<DepositLimitsPage> {
                           ? 'week'
                           : monthOption
                               ? 'month'
-                              : '';
+                              : 'day';
 
                       if (StringUtils.isNullOrEmpty(timePeriod)) {
                         print("no time period");

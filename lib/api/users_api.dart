@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:betsquad/services/networking.dart';
+import 'package:betsquad/string_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UsersApi {
@@ -29,6 +30,7 @@ class UsersApi {
     var idToken = await user.getIdToken();
     Map allUsers = await networkHelper.getJSON('getAllUsers', {'idToken': idToken});
     allUsers.removeWhere((key, value) => key == user.uid);
+    allUsers.removeWhere((key, value) => StringUtils.isNullOrEmpty(value['username']));
     return allUsers;
   }
 
@@ -99,6 +101,7 @@ class UsersApi {
   }
 
   static Future<Map> setSquadInfo(String squadId, Map squad) async {
+    print(squad);
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();

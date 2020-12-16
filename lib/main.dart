@@ -34,6 +34,9 @@ class MyApp extends StatelessWidget {
       title: 'BetSquad',
       debugShowCheckedModeBanner: false,
       theme: Theme.of(context).copyWith(
+          appBarTheme: Theme.of(context)
+              .appBarTheme
+              .copyWith(brightness: Brightness.light),
           accentIconTheme:
               Theme.of(context).accentIconTheme.copyWith(color: Colors.white),
           accentColor: kBetSquadOrange,

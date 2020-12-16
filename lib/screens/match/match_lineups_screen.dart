@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:betsquad/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/widgets/match_lineup_cell.dart';
 import 'package:betsquad/models/match.dart';
@@ -30,7 +31,7 @@ class MatchLineupScreen extends StatelessWidget {
     }
 
     return Container(
-      color: Colors.black54,
+      decoration: kGradientBoxDecoration,
       child: ListView(
         children: List<Widget>.generate(homePlayersSorted.length, (i) {
           var homePlayer = homePlayersSorted[i];

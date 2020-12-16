@@ -16,9 +16,7 @@ class CreateSquadPage extends StatefulWidget {
 class _CreateSquadPageState extends State<CreateSquadPage> {
   Map allUsers = {};
   Map squad = {
-    'with': {
-      //TODO: add current user info
-    },
+    'with': {},
     'name': '',
     'image': ''
   };
@@ -195,7 +193,7 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
                                   : NetworkImage(user['image'])),
                         ),
                         title: Text(
-                          user['username'],
+                          user['username'] ?? '',
                           style: GoogleFonts.roboto(color: Colors.white),
                         ),
                         subtitle: Text((user['firstName'] ?? '') + ' ' + (user['lastName'] ?? ''),

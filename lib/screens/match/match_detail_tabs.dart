@@ -48,7 +48,7 @@ class _MatchDetailTabsState extends State<MatchDetailTabs> {
                   case 3:
                     return MatchLineupScreen(match);
                   default:
-                    return MatchChatScreen();
+                    return MatchChatScreen(match);
                 }
               },
               onPositionChange: (index) {

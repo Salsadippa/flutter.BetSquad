@@ -38,6 +38,7 @@ dependencies:
   firebase_messaging: ^7.0.3
   flutter_local_notifications: ^2.0.0+1
   flutter_launcher_icons: ^0.7.5
+  keyboard_actions: ^3.3.1+1
 
 dev_dependencies:
   flutter_test:

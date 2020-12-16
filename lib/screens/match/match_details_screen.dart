@@ -1,3 +1,4 @@
+import 'package:betsquad/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/widgets/title_value_label.dart';
 import 'package:betsquad/models/match.dart';
@@ -16,7 +17,7 @@ class _MatchInfoScreenState extends State<MatchDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black54,
+      decoration: kGradientBoxDecoration,
       child: ListView(
         children: <Widget>[
           SizedBox(height: 30,),

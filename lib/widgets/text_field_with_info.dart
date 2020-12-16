@@ -12,9 +12,10 @@ class TextFieldWithTitleInfo extends StatelessWidget {
   final bool isEnabled;
   final Function onChanged;
   final TextInputType keyboardType;
+  final FocusNode focusNode;
 
   const TextFieldWithTitleInfo({this.controller, this.onInfoButtonPressed, this.isEnabled, this.title, this
-      .onChanged, this.keyboardType = TextInputType.text});
+      .onChanged, this.keyboardType = TextInputType.text, this.focusNode});
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,7 @@ class TextFieldWithTitleInfo extends StatelessWidget {
           Expanded(
             flex: 2,
             child: TextField(
+              focusNode: focusNode,
               keyboardType: keyboardType,
               decoration: kTextFieldInputDecoration,
               style: TextStyle(color: Colors.white),

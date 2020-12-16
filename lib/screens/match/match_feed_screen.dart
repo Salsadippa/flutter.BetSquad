@@ -45,7 +45,7 @@ class _MatchFeedScreenState extends State<MatchFeedScreen> {
           }
           List<dynamic> events = snapshot.data;
           return Container(
-            color: Colors.black54,
+            decoration: kGradientBoxDecoration,
             child: ListView(
               children: List<Widget>.generate(events.length, (i) {
                 Event event = events[i];

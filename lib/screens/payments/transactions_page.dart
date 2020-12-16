@@ -1,3 +1,4 @@
+import 'package:betsquad/api/payment_api.dart';
 import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
@@ -15,9 +16,19 @@ class TransactionsPage extends StatefulWidget {
 
 class _TransactionsPageState extends State<TransactionsPage> {
 
+  double netDepositAmount;
+
   @override
   void initState() {
     super.initState();
+    getNetDepositAmount();
+  }
+
+  getNetDepositAmount() async {
+    var result = await PaymentApi.netDepositForUser();
+    setState(() {
+      netDepositAmount = (result['netDeposit'] as num).toDouble();
+    });
   }
 
   @override
@@ -28,6 +39,26 @@ class _TransactionsPageState extends State<TransactionsPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Container(
+              decoration: kGradientBoxDecoration,
+              height: 100,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text( netDepositAmount != null ?
+                      '£${netDepositAmount.toStringAsFixed(2)}' : '',
+                      style: GoogleFonts.roboto(color: Colors.white, fontSize: 22),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Net Deposit',
+                      style: GoogleFonts.roboto(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Container(
               color: kBetSquadOrange,
               height: 35,
@@ -80,16 +111,18 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     .onValue,
                 builder: (context, snapshot) {
                   if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == null) {
-                    return Container(decoration: kGradientBoxDecoration,);
+                    return Container(
+                      decoration: kGradientBoxDecoration,
+                    );
                   }
 
                   List _transactions = [];
                   Map transactions = snapshot.data.snapshot.value;
 
-                  for (int i = 0; i < transactions.length; i ++ ) {
+                  for (int i = 0; i < transactions.length; i++) {
                     Map value = transactions.values.toList()[i];
 
-                    if (value['status'] != 'FAILED'){
+                    if (value['status'] != 'FAILED') {
                       print(value);
 
                       var type = value['type'];
@@ -120,7 +153,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     }
                   }
 
-                  _transactions.sort((a,b) => Comparable.compare(b['timestamp'], a['timestamp']));
+                  _transactions.sort((a, b) => Comparable.compare(b['timestamp'], a['timestamp']));
 
                   return ListView.builder(
                     shrinkWrap: true,
@@ -129,20 +162,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     itemBuilder: (context, index) {
                       var transaction = _transactions[index];
                       DateTime date = DateTime.fromMillisecondsSinceEpoch(transaction['timestamp']);
-                      var months = [
-                        "JAN",
-                        "FEB",
-                        "MAR",
-                        "APR",
-                        "MAY",
-                        "JUN",
-                        "JUL",
-                        "AUG",
-                        "SEP",
-                        "OCT",
-                        "NOV",
-                        "DEC"
-                      ];
+                      var months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
                       return Container(
                         decoration: kGradientBoxDecoration,
                         height: 70,

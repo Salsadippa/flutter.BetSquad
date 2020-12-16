@@ -1,3 +1,4 @@
+import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/widgets/match_stat_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/models/match.dart';
@@ -22,7 +23,7 @@ class MatchStatsScreen extends StatelessWidget {
     }
 
     return Container(
-      color: Colors.black54,
+      decoration: kGradientBoxDecoration,
       child: ListView(
         children: <Widget>[
           SizedBox(

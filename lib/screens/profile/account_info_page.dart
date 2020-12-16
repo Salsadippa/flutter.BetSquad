@@ -513,9 +513,10 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                         },
                                       ),
                                       CupertinoActionSheetAction(
+                                        isDestructiveAction: true,
                                         child: Text(
                                           'Delete Account',
-                                          style: GoogleFonts.roboto(color: Colors.red),
+                                          style: GoogleFonts.roboto(),
                                         ),
                                         onPressed: () {
                                           Navigator.of(context).pop();
@@ -559,6 +560,16 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                                               },
                                             ),
                                           );
+                                        },
+                                      ),
+                                      CupertinoActionSheetAction(
+                                        isDestructiveAction: true,
+                                        child: Text(
+                                          'Cancel',
+                                          style: GoogleFonts.roboto(),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
                                         },
                                       ),
                                     ],
