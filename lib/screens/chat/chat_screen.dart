@@ -1,3 +1,4 @@
+import 'package:betsquad/api/chat_api.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/widgets/message_bubble.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -10,9 +11,9 @@ User loggedInUser;
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
-  final String chatId;
+  final String chatId, chatType;
 
-  const ChatScreen({Key key, this.chatId}) : super(key: key);
+  const ChatScreen({Key key, this.chatId, this.chatType}) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -27,6 +28,11 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     print(widget.chatId);
+    markChatAsRead();
+  }
+
+  void markChatAsRead() {
+    ChatApi.markChatAsRead(chatId: widget.chatId, chatType: widget.chatType);
   }
 
   @override
@@ -81,6 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         'timestamp': DateTime.now().millisecondsSinceEpoch
                       });
                       messageTextController.clear();
+                      ChatApi.newChatMessage(chatType: widget.chatType, chatId: widget.chatId, message: messageText);
                     },
                     child: Icon(
                       Icons.send,

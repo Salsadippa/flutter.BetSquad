@@ -4,6 +4,7 @@ import 'package:betsquad/models/bet.dart';
 import 'package:betsquad/screens/bet/ngs_invited_page.dart';
 import 'package:betsquad/screens/bet/ngs_winner_page.dart';
 import 'package:betsquad/screens/bet/select_opponent_screen.dart';
+import 'package:betsquad/screens/chat/chat_screen.dart';
 import 'package:betsquad/services/database.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/utility.dart';
@@ -45,6 +46,7 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
     textEditingController3.text = '£${(widget.bet.amount * int.parse(widget.bet.rollovers)).toStringAsFixed(2)}';
 
     return Scaffold(
+      backgroundColor: Colors.black87,
       appBar: BetSquadLogoBalanceAppBar(),
       body: ModalProgressHUD(
         inAsyncCall: _loading,
@@ -161,30 +163,41 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                         ),
                       ),
                     ),
-                    Container(
-                      decoration: kGradientBoxDecoration,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.chat_bubble_outline,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'In-bet Chat',
-                                  style: TextStyle(color: Colors.white, fontSize: 15),
-                                ),
-                              ],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                              chatId: widget.bet.id,
                             ),
-                          )
-                        ],
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: kGradientBoxDecoration,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.chat_bubble_outline,
+                                    color: Colors.white,
+                                    size: 16,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'In-bet Chat',
+                                    style: TextStyle(color: Colors.white, fontSize: 15),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -246,10 +259,10 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                         var result = await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => SelectOpponentScreen(
-                              multipleSelection: true,
-                              alreadyInvited: widget.bet.invited,
-                              alreadySelected: invitedUsers != null ? invitedUsers.map((e) => e['uid']).toList() : []
-                            ),
+                                multipleSelection: true,
+                                alreadyInvited: widget.bet.invited,
+                                alreadySelected:
+                                    invitedUsers != null ? invitedUsers.map((e) => e['uid']).toList() : []),
                           ),
                         );
                         setState(() {

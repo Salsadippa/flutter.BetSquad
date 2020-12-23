@@ -5,6 +5,7 @@ import 'package:betsquad/models/match.dart';
 import 'package:betsquad/models/card.dart' as BSCard;
 import 'package:betsquad/models/substitution.dart';
 import 'package:betsquad/services/push_notifications.dart';
+import 'package:betsquad/utilities/utility.dart';
 import 'package:betsquad/widgets/dual_coloured_text.dart';
 import 'package:betsquad/screens/login_and_signup/login_screen.dart';
 import 'package:betsquad/screens/tab_bar.dart';
@@ -14,6 +15,8 @@ import 'package:betsquad/styles/constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:betsquad/api/match_api.dart';
 import 'package:betsquad/services/local_database.dart';
+
+import '../alert.dart';
 
 class PreparationScreen extends StatefulWidget {
   static const String ID = 'preparation_screen';
@@ -114,6 +117,15 @@ class _PreparationScreenState extends State<PreparationScreen> {
     }
 
     Future.wait(futures).then((values) async {
+      if (!(await Utility().isInTheUk())) {
+        Alert.showErrorDialog(
+            context,
+            'UK Access Only',
+            'You are not in the UK or we could not verify your location so we can\'t let you in. '
+                'Make sure location access is enabled and relaunch the app.');
+        return;
+      }
+
       print("saved match data");
       if (await firebaseHelper.loggedInUser())
         Navigator.pushReplacementNamed(context, TabBarController.ID);

@@ -45,10 +45,9 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                 var chatId = response['chatId'];
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        ChatScreen(
-                          chatId: chatId,
-                        ),
+                    builder: (context) => ChatScreen(
+                      chatId: chatId,
+                    ),
                   ),
                 );
               }
@@ -84,6 +83,8 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                   .child('users')
                   .child(FirebaseAuth.instance.currentUser.uid)
                   .child('chats')
+                  .orderByChild('deleted')
+                  .equalTo(false)
                   .onValue,
               builder: (context, snapshot) {
                 if (snapshot.hasError || !snapshot.hasData) {
@@ -130,49 +131,82 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                           leading: CircleAvatar(
                             backgroundColor: kBetSquadOrange,
                             radius: 24,
-                            child: FutureBuilder<DataSnapshot>(
-                                future: chat['type'] == 'personal' ? FirebaseDatabase.instance
-                                    .reference()
-                                    .child('users')
-                                    .child(chat['talkingToId'])
-                                    .child('image')
-                                    .once() : FirebaseDatabase.instance
-                                    .reference()
-                                    .child('squads')
-                                    .child(chat['squadId'])
-                                    .child('image').once(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasError) print(snapshot.error);
-                                  if (snapshot.hasData) print(snapshot.data.value);
-                                  return CircleAvatar(
+                            child: chat['type'] == 'bet'
+                                ? CircleAvatar(
                                     radius: 22,
-                                    backgroundImage: !snapshot.hasData || snapshot.hasError || StringUtils.isNullOrEmpty(snapshot.data.value)
-                                        ? AssetImage('images/user_placeholder'
-                                            '.png')
-                                        : NetworkImage(snapshot.data.value),
-                                  );
-                                }),
+                                    backgroundImage: AssetImage('images/user_placeholder.png'),
+                                  )
+                                : FutureBuilder<DataSnapshot>(
+                                    future: chat['type'] == 'personal'
+                                        ? FirebaseDatabase.instance
+                                            .reference()
+                                            .child('users')
+                                            .child(chat['talkingToId'])
+                                            .child('image')
+                                            .once()
+                                        : FirebaseDatabase.instance
+                                            .reference()
+                                            .child('squads')
+                                            .child(chat['squadId'])
+                                            .child('image')
+                                            .once(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasError) print(snapshot.error);
+                                      if (snapshot.hasData) print(snapshot.data.value);
+                                      return CircleAvatar(
+                                        radius: 22,
+                                        backgroundImage: !snapshot.hasData ||
+                                                snapshot.hasError ||
+                                                StringUtils.isNullOrEmpty(snapshot.data.value)
+                                            ? AssetImage('images/user_placeholder'
+                                                '.png')
+                                            : NetworkImage(snapshot.data.value),
+                                      );
+                                    }),
                           ),
-                          trailing: Icon(
-                            Icons.cancel_outlined,
-                            color: Colors.red,
-                            size: 17,
+                          trailing: GestureDetector(
+                            onTap: () async {
+                              print("delete chat");
+                              await ChatApi.deleteChat(chatId: chat['id'], chatType: chat['type']);
+                              print("delete chat done");
+                            },
+                            child: Icon(
+                              Icons.cancel_outlined,
+                              color: Colors.red,
+                              size: 17,
+                            ),
                           ),
                           title: FutureBuilder<DataSnapshot>(
-                              future: chat['type'] == 'personal' ? FirebaseDatabase.instance
-                                  .reference()
-                                  .child('users')
-                                  .child(chat['talkingToId'])
-                                  .child('username')
-                                  .once() : FirebaseDatabase.instance
-                                  .reference()
-                                  .child('squads')
-                                  .child(chat['squadId'])
-                                  .child('name')
-                                  .once(),
+                              future: chat['type'] == 'personal'
+                                  ? FirebaseDatabase.instance
+                                      .reference()
+                                      .child('users')
+                                      .child(chat['talkingToId'])
+                                      .child('username')
+                                      .once()
+                                  : chat['type'] == 'squad'
+                                      ? FirebaseDatabase.instance
+                                          .reference()
+                                          .child('squads')
+                                          .child(chat['squadId'])
+                                          .child('name')
+                                          .once()
+                                      : FirebaseDatabase.instance
+                                          .reference()
+                                          .child('chats')
+                                          .child(chat['id'])
+                                          .child('title')
+                                          .once(),
                               builder: (context, snapshot) {
+                                print(snapshot.error);
                                 return Text(
-                                  !snapshot.hasData || snapshot.hasError ? '' : snapshot.data.value,
+                                  !snapshot.hasData ||
+                                          snapshot.hasError ||
+                                          StringUtils.isNullOrEmpty(snapshot.data.value)
+                                      ? ''
+                                      : chat['type'] == 'bet'
+                                          ? 'NGS Bet: ${snapshot.data.value}'
+                                          : snapshot.data.value,
                                   style: GoogleFonts.roboto(color: Colors.white, fontSize: 16),
                                 );
                               }),

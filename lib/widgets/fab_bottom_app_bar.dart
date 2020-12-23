@@ -1,11 +1,14 @@
-
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class FABBottomAppBarItem {
-  FABBottomAppBarItem({this.iconData, this.text});
+  FABBottomAppBarItem({this.iconData, this.text, this.showBadge, this.badgeCount});
+
   IconData iconData;
   String text;
+  bool showBadge;
+  int badgeCount;
 }
 
 class FABBottomAppBar extends StatefulWidget {
@@ -22,6 +25,7 @@ class FABBottomAppBar extends StatefulWidget {
   }) {
     assert(this.items.length == 2 || this.items.length == 4);
   }
+
   final List<FABBottomAppBarItem> items;
   final String centerItemText;
   final double height;
@@ -44,6 +48,11 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -104,7 +113,62 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(item.iconData, color: color, size: widget.iconSize),
+                Stack(
+                  children: <Widget>[
+                    Icon(
+                      item.iconData,
+                      size: widget.iconSize,
+                      color: color,
+                    ),
+                    if (item.showBadge)
+                      StreamBuilder<Event>(
+                          stream: item.text == 'Bets'
+                              ? FirebaseDatabase.instance
+                                  .reference()
+                                  .child('users')
+                                  .child(FirebaseAuth.instance.currentUser.uid)
+                                  .child('bets')
+                                  .orderByValue()
+                                  .equalTo('received')
+                                  .onValue
+                              : item.text == 'Chat' ?
+                          FirebaseDatabase.instance
+                              .reference()
+                              .child('users')
+                              .child(FirebaseAuth.instance.currentUser.uid)
+                              .child('chats')
+                              .orderByChild('unread')
+                              .equalTo(true)
+                              .onValue : null,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == null)
+                              return Container(width: 0, height: 0);
+                            Map res = snapshot.data.snapshot.value;
+                            return Positioned(
+                              right: 0,
+                              child: new Container(
+                                padding: EdgeInsets.all(1),
+                                decoration: new BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                constraints: BoxConstraints(
+                                  minWidth: 14,
+                                  minHeight: 14,
+                                ),
+                                child: new Text(
+                                  '${res.length}',
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            );
+                          })
+                  ],
+                ),
                 Text(
                   item.text,
                   style: TextStyle(color: color),

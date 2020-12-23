@@ -57,8 +57,8 @@ class _NewChatScreenState extends State<NewChatScreen> {
                   child: Row(
                     children: [
                       Text(
-                        'SQUADS',
-                        style: GoogleFonts.roboto(color: Colors.grey, fontSize: 15,)
+                          'SQUADS',
+                          style: GoogleFonts.roboto(color: Colors.grey, fontSize: 15,)
                       ),
                     ],
                   ),
@@ -140,9 +140,9 @@ class _NewChatScreenState extends State<NewChatScreen> {
                       ),
                       trailing: allUsers[index].isSelected
                           ? Icon(
-                              Icons.check,
-                              color: kBetSquadOrange,
-                            )
+                        Icons.check,
+                        color: kBetSquadOrange,
+                      )
                           : null,
                       onTap: () {
                         Navigator.pop(context, {

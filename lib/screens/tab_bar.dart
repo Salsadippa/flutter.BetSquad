@@ -43,18 +43,18 @@ class _TabBarControllerState extends State<TabBarController> {
       child: Scaffold(
         appBar: BetSquadLogoProfileBalanceAppBar(),
         body: PageStorage(bucket: bucket, child: screens[currentTab]),
-          bottomNavigationBar: FABBottomAppBar(
-            color: Colors.grey,
-            selectedColor: kBetSquadOrange,
-            notchedShape: CircularNotchedRectangle(),
-            onTabSelected: _selectedTab,
-            items: [
-              FABBottomAppBarItem(iconData: MdiIcons.soccerField, text: 'Matches'),
-              FABBottomAppBarItem(iconData: MdiIcons.coins, text: 'Bets'),
-              FABBottomAppBarItem(iconData: Icons.chat_bubble_outline, text: 'Chat'),
-              FABBottomAppBarItem(iconData: Icons.supervised_user_circle, text: 'Squads'),
-            ],
-          ),
+        bottomNavigationBar: FABBottomAppBar(
+          color: Colors.grey,
+          selectedColor: kBetSquadOrange,
+          notchedShape: CircularNotchedRectangle(),
+          onTabSelected: _selectedTab,
+          items: [
+            FABBottomAppBarItem(iconData: MdiIcons.soccerField, text: 'Matches', showBadge: false),
+            FABBottomAppBarItem(iconData: MdiIcons.coins, text: 'Bets', showBadge: true),
+            FABBottomAppBarItem(iconData: Icons.chat_bubble_outline, text: 'Chat', showBadge: true),
+            FABBottomAppBarItem(iconData: Icons.supervised_user_circle, text: 'Squads', showBadge: true),
+          ],
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: BetNowButton(),
       ),

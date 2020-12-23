@@ -3,6 +3,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatApi {
 
+  static Future<Map> markChatAsRead({String chatId, String chatType}) async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var queryParameters = {
+      'senderId': FirebaseAuth.instance.currentUser.uid,
+      'chatId': chatId,
+      'chatType': chatType
+    };
+    var response = await networkHelper.getJSON('/markChatAsRead', queryParameters);
+    print(response);
+    return response;
+  }
+
+  static Future<Map> newChatMessage({String chatId, String chatType, String message}) async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var queryParameters = {
+      'senderId': FirebaseAuth.instance.currentUser.uid,
+      'chatId': chatId,
+      'chatType': chatType,
+      'chatMessage': message
+    };
+    var response = await networkHelper.getJSON('/newChatMessage', queryParameters);
+    print(response);
+    return response;
+  }
+
   static Future<Map> openChat({String talkingTo}) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var queryParameters = {
@@ -10,6 +35,18 @@ class ChatApi {
       'talkingTo': talkingTo,
     };
     var response = await networkHelper.getJSON('/openChat', queryParameters);
+    print(response);
+    return response;
+  }
+
+  static Future<Map> deleteChat({String chatId, String chatType}) async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var queryParameters = {
+      'senderId': FirebaseAuth.instance.currentUser.uid,
+      'chatId': chatId,
+      'chatType': chatType
+    };
+    var response = await networkHelper.getJSON('/deleteChat', queryParameters);
     print(response);
     return response;
   }
