@@ -79,6 +79,7 @@ class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
                 if (available) {
                   _userDetails["username"] = _username;
                   _userDetails["image"] = _image;
+                  _userDetails["hidden"] = 0;
                   print(_userDetails['image']);
                   Navigator.pushNamed(context, SignupUserInfoScreen.ID, arguments: _userDetails);
                 }

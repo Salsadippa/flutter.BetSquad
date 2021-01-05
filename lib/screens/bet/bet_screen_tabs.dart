@@ -49,6 +49,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
   CurrencyTextFieldController currencyTextFieldController =
       CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
   var invitedUsers = [];
+  var invitedSquads = [];
 
   CurrencyTextFieldController currencyTextFieldController2 =
       CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
@@ -565,12 +566,16 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                     var result = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => SelectOpponentScreen(
-                            multipleSelection: true,
-                            alreadySelected: invitedUsers != null ? invitedUsers.map((e) => e['uid']).toList() : []),
+                          multipleSelection: true,
+                          alreadySelectedUsers: invitedUsers != null ? invitedUsers.map((e) => e['uid']).toList() : [],
+                          alreadySelectedSquads: invitedSquads,
+                        ),
                       ),
                     );
+                    print(result['selectedSquads']);
                     setState(() {
-                      invitedUsers = result;
+                      invitedUsers = result['selectedUsers'];
+                      invitedSquads = result['selectedSquads'];
                     });
                   })
                 ],
@@ -627,10 +632,10 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
           });
         },
         items: [
-          FABBottomAppBarItem(iconData: MdiIcons.soccerField, text: 'Matches'),
-          FABBottomAppBarItem(iconData: MdiIcons.coins, text: 'Bets'),
-          FABBottomAppBarItem(iconData: Icons.chat_bubble_outline, text: 'Chat'),
-          FABBottomAppBarItem(iconData: Icons.supervised_user_circle, text: 'Squads'),
+          FABBottomAppBarItem(iconData: MdiIcons.soccerField, text: 'Matches', showBadge: false),
+          FABBottomAppBarItem(iconData: MdiIcons.coins, text: 'Bets', showBadge: true),
+          FABBottomAppBarItem(iconData: Icons.chat_bubble_outline, text: 'Chat', showBadge: true),
+          FABBottomAppBarItem(iconData: Icons.supervised_user_circle, text: 'Squads', showBadge: true),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -735,7 +740,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                     context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
               }
 
-              Map createBetResponse = await BetApi().sendNGSBet(ngsBet, invitedUsers);
+              Map createBetResponse = await BetApi().sendNGSBet(ngsBet, invitedUsers, invitedSquads);
               setState(() {
                 _ngsLoading = false;
               });

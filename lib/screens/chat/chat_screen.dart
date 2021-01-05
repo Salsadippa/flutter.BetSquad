@@ -160,7 +160,7 @@ class MessagesStream extends StatelessWidget {
           final currentUser = FirebaseAuth.instance.currentUser.uid;
 
           final messageBubble = MessageBubble(
-            text: messageText,
+            text: messageText ?? '',
             isMe: currentUser == senderId,
             sender: senderId,
             timestamp: timestamp,

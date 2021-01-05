@@ -131,15 +131,22 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                                   .orderByValue()
                                   .equalTo('received')
                                   .onValue
-                              : item.text == 'Chat' ?
-                          FirebaseDatabase.instance
-                              .reference()
-                              .child('users')
-                              .child(FirebaseAuth.instance.currentUser.uid)
-                              .child('chats')
-                              .orderByChild('unread')
-                              .equalTo(true)
-                              .onValue : null,
+                              : item.text == 'Chat'
+                                  ? FirebaseDatabase.instance
+                                      .reference()
+                                      .child('users')
+                                      .child(FirebaseAuth.instance.currentUser.uid)
+                                      .child('chats')
+                                      .orderByChild('unread')
+                                      .equalTo(true)
+                                      .onValue
+                                  : item.text == 'Squads'
+                                      ? FirebaseDatabase.instance
+                                          .reference()
+                                          .child('friendRequests')
+                                          .child(FirebaseAuth.instance.currentUser.uid)
+                                          .onValue
+                                      : null,
                           builder: (context, snapshot) {
                             if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == null)
                               return Container(width: 0, height: 0);

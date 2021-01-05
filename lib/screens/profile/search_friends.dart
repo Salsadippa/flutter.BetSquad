@@ -21,6 +21,12 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
   bool _loading = false;
 
   @override
+  void initState() {
+    super.initState();
+    print("hi");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: _loading,

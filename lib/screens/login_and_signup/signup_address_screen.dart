@@ -136,7 +136,6 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
         userDetails["street"] = _street;
         userDetails["city"] = _city;
         userDetails["county"] = _county;
-        userDetails["hidden"] = 0;
 
         await _firebaseHelper.signUp(userDetails, onSuccess: () {
           print('new user signed up');

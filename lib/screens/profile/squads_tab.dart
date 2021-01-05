@@ -58,14 +58,21 @@ class _SquadsTabState extends State<SquadsTab> {
                 child: GestureDetector(
                   onTap: getImage,
                   child: StreamBuilder<Event>(
-                      stream: FirebaseDatabase.instance.reference().child('users').child(FirebaseAuth.instance
-                          .currentUser.uid).child('image').onValue,
+                      stream: FirebaseDatabase.instance
+                          .reference()
+                          .child('users')
+                          .child(FirebaseAuth.instance.currentUser.uid)
+                          .child('image')
+                          .onValue,
                       builder: (context, snapshot) {
-                        if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == ''){
-                          return CircleAvatar(backgroundImage: kUserPlaceholderImage, radius: 50,);
+                        if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == '') {
+                          return CircleAvatar(
+                            backgroundImage: kUserPlaceholderImage,
+                            radius: 50,
+                          );
                         }
                         var image = snapshot.data.snapshot.value;
-                        return  CircleAvatar(
+                        return CircleAvatar(
                           radius: 53,
                           backgroundColor: kBetSquadOrange,
                           child: CircleAvatar(
@@ -73,8 +80,7 @@ class _SquadsTabState extends State<SquadsTab> {
                             radius: 50,
                           ),
                         );
-                      }
-                  ),
+                      }),
                 ),
               ),
             ),
@@ -136,51 +142,55 @@ class _SquadsTabState extends State<SquadsTab> {
                         stream: friends.onValue,
                         builder: (context, snapshot) {
                           if (!snapshot.hasData || snapshot.hasError || snapshot.data.snapshot.value == null) {
-                            return Container(height: 20,);
-                          }
-                            Map friendsList = snapshot.data.snapshot.value;
-                            List friendIds = friendsList.keys.toList();
-                            return FutureBuilder(
-                              future: fetchFriends(friendIds),
-                              builder: (context, friendsSnapshot) {
-                                if (!friendsSnapshot.hasData) {
-                                  print("no data");
-                                  return Container();
-                                }
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  primary: false,
-                                  itemCount: friendsSnapshot.data.length,
-                                  itemBuilder: (context, index) {
-                                    var friend = friendsSnapshot.data[index];
-                                    if (friend == null) {return Container();}
-                                    return Container(
-                                      decoration: kGradientBoxDecoration,
-                                      child: ListTile(
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                                        leading: CircleAvatar(
-                                          radius: 22,
-                                          backgroundColor: kBetSquadOrange,
-                                          child: CircleAvatar(
-                                              radius: 20,
-                                              backgroundImage: friend['image'] == null || friend['image'].toString().trim()
-                                                  .isEmpty
-                                                  ? AssetImage('images/user_placeholder'
-                                                  '.png')
-                                                  : NetworkImage(friend['image'])),
-                                        ),
-                                        title: Text(
-                                          friend['username'],
-                                          style: GoogleFonts.roboto(color: Colors.white),
-                                        ),
-                                        subtitle: Text((friend['firstName'] ?? '') + ' ' + (friend['lastName'] ?? ''),
-                                            style: GoogleFonts.roboto(color: Colors.white)),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
+                            return Container(
+                              height: 20,
                             );
+                          }
+                          Map friendsList = snapshot.data.snapshot.value;
+                          List friendIds = friendsList.keys.toList();
+                          return FutureBuilder(
+                            future: fetchFriends(friendIds),
+                            builder: (context, friendsSnapshot) {
+                              if (!friendsSnapshot.hasData) {
+                                print("no data");
+                                return Container();
+                              }
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                primary: false,
+                                itemCount: friendsSnapshot.data.length,
+                                itemBuilder: (context, index) {
+                                  var friend = friendsSnapshot.data[index];
+                                  if (friend == null) {
+                                    return Container();
+                                  }
+                                  return Container(
+                                    decoration: kGradientBoxDecoration,
+                                    child: ListTile(
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                                      leading: CircleAvatar(
+                                        radius: 22,
+                                        backgroundColor: kBetSquadOrange,
+                                        child: CircleAvatar(
+                                            radius: 20,
+                                            backgroundImage:
+                                                friend['image'] == null || friend['image'].toString().trim().isEmpty
+                                                    ? AssetImage('images/user_placeholder'
+                                                        '.png')
+                                                    : NetworkImage(friend['image'])),
+                                      ),
+                                      title: Text(
+                                        friend['username'],
+                                        style: GoogleFonts.roboto(color: Colors.white),
+                                      ),
+                                      subtitle: Text((friend['firstName'] ?? '') + ' ' + (friend['lastName'] ?? ''),
+                                          style: GoogleFonts.roboto(color: Colors.white)),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          );
                         })
                     : Container(),
                 Padding(
@@ -250,10 +260,41 @@ class _SquadsTabState extends State<SquadsTab> {
                     decoration: kGradientBoxDecoration,
                     child: ListTile(
                       leading: Icon(Icons.people, color: kBetSquadOrange, size: 30),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.grey,
-                        size: 20,
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          StreamBuilder<Event>(
+                              stream: FirebaseDatabase.instance
+                                  .reference()
+                                  .child('friendRequests')
+                                  .child(FirebaseAuth.instance.currentUser.uid)
+                                  .onValue,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == null)
+                                  return Container(width: 0, height: 0);
+                                Map res = snapshot.data.snapshot.value;
+                                return Container(
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      res.length.toString(),
+                                      style: GoogleFonts.roboto(color: Colors.white),
+                                    ),
+                                  ),
+                                );
+                              }),
+                          SizedBox(width: 20),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.grey,
+                            size: 20,
+                          ),
+                        ],
                       ),
                       title: Text('Friend Requests', style: GoogleFonts.roboto(color: Colors.white)),
                       subtitle: Text('Search for and add other users ', style: GoogleFonts.roboto(color: Colors.white)),
@@ -268,4 +309,3 @@ class _SquadsTabState extends State<SquadsTab> {
     );
   }
 }
-

@@ -21,6 +21,7 @@ class _FriendRequestsPageState extends State<FriendRequestsPage> {
       _loading = true;
     });
     var result = await UsersApi.getFriendRequests();
+    print(result);
     setState(() {
       requests = result;
       _loading = false;
@@ -29,6 +30,7 @@ class _FriendRequestsPageState extends State<FriendRequestsPage> {
 
   @override
   void initState() {
+    print("hello");
     fetchRequests();
     super.initState();
   }

@@ -38,7 +38,9 @@ class UsersApi {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
+    print("users");
     var users = await networkHelper.getJSON('searchUsers', {'idToken': idToken, 'searchQuery': query});
+    print(users);
     return users;
   }
 

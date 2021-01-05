@@ -33,6 +33,7 @@ class NGSBetScreen extends StatefulWidget {
 
 class _NGSBetScreenState extends State<NGSBetScreen> {
   var invitedUsers = [];
+  var invitedSquads = [];
   bool _loading = false;
 
   TextEditingController textEditingController = TextEditingController();
@@ -259,14 +260,18 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                         var result = await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => SelectOpponentScreen(
-                                multipleSelection: true,
-                                alreadyInvited: widget.bet.invited,
-                                alreadySelected:
-                                    invitedUsers != null ? invitedUsers.map((e) => e['uid']).toList() : []),
+                              multipleSelection: true,
+                              alreadyInvitedUsers: widget.bet.invited,
+                              alreadyInvitedSquads: ['-MP4pVt8EYfcpyNGfgWT'],
+                              alreadySelectedUsers:
+                                  invitedUsers != null ? invitedUsers.map((e) => e['uid']).toList() : [],
+                              alreadySelectedSquads: invitedSquads,
+                            ),
                           ),
                         );
                         setState(() {
-                          invitedUsers = result;
+                          invitedUsers = result['selectedUsers'];
+                          invitedSquads = result['selectedSquads'];
                         });
                       }),
                     SizedBox(
