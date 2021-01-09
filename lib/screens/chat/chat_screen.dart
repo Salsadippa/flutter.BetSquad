@@ -21,7 +21,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
-
+  final ScrollController scrollController = ScrollController();
   String messageText;
 
   @override
@@ -60,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
         children: <Widget>[
           MessagesStream(
             chatId: widget.chatId,
+            // scrollController: scrollController,
           ),
           Container(
             decoration: kGradientBoxDecoration,
@@ -103,15 +104,36 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-class MessagesStream extends StatelessWidget {
+class MessagesStream extends StatefulWidget {
   final String chatId;
 
-  const MessagesStream({Key key, this.chatId}) : super(key: key);
+  MessagesStream({Key key, this.chatId}) : super(key: key);
+
+  @override
+  _MessagesStreamState createState() => _MessagesStreamState();
+}
+
+class _MessagesStreamState extends State<MessagesStream> {
+  ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollController = ScrollController();
+
+      if(scrollController.hasClients){
+        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      } else {
+        print("no clients");
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Event>(
-      stream: FirebaseDatabase.instance.reference().child('messages').child(chatId).onValue,
+      stream: FirebaseDatabase.instance.reference().child('messages').child(widget.chatId).onValue,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
 
@@ -132,7 +154,7 @@ class MessagesStream extends StatelessWidget {
             child: Container(
               decoration: kGradientBoxDecoration,
               child: Center(
-                child: Text('Be the first to send a chat.', style:
+                  child: Text('Be the first to send a chat.', style:
                   GoogleFonts.roboto(color:kBetSquadOrange, fontSize: 20),)
               ),
             ),
@@ -146,9 +168,9 @@ class MessagesStream extends StatelessWidget {
                 decoration: kGradientBoxDecoration,
                 child: Center(
                     child: Text(
-                  'Send a message',
-                  style: GoogleFonts.roboto(color: kBetSquadOrange, fontSize: 20),
-                ))),
+                      'Send a message',
+                      style: GoogleFonts.roboto(color: kBetSquadOrange, fontSize: 20),
+                    ))),
           );
         }
         List<MessageBubble> messageBubbles = [];
@@ -175,6 +197,7 @@ class MessagesStream extends StatelessWidget {
           child: Container(
             decoration: kGradientBoxDecoration,
             child: ListView(
+              controller: scrollController,
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
               children: messageBubbles,
             ),

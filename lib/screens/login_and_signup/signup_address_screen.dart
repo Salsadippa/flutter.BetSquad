@@ -9,6 +9,7 @@ import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class SignupAddressScreen extends StatefulWidget {
   static const String ID = 'signup_address_screen';
@@ -25,6 +26,7 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
       _countyController = TextEditingController();
   FirebaseServices _firebaseHelper = FirebaseServices();
   var storage = FirebaseStorage.instance;
+  bool _loading = false;
 
   _selectedAddress(String address) {
     List parts = address.split(',');
@@ -137,11 +139,20 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
         userDetails["city"] = _city;
         userDetails["county"] = _county;
 
+        setState(() {
+          _loading = true;
+        });
+        print("sign up");
         await _firebaseHelper.signUp(userDetails, onSuccess: () {
           print('new user signed up');
-
+          setState(() {
+            _loading = false;
+          });
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TabBarController(),),);
         }, onError: (e) {
+          setState(() {
+            _loading = false;
+          });
           Utility().showErrorAlertDialog(context, 'Error', e.toString());
         });
       } else {
@@ -153,20 +164,23 @@ class _SignupAddressScreenState extends State<SignupAddressScreen> {
     return Scaffold(
       backgroundColor: Colors.black87,
       appBar: BetSquadLogoAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            postcodeTextField,
-            buildingTextField,
-            streetTextField,
-            cityTextField,
-            countyTextField,
-            SizedBox(height: 10),
-            skipButton,
-            SizedBox(height: 10),
-            doneButton
-          ],
+      body: ModalProgressHUD(
+        inAsyncCall: _loading,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              postcodeTextField,
+              buildingTextField,
+              streetTextField,
+              cityTextField,
+              countyTextField,
+              SizedBox(height: 10),
+              skipButton,
+              SizedBox(height: 10),
+              doneButton
+            ],
+          ),
         ),
       ),
     );

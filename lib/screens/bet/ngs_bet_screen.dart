@@ -262,17 +262,72 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                             builder: (context) => SelectOpponentScreen(
                               multipleSelection: true,
                               alreadyInvitedUsers: widget.bet.invited,
-                              alreadyInvitedSquads: ['-MP4pVt8EYfcpyNGfgWT'],
                               alreadySelectedUsers:
                                   invitedUsers != null ? invitedUsers.map((e) => e['uid']).toList() : [],
                               alreadySelectedSquads: invitedSquads,
                             ),
                           ),
                         );
+                        List users = result['selectedUsers'];
+                        List squads = result['selectedSquads'];
                         setState(() {
-                          invitedUsers = result['selectedUsers'];
-                          invitedSquads = result['selectedSquads'];
+                          invitedUsers = users.map((e) => {'username': e['username'], 'uid': e['uid'], 'messagingToke'
+                              'n': e['messagingToken']}).toList();
+                          invitedSquads = squads;
                         });
+                        // set up the buttons
+                        Widget sendButton = FlatButton(
+                          child: Text("Send Invites"),
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            // setState(() {
+                            //   _loading = true;
+                            // });
+                            print(users);
+                            print(squads);
+
+                            var res = await BetApi().additionalNGSInvites(widget.bet, invitedUsers, invitedSquads);
+                            print(res);
+
+                            setState(() {
+                              invitedUsers = [];
+                              invitedSquads = [];
+                            });
+
+                            Alert.showSuccessDialog(context, 'Invites sent', res['message']);
+                          },
+                        );
+
+                        Widget cancelButton = FlatButton(
+                          child: Text("Cancel"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        );
+                        // set up the AlertDialog
+                        AlertDialog alert = AlertDialog(
+                          title: Text('Send Invites?'),
+                          content: SingleChildScrollView(
+                            child: ListBody(
+                              children: <Widget>[
+                                Text('Are you sure you want to send ${users.length + squads.length} additional '
+                                    'invites')
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            cancelButton,
+                            sendButton,
+                          ],
+                        );
+
+                        // show the dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert;
+                          },
+                        );
                       }),
                     SizedBox(
                       height: 50,

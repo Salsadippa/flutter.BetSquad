@@ -8,14 +8,14 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class SelectOpponentScreen extends StatefulWidget {
   final Map alreadyInvitedUsers;
-  final List alreadySelectedUsers, alreadySelectedSquads, alreadyInvitedSquads;
+  final List alreadySelectedUsers, alreadySelectedSquads;
   final bool multipleSelection;
 
   static const String ID = 'select_opponent_screen';
 
   SelectOpponentScreen(
       {this.alreadyInvitedUsers = const {}, this.multipleSelection = false, this.alreadySelectedUsers = const [
-      ], this.alreadySelectedSquads = const [], this.alreadyInvitedSquads = const []});
+      ], this.alreadySelectedSquads = const []});
 
   @override
   _SelectOpponentScreenState createState() => _SelectOpponentScreenState();
@@ -114,7 +114,6 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
                           Map squadsList = snapshot.data.snapshot.value;
                           List squads = squadsList.values.toList();
                           List squadKeys = squadsList.keys.toList();
-                          print("invited: " + widget.alreadyInvitedSquads.toString());
 
                           return ListView.builder(
                             shrinkWrap: true,

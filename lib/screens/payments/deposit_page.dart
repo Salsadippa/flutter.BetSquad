@@ -154,13 +154,8 @@ class _DepositPageState extends State<DepositPage> {
                   ),
                   SizedBox(height: 20),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Text('AMOUNT', style: GoogleFonts.roboto(color: Colors.white)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                    child: Text('Your account will be debited £${((_amount * 0.0205) + 0.10).toStringAsFixed(2)}',
-                        style: GoogleFonts.roboto(color: Colors.grey)),
                   ),
                   Container(
                     height: 55,
@@ -186,15 +181,21 @@ class _DepositPageState extends State<DepositPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text('CARD DETAILS', style: GoogleFonts.roboto(color: Colors.white)),
-                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     child: Text('Your transactions will show on your account as BetSquad +44 (0) 203 289 6518',
                         style: GoogleFonts.roboto(color: Colors.grey)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text('Your account will be debited £${(((_amount * 0.0205) + 0.10) + _amount).toStringAsFixed
+                      (2)}',
+                        style: GoogleFonts.roboto(color: Colors.grey)),
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Text('CARD DETAILS', style: GoogleFonts.roboto(color: Colors.white)),
                   ),
                   Container(
                     height: 55,

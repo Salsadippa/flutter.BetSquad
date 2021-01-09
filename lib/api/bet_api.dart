@@ -58,6 +58,24 @@ class BetApi {
     return response;
   }
 
+  Future<Map> additionalNGSInvites(Bet bet, List invitedUsers, List invitedSquads) async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
+    Map<String, String> queryParameters = {
+      'senderId': user.uid,
+      'betId': bet.id,
+      'invitedUsers': json.encode(invitedUsers),
+      'invitedSquads': json.encode(invitedSquads),
+      'matchPath': '${bet.match.date}/${bet.match.homeTeamName}',
+      'idToken': idToken
+    };
+
+    print(queryParameters);
+    var response = await networkHelper.getJSON('/additionalNGSInvites', queryParameters);
+    return response;
+  }
+
   Future<Map> acceptH2HBet(Bet bet) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var user = FirebaseAuth.instance.currentUser;

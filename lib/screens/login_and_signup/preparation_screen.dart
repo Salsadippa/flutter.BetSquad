@@ -10,6 +10,7 @@ import 'package:betsquad/widgets/dual_coloured_text.dart';
 import 'package:betsquad/screens/login_and_signup/login_screen.dart';
 import 'package:betsquad/screens/tab_bar.dart';
 import 'package:betsquad/services/firebase_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -116,24 +117,24 @@ class _PreparationScreenState extends State<PreparationScreen> {
       }
     }
 
-    if (await firebaseHelper.loggedInUser())
-      Navigator.pushReplacementNamed(context, TabBarController.ID);
-    else
-      Navigator.pushReplacementNamed(context, LoginScreen.ID);
+    Future.wait(futures).then((values) async {
+      if (!(await Utility().isInTheUk())) {
+        Alert.showErrorDialog(
+            context,
+            'UK Access Only',
+            'You are not in the UK or we could not verify your location so we can\'t let you in. '
+                'Make sure location access is enabled and relaunch the app.');
+        return;
+      }
 
-    // Future.wait(futures).then((values) async {
-    //   if (!(await Utility().isInTheUk())) {
-    //     Alert.showErrorDialog(
-    //         context,
-    //         'UK Access Only',
-    //         'You are not in the UK or we could not verify your location so we can\'t let you in. '
-    //             'Make sure location access is enabled and relaunch the app.');
-    //     return;
-    //   }
-    //
-    //   print("saved match data");
-    //
-    // });
+      print("saved match data");
+
+      if (await firebaseHelper.loggedInUser())
+        Navigator.pushReplacementNamed(context, TabBarController.ID);
+      else
+        Navigator.pushReplacementNamed(context, LoginScreen.ID);
+
+    });
   }
 
   @override

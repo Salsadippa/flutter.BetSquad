@@ -56,6 +56,7 @@ class FirebaseServices {
           email: userDetails["email"], password: userDetails["password"]);
     } catch (e) {
       onError(e);
+      return;
     }
 
     final User user = _auth.currentUser;

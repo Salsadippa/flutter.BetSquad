@@ -114,6 +114,8 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                   itemBuilder: (context, index) {
                     var chat = chats[index];
                     print(chat);
+                    bool unread = chat['unread'] == true;
+                    print(unread);
                     return Container(
                       decoration: kGradientBoxDecoration,
                       child: Padding(
@@ -199,15 +201,32 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                                           .once(),
                               builder: (context, snapshot) {
                                 print(snapshot.error);
-                                return Text(
-                                  !snapshot.hasData ||
-                                          snapshot.hasError ||
-                                          StringUtils.isNullOrEmpty(snapshot.data.value)
-                                      ? ''
-                                      : chat['type'] == 'bet'
-                                          ? 'NGS Bet: ${snapshot.data.value}'
-                                          : snapshot.data.value,
-                                  style: GoogleFonts.roboto(color: Colors.white, fontSize: 16),
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    if (unread)
+                                      Container(
+                                        margin: EdgeInsets.only(right: 10),
+                                        width: 8,
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(4),
+                                          color: kBetSquadOrange,
+                                        ),
+                                      ),
+                                    Flexible(
+                                      child: Text(
+                                        !snapshot.hasData ||
+                                                snapshot.hasError ||
+                                                StringUtils.isNullOrEmpty(snapshot.data.value)
+                                            ? ''
+                                            : chat['type'] == 'bet'
+                                                ? 'NGS Bet: ${snapshot.data.value}'
+                                                : snapshot.data.value,
+                                        style: GoogleFonts.roboto(color: Colors.white, fontSize: 16),
+                                      ),
+                                    ),
+                                  ],
                                 );
                               }),
                         ),
