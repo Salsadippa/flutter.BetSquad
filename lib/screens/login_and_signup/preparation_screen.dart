@@ -18,6 +18,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:betsquad/api/match_api.dart';
 import 'package:betsquad/services/local_database.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:package_info/package_info.dart';
 
 import '../alert.dart';
 
@@ -47,11 +48,12 @@ class _PreparationScreenState extends State<PreparationScreen> {
   }
 
   Future<void> checkVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
     final dbRef = await FirebaseDatabase.instance.reference().child("version").once();
     print("version -->" + dbRef.value["version_number"]);
 
-    if("1.0.2" != dbRef.value["version_number"]){
+    if(packageInfo.version != dbRef.value["version_number"]){
       versionValid = false;
     }
   }
