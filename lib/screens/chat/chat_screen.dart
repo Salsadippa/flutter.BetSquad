@@ -197,6 +197,7 @@ class _MessagesStreamState extends State<MessagesStream> {
           child: Container(
             decoration: kGradientBoxDecoration,
             child: ListView(
+              reverse: true,
               controller: scrollController,
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
               children: messageBubbles,
