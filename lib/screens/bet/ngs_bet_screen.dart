@@ -248,11 +248,11 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                         ],
                       ),
                     ),
-                    if (widget.bet.winners != null)
+                    if (widget.bet.winners != null) 
                       Column(
-                          children: widget.bet.winners.values
+                          children: widget.bet.winners.entries
                               .map(
-                                (e) => WinnerListItem(winner: e, bet: widget.bet),
+                                (e) => WinnerListItem(winner: e.value, winnerEntryId: e.key, bet: widget.bet),
                               )
                               .toList()),
                     if (widget.bet.userStatus == 'sent')
@@ -271,8 +271,14 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                         List users = result['selectedUsers'];
                         List squads = result['selectedSquads'];
                         setState(() {
-                          invitedUsers = users.map((e) => {'username': e['username'], 'uid': e['uid'], 'messagingToke'
-                              'n': e['messagingToken']}).toList();
+                          invitedUsers = users
+                              .map((e) => {
+                                    'username': e['username'],
+                                    'uid': e['uid'],
+                                    'messagingToke'
+                                        'n': e['messagingToken']
+                                  })
+                              .toList();
                           invitedSquads = squads;
                         });
                         // set up the buttons
@@ -414,8 +420,9 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
 class WinnerListItem extends StatefulWidget {
   final winner;
   final Bet bet;
+  final winnerEntryId;
 
-  const WinnerListItem({Key key, this.winner, this.bet}) : super(key: key);
+  const WinnerListItem({Key key, this.winner, this.bet, this.winnerEntryId}) : super(key: key);
 
   @override
   _WinnerListItemState createState() => _WinnerListItemState();
@@ -448,6 +455,7 @@ class _WinnerListItemState extends State<WinnerListItem> {
           MaterialPageRoute(
             builder: (context) {
               return NGSWinnerPage(
+                winnerEntryId: widget.winnerEntryId,
                 amount: widget.winner['amount'],
                 uid: widget.winner['userID'],
                 scoringPlayer: widget.winner['scoringPlayer'],
