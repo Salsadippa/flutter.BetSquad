@@ -14,8 +14,9 @@ class NGSWinnerPage extends StatefulWidget {
   final String uid, scoringPlayer, scoringTime;
   final double amount;
   final Bet bet;
+  final winnerEntryId;
 
-  const NGSWinnerPage({this.uid, this.amount, this.scoringPlayer, this.scoringTime, this.bet});
+  const NGSWinnerPage({this.uid, this.amount, this.scoringPlayer, this.scoringTime, this.bet, this.winnerEntryId});
 
   @override
   _NGSWinnerPageState createState() => _NGSWinnerPageState();
@@ -99,7 +100,7 @@ class _NGSWinnerPageState extends State<NGSWinnerPage> {
                               print("pressed");
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => NGSAssignmentsPage(bet: widget.bet),
+                                  builder: (context) => NGSAssignmentsPage(bet: widget.bet, winnerEntryId: widget.winnerEntryId,),
                                 ),
                               );
                             },
