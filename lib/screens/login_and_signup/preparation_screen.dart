@@ -37,14 +37,9 @@ class _PreparationScreenState extends State<PreparationScreen> {
   @override
   void initState() {
     super.initState();
-    check();
     saveMatches();
     PushNotificationsManager pushNotificationsManager = PushNotificationsManager();
     pushNotificationsManager.init();
-  }
-
-  void check()async{
-    await checkVersion();
   }
 
   Future<void> checkVersion() async {
@@ -54,7 +49,9 @@ class _PreparationScreenState extends State<PreparationScreen> {
     print("version -->" + dbRef.value["version_number"]);
 
     if(packageInfo.version != dbRef.value["version_number"]){
-      versionValid = false;
+      setState(() {
+        versionValid = false;
+      });
     }
   }
 
@@ -148,19 +145,18 @@ class _PreparationScreenState extends State<PreparationScreen> {
 //        return;
 //      }
 
-    if(versionValid){
-      print("saved match data");
 
-      if (await firebaseHelper.loggedInUser())
-        Navigator.pushReplacementNamed(context, TabBarController.ID);
-      else
-        Navigator.pushReplacementNamed(context, LoginScreen.ID);
-    }else{
-      Alerts.updateApp(context: context);
-    }
+      await checkVersion();
+      if (versionValid) {
+        print("saved match data");
 
-
-
+        if (await firebaseHelper.loggedInUser())
+          Navigator.pushReplacementNamed(context, TabBarController.ID);
+        else
+          Navigator.pushReplacementNamed(context, LoginScreen.ID);
+      } else {
+        Alerts.updateApp(context: context);
+      }
 
 
     });
