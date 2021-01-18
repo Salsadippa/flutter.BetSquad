@@ -644,7 +644,11 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
     );
 
     var betScreens = Scaffold(
-      body: Column(
+      body: ModalProgressHUD(
+        progressIndicator: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(kBetSquadOrange),
+        ),
+        child:Column(
         children: <Widget>[
           Expanded(
             child: CustomTabView(
@@ -655,21 +659,9 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
               pageBuilder: (context, index) {
                 switch (index) {
                   case 0:
-                    return ModalProgressHUD(
-                      progressIndicator: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(kBetSquadOrange),
-                      ),
-                      child: h2hScreen,
-                      inAsyncCall: _h2hLoading,
-                    );
+                    return h2hScreen;
                   default:
-                    return ModalProgressHUD(
-                      progressIndicator: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(kBetSquadOrange),
-                      ),
-                      child: ngsScreen,
-                      inAsyncCall: _ngsLoading,
-                    );
+                    return ngsScreen;
                 }
               },
               onPositionChange: (index) {
@@ -679,6 +671,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
           )
         ],
       ),
+        inAsyncCall: _ngsLoading && _h2hLoading,
+      )
     );
 
     final List<Widget> screens = [
