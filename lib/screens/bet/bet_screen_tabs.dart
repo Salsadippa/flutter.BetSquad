@@ -610,10 +610,9 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                            '${invitedUsers != null ? invitedUsers.length : 0} players invited',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center)
+                        Text('${invitedUsers != null ? invitedUsers.length : 0} players invited, ${invitedSquads != null ?
+                        invitedSquads.length : 0} squads invited',
+                            style: TextStyle(color: Colors.white), textAlign: TextAlign.center)
                       ],
                     ),
                   ),
@@ -804,8 +803,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 Utility.getInstance().showErrorAlertDialog(
                     context,
                     'Invite users',
-                    'You must invite at least 1 '
-                        'user or 1 squad to this bet');
+                    'You must invite at least 1 user or squad'
+                        'to this bet');
                 return;
               }
 
