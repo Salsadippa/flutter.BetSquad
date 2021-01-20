@@ -671,7 +671,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
           )
         ],
       ),
-        inAsyncCall: _ngsLoading && _h2hLoading,
+        inAsyncCall: _ngsLoading || _h2hLoading,
       )
     );
 
