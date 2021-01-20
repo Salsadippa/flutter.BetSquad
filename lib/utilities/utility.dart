@@ -51,7 +51,10 @@ class Utility {
   }
 
   Future<bool> isInTheUk() async {
+    print("get 1");
+
     try {
+      print("get 2");
       var country = await getCountryName();
       return country == 'United Kingdom';
     } catch (e) {
@@ -61,10 +64,25 @@ class Utility {
   }
 
   Future<String> getCountryName() async {
+    print("get 3");
+
     Position position = await Geolocator.getLastKnownPosition();
+    print(position);
+    if(position == null){
+      position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+    }
     final coordinates = new Coordinates(position.latitude, position.longitude);
     var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
+    print("first");
+    print(first);
+
+    print("name");
+    print(first.countryName);
+
+    print("map");
+    print(first.toMap());
+
     return first.countryName;
   }
 }
