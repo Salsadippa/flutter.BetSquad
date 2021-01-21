@@ -115,73 +115,71 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
       decoration: kGrassTrimBoxDecoration,
       child: FractionallySizedBox(
         heightFactor: 0.75,
-        child: ModalProgressHUD(
-          inAsyncCall: _h2hLoading,
-          child: Container(
-            decoration: kGradientBoxDecoration,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 100,
-                  child: Transform.translate(
-                    offset: Offset(0.0, -30.0),
+        child: Container(
+          decoration: kGradientBoxDecoration,
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 100,
+                child: Transform.translate(
+                  offset: Offset(0.0, -30.0),
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: kBetSquadOrange,
                     child: CircleAvatar(
-                      radius: 50,
-                      backgroundColor: kBetSquadOrange,
-                      child: CircleAvatar(
-                        backgroundImage:
-                            userProfilePic != null || userProfilePic == ''
-                                ? NetworkImage(userProfilePic)
-                                : kUserPlaceholderImage,
-                        radius: 48,
-                      ),
+                      backgroundImage:
+                          userProfilePic != null || userProfilePic == ''
+                              ? NetworkImage(userProfilePic)
+                              : kUserPlaceholderImage,
+                      radius: 48,
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    child: KeyboardActions(
-                      config: _buildConfig(context),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'You are betting',
-                                  style: whiteTextStyle,
+              ),
+              Expanded(
+                child: Container(
+                  child: KeyboardActions(
+                    config: _buildConfig(context),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'You are betting',
+                                style: whiteTextStyle,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                height: 35,
+                                width: 100,
+                                child: TextField(
+                                  focusNode: _nodeText1,
+                                  decoration: kTextFieldInputDecoration,
+                                  controller: currencyTextFieldController,
+                                  keyboardType: TextInputType.number,
+                                  textAlign: TextAlign.center,
+                                  onChanged: (String value) {
+                                    double val = currencyTextFieldController
+                                        .doubleValue;
+                                    print(val);
+                                    setState(() {
+                                      h2hBet.amount = val;
+                                    });
+                                  },
                                 ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                  height: 35,
-                                  width: 100,
-                                  child: TextField(
-                                    focusNode: _nodeText1,
-                                    decoration: kTextFieldInputDecoration,
-                                    controller: currencyTextFieldController,
-                                    keyboardType: TextInputType.number,
-                                    textAlign: TextAlign.center,
-                                    onChanged: (String value) {
-                                      double val = currencyTextFieldController
-                                          .doubleValue;
-                                      print(val);
-                                      setState(() {
-                                        h2hBet.amount = val;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text('that', style: whiteTextStyle)
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text('that', style: whiteTextStyle)
+                            ],
                           ),
+                        ),
 //                      Padding(
 //                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 50),
 //                        child: Container(
@@ -287,232 +285,231 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
 //                          ),
 //                        ),
 //                      ),
-                          Container(
-                            child: Column(
-                              children: [
-                                Row(
+                        Container(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(MdiIcons.tshirtCrew,
+                                      color: HexColor(
+                                          match.homeShirtColor ?? '#FFFFFF')),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    match.homeTeamName + ' will',
+                                    style: whiteTextStyle,
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width - 50,
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(MdiIcons.tshirtCrew,
-                                        color: HexColor(
-                                            match.homeShirtColor ?? '#FFFFFF')),
-                                    SizedBox(
-                                      width: 5,
+                                    Expanded(
+                                      //win button
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (h2hBet.homeBet ==
+                                              BetOption.Positive) {
+                                            setState(() {
+                                              h2hBet.homeBet =
+                                                  BetOption.Negative;
+                                              h2hBet.awayBet =
+                                                  BetOption.Positive;
+                                            });
+                                          } else if (h2hBet.homeBet ==
+                                              BetOption.Negative) {
+                                            setState(() {
+                                              h2hBet.homeBet =
+                                                  BetOption.Positive;
+                                              h2hBet.awayBet =
+                                                  BetOption.Negative;
+                                            });
+                                          } else {
+                                            print('else');
+                                            setState(() {
+                                              h2hBet.drawBet =
+                                                  BetOption.Negative;
+                                              h2hBet.homeBet =
+                                                  BetOption.Positive;
+                                              h2hBet.awayBet =
+                                                  BetOption.Negative;
+                                            });
+                                          }
+                                        },
+                                        child: Image.asset(
+                                          h2hBet.homeBet == BetOption.Positive
+                                              ? 'images/win_green.png'
+                                              : (h2hBet.homeBet ==
+                                                      BetOption.Negative
+                                                  ? 'images/win_red.png'
+                                                  : 'images/win_grey.png'),
+                                        ),
+                                      ),
                                     ),
-                                    Text(
-                                      match.homeTeamName + ' will',
-                                      style: whiteTextStyle,
+                                    Expanded(
+                                      //draw button
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (h2hBet.drawBet ==
+                                              BetOption.Positive) {
+                                            if (h2hBet.homeBet ==
+                                                    BetOption.Positive ||
+                                                h2hBet.awayBet ==
+                                                    BetOption.Positive) {
+                                              setState(() {
+                                                h2hBet.drawBet =
+                                                    BetOption.Negative;
+                                              });
+                                            }
+                                          } else if (h2hBet.drawBet ==
+                                              BetOption.Negative) {
+                                            setState(() {
+                                              h2hBet.drawBet =
+                                                  BetOption.Neutral;
+                                            });
+                                          } else {
+                                            setState(() {
+                                              h2hBet.drawBet =
+                                                  BetOption.Positive;
+                                              h2hBet.homeBet =
+                                                  BetOption.Negative;
+                                              h2hBet.awayBet =
+                                                  BetOption.Negative;
+                                            });
+                                          }
+                                        },
+                                        child: Image.asset(
+                                          h2hBet.drawBet == BetOption.Positive
+                                              ? 'images/draw_green.png'
+                                              : (h2hBet.drawBet ==
+                                                      BetOption.Negative
+                                                  ? 'images/draw_red.png'
+                                                  : 'images/draw_grey.png'),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      //lose button
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (h2hBet.awayBet ==
+                                              BetOption.Positive) {
+                                            setState(() {
+                                              h2hBet.awayBet =
+                                                  BetOption.Negative;
+                                              h2hBet.homeBet =
+                                                  BetOption.Positive;
+                                            });
+                                          } else if (h2hBet.awayBet ==
+                                              BetOption.Negative) {
+                                            setState(() {
+                                              h2hBet.awayBet =
+                                                  BetOption.Positive;
+                                              h2hBet.homeBet =
+                                                  BetOption.Negative;
+                                            });
+                                          } else {
+                                            setState(() {
+                                              h2hBet.drawBet =
+                                                  BetOption.Negative;
+                                              h2hBet.homeBet =
+                                                  BetOption.Negative;
+                                              h2hBet.awayBet =
+                                                  BetOption.Positive;
+                                            });
+                                          }
+                                        },
+                                        child: Image.asset(
+                                          h2hBet.awayBet == BetOption.Positive
+                                              ? 'images/lose_green.png'
+                                              : (h2hBet.awayBet ==
+                                                      BetOption.Negative
+                                                  ? 'images/lose_red.png'
+                                                  : 'images/lose_grey.png'),
+                                        ),
+                                      ),
                                     )
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width - 50,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        //win button
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            if (h2hBet.homeBet ==
-                                                BetOption.Positive) {
-                                              setState(() {
-                                                h2hBet.homeBet =
-                                                    BetOption.Negative;
-                                                h2hBet.awayBet =
-                                                    BetOption.Positive;
-                                              });
-                                            } else if (h2hBet.homeBet ==
-                                                BetOption.Negative) {
-                                              setState(() {
-                                                h2hBet.homeBet =
-                                                    BetOption.Positive;
-                                                h2hBet.awayBet =
-                                                    BetOption.Negative;
-                                              });
-                                            } else {
-                                              print('else');
-                                              setState(() {
-                                                h2hBet.drawBet =
-                                                    BetOption.Negative;
-                                                h2hBet.homeBet =
-                                                    BetOption.Positive;
-                                                h2hBet.awayBet =
-                                                    BetOption.Negative;
-                                              });
-                                            }
-                                          },
-                                          child: Image.asset(
-                                            h2hBet.homeBet == BetOption.Positive
-                                                ? 'images/win_green.png'
-                                                : (h2hBet.homeBet ==
-                                                        BetOption.Negative
-                                                    ? 'images/win_red.png'
-                                                    : 'images/win_grey.png'),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        //draw button
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            if (h2hBet.drawBet ==
-                                                BetOption.Positive) {
-                                              if (h2hBet.homeBet ==
-                                                      BetOption.Positive ||
-                                                  h2hBet.awayBet ==
-                                                      BetOption.Positive) {
-                                                setState(() {
-                                                  h2hBet.drawBet =
-                                                      BetOption.Negative;
-                                                });
-                                              }
-                                            } else if (h2hBet.drawBet ==
-                                                BetOption.Negative) {
-                                              setState(() {
-                                                h2hBet.drawBet =
-                                                    BetOption.Neutral;
-                                              });
-                                            } else {
-                                              setState(() {
-                                                h2hBet.drawBet =
-                                                    BetOption.Positive;
-                                                h2hBet.homeBet =
-                                                    BetOption.Negative;
-                                                h2hBet.awayBet =
-                                                    BetOption.Negative;
-                                              });
-                                            }
-                                          },
-                                          child: Image.asset(
-                                            h2hBet.drawBet == BetOption.Positive
-                                                ? 'images/draw_green.png'
-                                                : (h2hBet.drawBet ==
-                                                        BetOption.Negative
-                                                    ? 'images/draw_red.png'
-                                                    : 'images/draw_grey.png'),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        //lose button
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            if (h2hBet.awayBet ==
-                                                BetOption.Positive) {
-                                              setState(() {
-                                                h2hBet.awayBet =
-                                                    BetOption.Negative;
-                                                h2hBet.homeBet =
-                                                    BetOption.Positive;
-                                              });
-                                            } else if (h2hBet.awayBet ==
-                                                BetOption.Negative) {
-                                              setState(() {
-                                                h2hBet.awayBet =
-                                                    BetOption.Positive;
-                                                h2hBet.homeBet =
-                                                    BetOption.Negative;
-                                              });
-                                            } else {
-                                              setState(() {
-                                                h2hBet.drawBet =
-                                                    BetOption.Negative;
-                                                h2hBet.homeBet =
-                                                    BetOption.Negative;
-                                                h2hBet.awayBet =
-                                                    BetOption.Positive;
-                                              });
-                                            }
-                                          },
-                                          child: Image.asset(
-                                            h2hBet.awayBet == BetOption.Positive
-                                                ? 'images/lose_green.png'
-                                                : (h2hBet.awayBet ==
-                                                        BetOption.Negative
-                                                    ? 'images/lose_red.png'
-                                                    : 'images/lose_grey.png'),
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'against',
+                                    style: whiteTextStyle,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'against',
-                                      style: whiteTextStyle,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Icon(MdiIcons.tshirtCrew,
-                                        color: HexColor(
-                                            match.awayShirtColor ?? '#FFFFFF')),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      match.awayTeamName,
-                                      style: whiteTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(MdiIcons.tshirtCrew,
+                                      color: HexColor(
+                                          match.awayShirtColor ?? '#FFFFFF')),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    match.awayTeamName,
+                                    style: whiteTextStyle,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          Container(
-                            child: Text(
-                              'vs ${selectedOpponent != null ? selectedOpponent['username'] : ''}',
-                              style: whiteTextStyle,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 100,
-                  child: Transform.translate(
-                    offset: Offset(0.0, 10.0),
-                    child: GestureDetector(
-                      onTap: () async {
-                        var result = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SelectOpponentScreen(),
-                          ),
-                        );
-                        setState(() {
-                          selectedOpponent = result;
-                          h2hBet.vsUserID = selectedOpponent['uid'];
-                        });
-                      },
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: kBetSquadOrange,
-                        child: CircleAvatar(
-                          backgroundImage: selectedOpponent != null &&
-                                  selectedOpponent['image'] != null &&
-                                  selectedOpponent['image'] != ''
-                              ? NetworkImage(selectedOpponent['image'])
-                              : kUserPlaceholderImage,
-                          radius: 48,
                         ),
+                        Container(
+                          child: Text(
+                            'vs ${selectedOpponent != null ? selectedOpponent['username'] : ''}',
+                            style: whiteTextStyle,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                height: 100,
+                child: Transform.translate(
+                  offset: Offset(0.0, 10.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      var result = await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SelectOpponentScreen(),
+                        ),
+                      );
+                      setState(() {
+                        selectedOpponent = result;
+                        h2hBet.vsUserID = selectedOpponent['uid'];
+                      });
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: kBetSquadOrange,
+                      child: CircleAvatar(
+                        backgroundImage: selectedOpponent != null &&
+                                selectedOpponent['image'] != null &&
+                                selectedOpponent['image'] != ''
+                            ? NetworkImage(selectedOpponent['image'])
+                            : kUserPlaceholderImage,
+                        radius: 48,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -647,6 +644,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
         progressIndicator: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(kBetSquadOrange),
         ),
+        inAsyncCall: _ngsLoading || _h2hLoading,
         child:Column(
         children: <Widget>[
           Expanded(
@@ -670,7 +668,6 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
           )
         ],
       ),
-        inAsyncCall: _ngsLoading || _h2hLoading,
       )
     );
 
@@ -718,6 +715,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
           shape: CircleBorder(
               side: BorderSide(color: kBetSquadOrange, width: 2.0)),
           onPressed: () async {
+            if (_h2hLoading) return;
             if (initPosition == 0) {
               print("send H2H bet");
 
@@ -777,6 +775,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
               }
             } else {
+              if (_ngsLoading) return;
+
               print("send NGS bet");
               print(ngsBet.amount);
               print(ngsTotalStake);
