@@ -191,7 +191,7 @@ class _MessagesStreamState extends State<MessagesStream> {
           messageBubbles.add(messageBubble);
         }
 
-        messageBubbles.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+        messageBubbles.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
         return Expanded(
           child: Container(
