@@ -51,6 +51,7 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
     return bet;
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -175,6 +176,11 @@ class BetHistoryCell extends StatelessWidget {
   final Bet bet;
 
   const BetHistoryCell({Key key, this.bet}) : super(key: key);
+
+  Future<String> getUsername(String userId) async {
+    final dbRef = await FirebaseDatabase.instance.reference().child("users").child(userId).once();
+    return dbRef.value["username"];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -314,17 +320,17 @@ class BetHistoryCell extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '£${liveBet.amount.toStringAsFixed(2)} bet',
+                            '£${liveBet.amount.toStringAsFixed(2)} bet x ${liveBet.rollovers} rollovers',
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
                             liveBet.mode == "NGS"
                                 ? 'vs ${liveBet.accepted.length} ${liveBet.accepted.length > 1 ? 'users' : 'user'}'
-                                : 'vs 1 user',
+                                : 'vs ${getUsername(liveBet.vsUserID)}',
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
-                            '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(liveBet.createdAt))}',
+                            '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(liveBet.match.startTimestamp)))}',
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
