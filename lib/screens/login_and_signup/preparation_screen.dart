@@ -25,7 +25,6 @@ import '../alert.dart';
 class PreparationScreen extends StatefulWidget {
   static const String ID = 'preparation_screen';
 
-
   @override
   _PreparationScreenState createState() => _PreparationScreenState();
 }
@@ -47,11 +46,10 @@ class _PreparationScreenState extends State<PreparationScreen> {
 
     final dbRef = await FirebaseDatabase.instance.reference().child("version").once();
 
-    if(packageInfo.version != dbRef.value["version_number"]){
-      setState(() {
-        versionValid = false;
-      });
-    }
+    print(packageInfo.version);
+    setState(() {
+      versionValid = packageInfo.version == dbRef.value["version_number"];
+    });
   }
 
   saveMatches() async {
@@ -144,7 +142,6 @@ class _PreparationScreenState extends State<PreparationScreen> {
         return;
       }
 
-
       await checkVersion();
 
       if (versionValid) {
@@ -157,8 +154,6 @@ class _PreparationScreenState extends State<PreparationScreen> {
       } else {
         Alerts.updateApp(context: context);
       }
-
-
     });
   }
 
