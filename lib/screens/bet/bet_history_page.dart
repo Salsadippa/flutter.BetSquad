@@ -203,9 +203,10 @@ class BetHistoryCell extends StatelessWidget {
             }
 
             var liveBet = bet;
-
             // Bet.fromMap(snapshot.data.snapshot.value);
             // liveBet.match = bet.match;
+
+
 
             return Container(
               decoration: kGradientBoxDecoration,
@@ -314,23 +315,30 @@ class BetHistoryCell extends StatelessWidget {
                     flex: 3,
                     child: Container(
                       padding: EdgeInsets.only(left: 20),
-                      height: 100,
+                      height: 120,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '£${liveBet.amount.toStringAsFixed(2)} bet x ${liveBet.rollovers} rollovers',
+                            liveBet.mode == "NGS" ? '£${liveBet.amount.toStringAsFixed(2)} bet x ${liveBet.rollovers} rollovers' : '£${liveBet.amount.toStringAsFixed(2)} bet',
                             style: TextStyle(color: Colors.white),
                           ),
-                          Text(
-                            liveBet.mode == "NGS"
-                                ? 'vs ${liveBet.accepted.length} ${liveBet.accepted.length > 1 ? 'users' : 'user'}'
-                                : 'vs ${getUsername(liveBet.vsUserID)}',
-                            style: TextStyle(color: Colors.white),
+                          FutureBuilder<String>(
+                            future: getUsername(liveBet.vsUserID),
+                            builder: (context,snapshot) {
+
+                              return Text(
+                                  liveBet.mode == "NGS"
+                                      ? 'vs ${liveBet.accepted.length} ${liveBet.accepted.length > 1 ? 'users' : 'user'}'
+                                      : 'vs ${snapshot.hasError || !snapshot.hasData ? ' ' : snapshot.data}',
+                              style: TextStyle(color: Colors.white),
+                              );
+                            }
                           ),
+
                           Text(
-                            '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(liveBet.match.startTimestamp)))}',
+                            '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(liveBet.match.startTimestamp) * 1000))}',
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
