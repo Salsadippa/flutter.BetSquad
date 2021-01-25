@@ -32,6 +32,7 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
     User user = FirebaseAuth.instance.currentUser;
     final dbRef = await FirebaseDatabase.instance.reference().child("users/${user.uid}").once();
     setState(() {
+      print("image --> " + dbRef.value['image']);
       userProfilePic = dbRef.value['image'];
     });
   }
@@ -64,7 +65,7 @@ class _Head2HeadBetScreenState extends State<Head2HeadBetScreen> {
                         radius: 50,
                         backgroundColor: kBetSquadOrange,
                         child: CircleAvatar(
-                          backgroundImage: userProfilePic != null || userProfilePic == '' ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
+                          backgroundImage: userProfilePic != null ? NetworkImage(userProfilePic) : kUserPlaceholderImage,
                           radius: 48,
                         ),
                       ),
