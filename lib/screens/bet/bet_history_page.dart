@@ -51,7 +51,6 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
     return bet;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,9 +62,7 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
             indicatorColor: kBetSquadOrange,
             tabs: [
               Tab(text: 'Open'),
-              Tab(
-                text: 'Recent',
-              ),
+              Tab(text: 'Recent'),
               Tab(text: 'Closed'),
             ],
           ),
@@ -78,7 +75,9 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                   .onValue,
               builder: (context, snapshot) {
                 if (snapshot.hasError || !snapshot.hasData || snapshot.data.snapshot.value == null) {
-                  return Container(decoration: kGradientBoxDecoration,);
+                  return Container(
+                    decoration: kGradientBoxDecoration,
+                  );
                 }
                 Map usersBetsMap = snapshot.data.snapshot.value;
                 // print(usersBetsMap);
@@ -94,7 +93,9 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                   future: betFutures,
                   builder: (context, snapshot) {
                     if (snapshot.hasError || !snapshot.hasData) {
-                      return Container(decoration: kGradientBoxDecoration,);
+                      return Container(
+                        decoration: kGradientBoxDecoration,
+                      );
                     }
                     var bets = snapshot.data;
 
@@ -178,8 +179,8 @@ class BetHistoryCell extends StatelessWidget {
   const BetHistoryCell({Key key, this.bet}) : super(key: key);
 
   Future<String> getUsername(String userId) async {
-    final dbRef = await FirebaseDatabase.instance.reference().child("users").child(userId).once();
-    return dbRef.value["username"];
+    final dbRef = await FirebaseDatabase.instance.reference().child("users").child(userId).child('username').once();
+    return dbRef.value;
   }
 
   @override
@@ -205,8 +206,6 @@ class BetHistoryCell extends StatelessWidget {
             var liveBet = bet;
             // Bet.fromMap(snapshot.data.snapshot.value);
             // liveBet.match = bet.match;
-
-
 
             return Container(
               decoration: kGradientBoxDecoration,
@@ -315,28 +314,30 @@ class BetHistoryCell extends StatelessWidget {
                     flex: 3,
                     child: Container(
                       padding: EdgeInsets.only(left: 20),
-                      height: 120,
+                      height: 110,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            liveBet.mode == "NGS" ? '£${liveBet.amount.toStringAsFixed(2)} bet x ${liveBet.rollovers} rollovers' : '£${liveBet.amount.toStringAsFixed(2)} bet',
+                            liveBet.mode == "NGS"
+                                ? '£${liveBet.amount.toStringAsFixed(2)} bet x ${liveBet.rollovers} rollovers'
+                                : '£${liveBet.amount.toStringAsFixed(2)} bet',
                             style: TextStyle(color: Colors.white),
                           ),
-                          FutureBuilder<String>(
-                            future: getUsername(liveBet.vsUserID),
-                            builder: (context,snapshot) {
-
-                              return Text(
-                                  liveBet.mode == "NGS"
-                                      ? 'vs ${liveBet.accepted.length} ${liveBet.accepted.length > 1 ? 'users' : 'user'}'
-                                      : 'vs ${snapshot.hasError || !snapshot.hasData ? ' ' : snapshot.data}',
-                              style: TextStyle(color: Colors.white),
-                              );
-                            }
-                          ),
-
+                          liveBet.mode == "NGS"
+                              ? Text(
+                                  'vs ${liveBet.accepted.length} ${liveBet.accepted.length > 1 ? 'users' : 'user'}',
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              : FutureBuilder<String>(
+                                  future: getUsername(liveBet.vsUserID),
+                                  builder: (context, snapshot) {
+                                    return Text(
+                                      'vs ${snapshot.hasError || !snapshot.hasData ? '' : snapshot.data}',
+                                      style: TextStyle(color: Colors.white),
+                                    );
+                                  }),
                           Text(
                             '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(liveBet.match.startTimestamp) * 1000))}',
                             style: TextStyle(color: Colors.white),
