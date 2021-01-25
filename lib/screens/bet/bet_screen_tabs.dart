@@ -762,6 +762,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
               }
 
               Map createBetResponse = await BetApi().sendH2HBet(h2hBet);
+              print(createBetResponse);
               setState(() {
                 _h2hLoading = false;
               });

@@ -117,6 +117,7 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                         if (created > sevenDaysAgo) {
                           recent.add(Bet.fromMap(bet));
                         } else {
+
                           closed.add(Bet.fromMap(bet));
                         }
                       } else {

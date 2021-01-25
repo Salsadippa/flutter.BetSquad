@@ -38,6 +38,8 @@ class _PreparationScreenState extends State<PreparationScreen> {
   }
 
   saveMatches() async {
+    await DBProvider.db.deleteAllMatchesAndData();
+
     List matches = await MatchApi().getMatches();
     List<Future<dynamic>> futures = [];
     if (matches != null) {
