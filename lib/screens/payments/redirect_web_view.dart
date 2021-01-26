@@ -35,7 +35,7 @@ class _RedirectWebViewPageState extends State<RedirectWebViewPage> {
               context: context,
               type: AlertType.success,
               title: "Deposit Successful",
-              desc: "Please wait up to 20 minutes for the deposited funds to become available",
+              desc: "Please wait up to 2 minutes for the deposited funds to become available",
               buttons: [
                 DialogButton(
                   child: Text(
