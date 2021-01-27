@@ -773,7 +773,12 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
               } else {
                 var errorMsg = createBetResponse['message'];
                 print(errorMsg);
-                Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
+
+                if(errorMsg == "You do not have enough funds to place this bet"){
+                  Alert.showDepositError(context, 'Insufficient funds', errorMsg);
+                }else{
+                  Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
+                }
               }
             } else {
               if (_ngsLoading) return;
