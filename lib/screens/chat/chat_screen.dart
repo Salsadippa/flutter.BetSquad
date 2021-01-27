@@ -191,12 +191,13 @@ class _MessagesStreamState extends State<MessagesStream> {
           messageBubbles.add(messageBubble);
         }
 
-        messageBubbles.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+        messageBubbles.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
         return Expanded(
           child: Container(
             decoration: kGradientBoxDecoration,
             child: ListView(
+              reverse: true,
               controller: scrollController,
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
               children: messageBubbles,

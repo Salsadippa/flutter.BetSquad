@@ -118,9 +118,12 @@ class DBProvider {
     return db.delete('Matches', where: 'id = ?', whereArgs: [id]);
   }
 
-  deleteAllMatches() async {
+  deleteAllMatchesAndData() async {
     final db = await database;
     db.rawDelete('Delete from Matches');
+    db.rawDelete('Delete from Goals');
+    db.rawDelete('Delete from Cards');
+    db.rawDelete('Delete from Substitutions');
   }
 
   Future<List<Event>> _getCards(int matchId) async {

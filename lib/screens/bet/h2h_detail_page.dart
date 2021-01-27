@@ -81,20 +81,18 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                         style: GoogleFonts.roboto(color: kBetSquadOrange, fontSize: 18),
                                       ),
                                       onTap: () async {
-                                        if (widget.bet.status == 'sent') {
-                                          setState(() {
-                                            _loading = true;
-                                          });
-                                          var res = await BetApi().withdrawH2HBet(widget.bet);
-                                          setState(() {
-                                            _loading = false;
-                                          });
-                                          Navigator.of(context).pop();
+                                        setState(() {
+                                          _loading = true;
+                                        });
+                                        var res = await BetApi().withdrawH2HBet(widget.bet);
+                                        setState(() {
+                                          _loading = false;
+                                        });
+                                        Navigator.of(context).pop();
+                                        if (res['result'] == 'success') {
                                           Alert.showSuccessDialog(context, 'Bet Withdrawn', res['message']);
                                         } else {
-                                          Navigator.of(context).pop();
-                                          Alert.showErrorDialog(context, 'Cannot Withdraw Bet', 'You cannot withdraw '
-                                              'this bet at this time.');
+                                          Alert.showErrorDialog(context, 'Cannot Withdraw Bet', res['message']);
                                         }
                                       },
                                     )
@@ -314,7 +312,7 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                           Alert.showSuccessDialog(
                                               context, 'Bet Declined', acceptedBetResponse['message']);
                                         } else {
-                                          Alert.showSuccessDialog(
+                                          Alert.showErrorDialog(
                                               context, 'Decline Bet Failed', acceptedBetResponse['message']);
                                         }
                                       },

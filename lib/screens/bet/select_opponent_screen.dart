@@ -110,8 +110,9 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
                           .child('squads')
                           .onValue,
                       builder: (context, snapshot) {
-                        if (snapshot.hasData && !snapshot.hasError) {
+                        if (snapshot.hasData && !snapshot.hasError && snapshot.data.snapshot.value != null) {
                           Map squadsList = snapshot.data.snapshot.value;
+
                           List squads = squadsList.values.toList();
                           List squadKeys = squadsList.keys.toList();
 
