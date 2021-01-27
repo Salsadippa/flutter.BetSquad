@@ -117,11 +117,14 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                         if (created > sevenDaysAgo) {
                           recent.add(Bet.fromMap(bet));
                         } else {
+                          print("status: " + bet["status"]);
+                          print("status: " + bet["status"]);
 
-                          closed.add(Bet.fromMap(bet));
                         }
                       } else {
-                        closed.add(Bet.fromMap(bet));
+                        if (bet['status'] != 'withdrawn' && bet['status'] != 'declined' && bet['status'] != 'expired'){
+                          closed.add(Bet.fromMap(bet));
+                        }
                       }
                     }
 
