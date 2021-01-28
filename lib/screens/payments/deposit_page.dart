@@ -606,14 +606,20 @@ class _DepositPageState extends State<DepositPage> {
                                 _loading = false;
                               });
 
-                              String redirectUrl = deposit['body']['redirect_url'];
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => RedirectWebViewPage(
-                                    redirectUrl: redirectUrl,
+                              if (deposit['body']["status"] == "declined" || deposit['body']["status"] == "error") {
+                                Alert.showErrorDialog(context, 'Cannot make deposit',
+                                    'This deposit failed. Please check your details and try again');
+                              } else {
+                                String redirectUrl = deposit['body']['redirect_url'];
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => RedirectWebViewPage(
+                                      redirectUrl: redirectUrl,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              }
+                              
                             } else {
                               setState(() {
                                 _loading = false;
