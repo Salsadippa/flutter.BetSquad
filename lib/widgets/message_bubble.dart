@@ -23,7 +23,7 @@ class MessageBubble extends StatelessWidget {
             children:<Widget>[
               isMe
                   ? Text(
-                '${DateFormat('dd/MM/yyyy').format(DateTime.fromMillisecondsSinceEpoch(timestamp))}',
+                '${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(timestamp))}',
                 style: TextStyle(
                   fontSize: 12.0,
                   color: Colors.white,
@@ -52,7 +52,7 @@ class MessageBubble extends StatelessWidget {
                   color: Colors.white,
                 )
               ): Text(
-                  '${DateFormat('dd/MM/yyyy').format(DateTime.fromMillisecondsSinceEpoch(timestamp))}',
+                  '${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(timestamp))}',
                   style: TextStyle(
                     fontSize: 12.0,
                     color: Colors.white,
