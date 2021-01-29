@@ -41,15 +41,16 @@ class _PreparationScreenState extends State<PreparationScreen> {
     pushNotificationsManager.init();
   }
 
-  Future<void> checkVersion() async {
+  Future<String> checkVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-    final dbRef = await FirebaseDatabase.instance.reference().child("version").once();
+    return packageInfo.version;
+//    final dbRef = await FirebaseDatabase.instance.reference().child("version").once();
 
-    print(packageInfo.version);
-    setState(() {
-      versionValid = packageInfo.version == dbRef.value["version_number"];
-    });
+//    print(packageInfo.version);
+//    setState(() {
+//      versionValid = packageInfo.version == dbRef.value["version_number"];
+//    });
   }
 
   saveMatches() async {
@@ -171,7 +172,15 @@ class _PreparationScreenState extends State<PreparationScreen> {
       height: 30,
     );
 
-    var upToDateText = DualColouredText('v1.0.0', 'Making sure you\'re up to date');
+    var upToDateText = FutureBuilder<String>(
+      future: checkVersion(), // async work
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if(snapshot.hasError || !snapshot.hasData) {
+          return Text('');
+        }
+        return DualColouredText(snapshot.data, 'Making sure you\'re up to date');
+      },
+    );
 
     var gamblingCommissionLogo = Container(
         margin: EdgeInsets.only(top: 100),
