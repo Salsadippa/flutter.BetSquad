@@ -1,6 +1,7 @@
 import 'package:betsquad/styles/constants.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MessageBubble extends StatelessWidget {
   MessageBubble({this.sender, this.text, this.isMe, this.timestamp});
@@ -17,29 +18,49 @@ class MessageBubble extends StatelessWidget {
       child: Column(
         crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          isMe
-              ? Text(
-            'Me',
-            style: TextStyle(
-              fontSize: 12.0,
-              color: Colors.white,
-            ),
-          )
-              : FutureBuilder<DataSnapshot>(
-              future: FirebaseDatabase.instance.reference().child('users').child(sender).child('username').once(),
-              builder: (context, snapshot) {
-                print(sender);
-                if (!snapshot.hasData || snapshot.hasError) {
-                  return Text('');
-                }
-                return Text(
-                  snapshot.data.value,
+          Row(
+            mainAxisAlignment:MainAxisAlignment.spaceBetween ,
+            children:<Widget>[
+              isMe
+                  ? Text(
+                '${DateFormat('dd/MM/yyyy').format(DateTime.fromMillisecondsSinceEpoch(timestamp))}',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  color: Colors.white,
+                ),
+              )
+                  : FutureBuilder<DataSnapshot>(
+                  future: FirebaseDatabase.instance.reference().child('users').child(sender).child('username').once(),
+                  builder: (context, snapshot) {
+                    print(sender);
+                    if (!snapshot.hasData || snapshot.hasError) {
+                      return Text('');
+                    }
+                    return Text(
+                      snapshot.data.value,
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.white,
+                      ),
+                    );
+                  }),
+              isMe
+                  ? Text(
+                'Me',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  color: Colors.white,
+                )
+              ): Text(
+                  '${DateFormat('dd/MM/yyyy').format(DateTime.fromMillisecondsSinceEpoch(timestamp))}',
                   style: TextStyle(
                     fontSize: 12.0,
                     color: Colors.white,
-                  ),
-                );
-              }),
+                  )
+              )
+            ],
+          ),
+
           SizedBox(height: 5),
           Material(
             borderRadius: isMe
