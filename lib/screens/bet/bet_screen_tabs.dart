@@ -42,7 +42,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
 
   var h2hBet = Bet(mode: 'head2head', amount: 0);
   var ngsBet = Bet(mode: 'NGS', amount: 0);
-  double ngsTotalStake = 0;
+//  double ngsTotalStake = 0;
   var userProfilePic;
   var selectedOpponent;
   var whiteTextStyle = TextStyle(color: Colors.white);
@@ -56,8 +56,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
       CurrencyTextFieldController(
           rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
 
-  TextEditingController textEditingController = TextEditingController();
-  TextEditingController textEditingController2 = TextEditingController();
+//  TextEditingController textEditingController = TextEditingController();
+//  TextEditingController textEditingController2 = TextEditingController();
 
   final FocusNode _nodeText1 = FocusNode();
   final FocusNode _nodeText2 = FocusNode();
@@ -545,60 +545,60 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                         ngsBet.amount =
                             currencyTextFieldController2.doubleValue;
                       });
-                      if (currencyTextFieldController2.text.isNotEmpty &&
-                          textEditingController2.text.isNotEmpty) {
-                        double totalStake =
-                            currencyTextFieldController2.doubleValue *
-                                double.parse(textEditingController2.text);
-                        textEditingController.text =
-                            "£${totalStake.toStringAsFixed(2)}";
-                        setState(() {
-                          print("setting amount");
-                          ngsTotalStake = totalStake;
-                        });
-                      }
+//                      if (currencyTextFieldController2.text.isNotEmpty &&
+//                          textEditingController2.text.isNotEmpty) {
+//                        double totalStake =
+//                            currencyTextFieldController2.doubleValue *
+//                                double.parse(textEditingController2.text);
+//                        textEditingController.text =
+//                            "£${totalStake.toStringAsFixed(2)}";
+//                        setState(() {
+//                          print("setting amount");
+//                          ngsTotalStake = totalStake;
+//                        });
+//                      }
                     },
                   ),
-                  TextFieldWithTitleInfo(
-                    title: 'Max bets per match:',
-                    focusNode: _nodeText3,
-                    keyboardType: TextInputType.number,
-                    onInfoButtonPressed: () {
-                      Utility.getInstance().showErrorAlertDialog(
-                          context,
-                          "Bets per match",
-                          "This is the maximum number of times you "
-                              "will be automatically added to a new bet once a goal has been scored.  We will take funds from your account to cover all rollovers.  If there are not enough goals in the game, you will be refunded any remaining funds.");
-                    },
-                    controller: textEditingController2,
-                    onChanged: (value) {
-                      if (currencyTextFieldController2.text.isNotEmpty &&
-                          textEditingController2.text.isNotEmpty) {
-                        var totalStake =
-                            currencyTextFieldController2.doubleValue *
-                                double.parse(textEditingController2.text);
-                        textEditingController.text =
-                            "£${(totalStake).toStringAsFixed(2)}";
-                        setState(() {
-                          ngsTotalStake = totalStake;
-                          ngsBet.rollovers =
-                              textEditingController2.text.toString();
-                        });
-                      }
-                    },
-                  ),
-                  TextFieldWithTitleInfo(
-                    title: 'Total stake:',
-                    isEnabled: false,
-                    onInfoButtonPressed: () {
-                      Utility.getInstance().showErrorAlertDialog(
-                          context,
-                          "Total stake",
-                          "The total amount you will be charged. Bets Per Goal x Bets Per Match. Any excess funds will be refunded at the end of the match.");
-                    },
-                    onChanged: (value) {},
-                    controller: textEditingController,
-                  ),
+//                  TextFieldWithTitleInfo(
+//                    title: 'Max bets per match:',
+//                    focusNode: _nodeText3,
+//                    keyboardType: TextInputType.number,
+//                    onInfoButtonPressed: () {
+//                      Utility.getInstance().showErrorAlertDialog(
+//                          context,
+//                          "Bets per match",
+//                          "This is the maximum number of times you "
+//                              "will be automatically added to a new bet once a goal has been scored.  We will take funds from your account to cover all rollovers.  If there are not enough goals in the game, you will be refunded any remaining funds.");
+//                    },
+//                    controller: textEditingController2,
+//                    onChanged: (value) {
+//                      if (currencyTextFieldController2.text.isNotEmpty &&
+//                          textEditingController2.text.isNotEmpty) {
+//                        var totalStake =
+//                            currencyTextFieldController2.doubleValue *
+//                                double.parse(textEditingController2.text);
+//                        textEditingController.text =
+//                            "£${(totalStake).toStringAsFixed(2)}";
+//                        setState(() {
+//                          ngsTotalStake = totalStake;
+//                          ngsBet.rollovers =
+//                              textEditingController2.text.toString();
+//                        });
+//                      }
+//                    },
+//                  ),
+//                  TextFieldWithTitleInfo(
+//                    title: 'Total stake:',
+//                    isEnabled: false,
+//                    onInfoButtonPressed: () {
+//                      Utility.getInstance().showErrorAlertDialog(
+//                          context,
+//                          "Total stake",
+//                          "The total amount you will be charged. Bets Per Goal x Bets Per Match. Any excess funds will be refunded at the end of the match.");
+//                    },
+//                    onChanged: (value) {},
+//                    controller: textEditingController,
+//                  ),
                   SizedBox(height: 10),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -785,18 +785,18 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
 
               print("send NGS bet");
               print(ngsBet.amount);
-              print(ngsTotalStake);
+//              print(ngsTotalStake);
 
-              if (ngsBet.rollovers == null) {
-                print("rollovers null");
-                Utility.getInstance().showErrorAlertDialog(
-                    context,
-                    'Enter max bets',
-                    'Please enter a max bets per match value');
-                return;
-              }
-
-              if (ngsTotalStake < 2) {
+//              if (ngsBet.rollovers == null) {
+//                print("rollovers null");
+//                Utility.getInstance().showErrorAlertDialog(
+//                    context,
+//                    'Enter max bets',
+//                    'Please enter a max bets per match value');
+//                return;
+//              }
+//
+              if (ngsBet.amount < 2) {
                 Utility.getInstance().showErrorAlertDialog(
                     context,
                     'Minimum £2 bet',
@@ -804,6 +804,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                         ' is £2.00');
                 return;
               }
+
 
               if (invitedUsers.length < 1 && invitedSquads.length < 1) {
                 Utility.getInstance().showErrorAlertDialog(

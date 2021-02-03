@@ -12,6 +12,7 @@ import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
 import 'package:betsquad/widgets/full_width_button.dart';
 import 'package:betsquad/widgets/match_header.dart';
 import 'package:betsquad/widgets/text_field_with_info.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -37,14 +38,14 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
   bool _loading = false;
 
   TextEditingController textEditingController = TextEditingController();
-  TextEditingController textEditingController2 = TextEditingController();
-  TextEditingController textEditingController3 = TextEditingController();
+//  TextEditingController textEditingController2 = TextEditingController();
+//  TextEditingController textEditingController3 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     textEditingController.text = '£${widget.bet.amount.toStringAsFixed(2)}';
-    textEditingController2.text = widget.bet.rollovers;
-    textEditingController3.text = '£${(widget.bet.amount * int.parse(widget.bet.rollovers)).toStringAsFixed(2)}';
+//    textEditingController2.text = widget.bet.rollovers;
+//    textEditingController3.text = '£${(widget.bet.amount * int.parse(widget.bet.rollovers)).toStringAsFixed(2)}';
 
     return Scaffold(
       backgroundColor: Colors.black87,
@@ -212,29 +213,29 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                       },
                       onChanged: (value) {},
                     ),
-                    TextFieldWithTitleInfo(
-                      title: 'Max bets per match:',
-                      isEnabled: false,
-                      onInfoButtonPressed: () {
-                        Utility.getInstance().showErrorAlertDialog(
-                            context,
-                            "Bets per match",
-                            "This is the maximum number of times you "
-                                "will be automatically added to a new bet once a goal has been scored.  We will take funds from your account to cover all rollovers.  If there are not enough goals in the game, you will be refunded any remaining funds.");
-                      },
-                      controller: textEditingController2,
-                      onChanged: (value) {},
-                    ),
-                    TextFieldWithTitleInfo(
-                      title: 'Total stake:',
-                      isEnabled: false,
-                      onInfoButtonPressed: () {
-                        Utility.getInstance().showErrorAlertDialog(context, "Total stake",
-                            "The total amount you will be charged. Bets Per Goal x Bets Per Match. Any excess funds will be refunded at the end of the match.");
-                      },
-                      onChanged: (value) {},
-                      controller: textEditingController3,
-                    ),
+//                    TextFieldWithTitleInfo(
+//                      title: 'Max bets per match:',
+//                      isEnabled: false,
+//                      onInfoButtonPressed: () {
+//                        Utility.getInstance().showErrorAlertDialog(
+//                            context,
+//                            "Bets per match",
+//                            "This is the maximum number of times you "
+//                                "will be automatically added to a new bet once a goal has been scored.  We will take funds from your account to cover all rollovers.  If there are not enough goals in the game, you will be refunded any remaining funds.");
+//                      },
+//                      controller: textEditingController2,
+//                      onChanged: (value) {},
+//                    ),
+//                    TextFieldWithTitleInfo(
+//                      title: 'Total stake:',
+//                      isEnabled: false,
+//                      onInfoButtonPressed: () {
+//                        Utility.getInstance().showErrorAlertDialog(context, "Total stake",
+//                            "The total amount you will be charged. Bets Per Goal x Bets Per Match. Any excess funds will be refunded at the end of the match.");
+//                      },
+//                      onChanged: (value) {},
+//                      controller: textEditingController3,
+//                    ),
                     SizedBox(height: 10),
                     Container(
                       width: MediaQuery.of(context).size.width,
@@ -250,13 +251,24 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                         ],
                       ),
                     ),
-                    if (widget.bet.winners != null) 
-                      Column(
-                          children: widget.bet.winners.entries
-                              .map(
-                                (e) => WinnerListItem(winner: e.value, winnerEntryId: e.key, bet: widget.bet),
-                              )
-                              .toList()),
+
+                    StreamBuilder<Event>(
+                      stream: FirebaseDatabase.instance.reference().child("bets").child(widget.bet.id).child("winners").onValue,
+                      builder: (context,  snapshot) {
+                        if (snapshot.hasData) {
+
+                          Map<dynamic, dynamic> winners = snapshot.data.snapshot.value;
+
+                            return Column(
+                                children: winners.entries
+                                    .map(
+                                      (e) => WinnerListItem(winner: e.value, winnerEntryId: e.key, bet: widget.bet),
+                                ).toList());
+                        }
+                        return Container();
+                      },
+                    ),
+
                     if (widget.bet.userStatus == 'sent')
                       FullWidthButton('Invite Players +', () async {
                         var result = await Navigator.of(context).push(

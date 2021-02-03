@@ -41,10 +41,11 @@ class BetApi {
     Map<String, String> queryParameters = {
       'matchPath': '${bet.match.date}/${bet.match.homeTeamName}',
       'senderId': bet.from,
-      'betTotal': (bet.amount * int.parse(bet.rollovers)).toStringAsFixed(2),
+      'betTotal': (bet.amount).toStringAsFixed(2),
+//          * int.parse(bet.rollovers)).toStringAsFixed(2),
       'betAmount': bet.amount.toStringAsFixed(2),
       'invited': json.encode(invited),
-      'maxRollovers': bet.rollovers,
+//      'maxRollovers': bet.rollovers,
       'idToken': idToken,
       'invitedSquads': json.encode(invitedSquads)
     };
@@ -116,12 +117,13 @@ class BetApi {
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
     print(bet.amount);
-    print(bet.rollovers);
+//    print(bet.rollovers);
     Map<String, String> queryParameters = {
       'senderId': user.uid,
       'betId': bet.id,
-      'betTotal': (bet.amount * int.parse(bet.rollovers)).toStringAsFixed(2),
-      'rollovers': bet.rollovers,
+      'betTotal': (bet.amount).toStringAsFixed(2),
+//          * int.parse(bet.rollovers)).toStringAsFixed(2),
+//      'rollovers': bet.rollovers,
       'from': bet.from,
       'homeTeamName': bet.match.homeTeamName,
       'awayTeamName': bet.match.awayTeamName,

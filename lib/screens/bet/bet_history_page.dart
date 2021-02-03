@@ -322,7 +322,8 @@ class BetHistoryCell extends StatelessWidget {
                         children: [
                           Text(
                             liveBet.mode == "NGS"
-                                ? '£${liveBet.amount.toStringAsFixed(2)} bet x ${liveBet.rollovers} rollovers'
+                                ? '£${liveBet.amount.toStringAsFixed(2)} bet '
+//                                'x ${liveBet.rollovers} rollovers'
                                 : '£${liveBet.amount.toStringAsFixed(2)} bet',
                             style: TextStyle(color: Colors.white),
                           ),
