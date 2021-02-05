@@ -27,8 +27,18 @@ class _NGSAssignmentsPageState extends State<NGSAssignmentsPage> {
 
   @override
   void initState() {
+    super.initState();
+    int goalCount = widget.bet.match.homeGoals + widget.bet.match.awayGoals;
+
+    //bet.assignemnts = {"0": {}, "262": {}}
+    //bet.assignments = {"afafdgdz":{"0": {}, "262": {}},
+    // "afafdgdz":{"0": {}, "262": {}},
+//    "afafdgdz":{"0": {}, "262": {}}
+    // }
+
+  
     var data =
-        widget.winnerEntryId == null ? widget.bet.assignments : widget.bet.winners[widget.winnerEntryId]['assignments'];
+        widget.winnerEntryId == null ? widget.bet.assignments.values.toList()[goalCount - 1] : widget.bet.winners[widget.winnerEntryId]['assignments'];
 
     goalkeepersH = data.values
         .toList()
