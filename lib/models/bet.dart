@@ -6,8 +6,10 @@ enum BetOption { Positive, Neutral, Negative }
 class Bet {
   Match match;
   double amount, holding;
-  bool rolloversEnabled;
-  String name, vsUserID, vsUsername, status, id, opponentId, mode, from, rollovers, userStatus;
+//  bool rolloversEnabled;
+  String name, vsUserID, vsUsername, status, id, opponentId, mode, from,
+//      rollovers,
+      userStatus;
   int createdAt, priority, numTickets;
   Map<dynamic, dynamic> accepted, assignments, invited, winners, invitedSquads;
   BetOption drawBet, homeBet, awayBet;
@@ -19,7 +21,7 @@ class Bet {
       this.homeBet,
       this.awayBet,
       this.drawBet,
-      this.rolloversEnabled,
+//      this.rolloversEnabled,
       this.name,
       this.vsUserID,
       this.vsUsername,
@@ -28,7 +30,7 @@ class Bet {
       this.opponentId,
       this.mode,
       this.from,
-      this.rollovers,
+//      this.rollovers,
       this.userStatus,
       this.createdAt,
       this.priority,
@@ -46,14 +48,14 @@ class Bet {
         mode: json['mode'],
         amount: json['amount'] != null ? double.parse(json['amount'].toString()) : 0.0,
         holding: json['holding'] != null ? double.parse(json['holding'].toString()) : 0.0,
-        rolloversEnabled: json['rolloversEnabled'],
+//        rolloversEnabled: json['rolloversEnabled'],
         name: json['name'],
         vsUserID: json['vs'],
         vsUsername: json['vsUsername'],
         status: json['status'],
         opponentId: json['opponentId'],
         from: json['from'],
-        rollovers: json['rollovers'],
+//        rollovers: json['rollovers'],
         userStatus: json['userStatus'],
         createdAt: json['created'],
         numTickets: json['numTickets'],
