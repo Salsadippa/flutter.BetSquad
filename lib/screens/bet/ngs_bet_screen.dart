@@ -259,8 +259,11 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
 
                           Map<dynamic, dynamic> winners = snapshot.data.snapshot.value;
 
+                          if (winners == null || winners.length == 0)
+                            return Container();
+
                             return Column(
-                                children: winners.entries
+                                children:winners.entries
                                     .map(
                                       (e) => WinnerListItem(winner: e.value, winnerEntryId: e.key, bet: widget.bet),
                                 ).toList());
