@@ -36,9 +36,9 @@ class _NGSAssignmentsPageState extends State<NGSAssignmentsPage> {
 //    "afafdgdz":{"0": {}, "262": {}}
     // }
 
-  
+
     var data =
-        widget.winnerEntryId == null ? widget.bet.assignments.values.toList()[goalCount - 1] : widget.bet.winners[widget.winnerEntryId]['assignments'];
+        widget.winnerEntryId == null ? widget.bet.assignments.values.toList()[goalCount == 0 ? goalCount : goalCount - 1] : widget.bet.winners[widget.winnerEntryId]['assignments'];
 
     goalkeepersH = data.values
         .toList()
