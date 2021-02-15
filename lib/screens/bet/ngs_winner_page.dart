@@ -16,7 +16,7 @@ class NGSWinnerPage extends StatefulWidget {
   final Bet bet;
   final winnerEntryId;
 
-  const NGSWinnerPage({this.uid, this.amount, this.scoringPlayer, this.scoringTime, this.bet, this.winnerEntryId});
+  const   NGSWinnerPage({this.uid, this.amount, this.scoringPlayer, this.scoringTime, this.bet, this.winnerEntryId});
 
   @override
   _NGSWinnerPageState createState() => _NGSWinnerPageState();
@@ -84,7 +84,7 @@ class _NGSWinnerPageState extends State<NGSWinnerPage> {
                             style: GoogleFonts.roboto(color: Colors.white, fontSize: 25),
                           ),
                           Text(
-                            '£${widget.amount.toStringAsFixed(2)}',
+                            '£${widget.amount != null ? widget.amount.toStringAsFixed(2): widget.amount}',
                             style: GoogleFonts.roboto(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                           ),
                           Column(

@@ -468,6 +468,9 @@ class _WinnerListItemState extends State<WinnerListItem> {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
+        print('betID -> ' + widget.bet.id);
+        print('amount -> ' + widget.winnerEntryId);
+
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
