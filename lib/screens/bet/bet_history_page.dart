@@ -105,7 +105,7 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                             ? 0
                             : 1);
                     List<Bet> open = [], recent = [], closed = [];
-                    var sevenDaysAgo = DateTime.now().subtract(Duration(days: 7)).millisecondsSinceEpoch;
+                    var threeDaysAgo = DateTime.now().subtract(Duration(days: 3)).millisecondsSinceEpoch;
                     for (var i = 0; i < bets.length; i++) {
                       var bet = bets[i];
                       if (['ongoing', 'sent', 'received', 'reversal', 'requested', 'open'].contains(bet['status']) &&
@@ -114,14 +114,13 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                       } else if (['won', 'lost', 'requested reversal', 'reversed'].contains(bet['status']) ||
                           (bet['status'] == 'closed' && (bet['userStatus'] == 'won' || bet['userStatus'] == 'lost'))) {
                         var created = bet['created'];
-                        if (created > sevenDaysAgo) {
+                        if (created > threeDaysAgo) {
                           recent.add(Bet.fromMap(bet));
-                        } else {
-
-                          closed.add(Bet.fromMap(bet));
                         }
                       } else {
-                        closed.add(Bet.fromMap(bet));
+                        if (bet['status'] != 'withdrawn' && bet['status'] != 'declined' && bet['status'] != 'expired'){
+                          closed.add(Bet.fromMap(bet));
+                        }
                       }
                     }
 
