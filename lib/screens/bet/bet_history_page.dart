@@ -105,7 +105,7 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                             ? 0
                             : 1);
                     List<Bet> open = [], recent = [], closed = [];
-                    var sevenDaysAgo = DateTime.now().subtract(Duration(days: 3)).millisecondsSinceEpoch;
+                    var threeDaysAgo = DateTime.now().subtract(Duration(days: 3)).millisecondsSinceEpoch;
                     for (var i = 0; i < bets.length; i++) {
                       var bet = bets[i];
                       if (['ongoing', 'sent', 'received', 'reversal', 'requested', 'open'].contains(bet['status']) &&
