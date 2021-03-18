@@ -108,17 +108,25 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                     var threeDaysAgo = DateTime.now().subtract(Duration(days: 3)).millisecondsSinceEpoch;
                     for (var i = 0; i < bets.length; i++) {
                       var bet = bets[i];
-                      if (['ongoing', 'sent', 'received', 'reversal', 'requested', 'open'].contains(bet['status']) &&
-                          bet['userStatus'] != 'declined') {
+                      var created = bet['created'];
+                      var betIsOpen = ['ongoing', 'sent', 'received', 'reversal', 'requested', 'open','won', 'lost'].contains(bet['status']);
+                      var betIsRecent = ['won', 'lost', 'requested reversal', 'reversed'].contains(bet['status']) ||
+                          (bet['status'] == 'closed' && (bet['userStatus'] == 'won' || bet['userStatus'] == 'lost'));
+                      var userAcceptedBet = bet['userStatus'] != 'declined';
+                      var betIsClosed = bet['status'] != 'withdrawn' && bet['status'] != 'declined' && bet['status'] != 'expired';
+
+                      if (betIsOpen && userAcceptedBet) {
+                        //Add to open bets
                         open.add(Bet.fromMap(bet));
-                      } else if (['won', 'lost', 'requested reversal', 'reversed'].contains(bet['status']) ||
-                          (bet['status'] == 'closed' && (bet['userStatus'] == 'won' || bet['userStatus'] == 'lost'))) {
-                        var created = bet['created'];
-                        if (created > threeDaysAgo) {
-                          recent.add(Bet.fromMap(bet));
-                        }
+                      } else if (betIsRecent && created > threeDaysAgo) {
+                        //Add to recent bets
+                        recent.add(Bet.fromMap(bet));
+                      } else if(betIsRecent && created <= threeDaysAgo){
+                        //Add to closed bets
+                        closed.add(Bet.fromMap(bet));
                       } else {
-                        if (bet['status'] != 'withdrawn' && bet['status'] != 'declined' && bet['status'] != 'expired'){
+                        if(betIsClosed){
+                          //Add to closed bets
                           closed.add(Bet.fromMap(bet));
                         }
                       }
