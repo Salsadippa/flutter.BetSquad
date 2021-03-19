@@ -112,10 +112,10 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                       var betIsOpen = ['ongoing', 'sent', 'received', 'reversal', 'requested', 'open','won', 'lost'].contains(bet['status']);
                       var betIsRecent = ['won', 'lost', 'requested reversal', 'reversed'].contains(bet['status']) ||
                           (bet['status'] == 'closed' && (bet['userStatus'] == 'won' || bet['userStatus'] == 'lost'));
-                      var userAcceptedBet = bet['userStatus'] != 'declined';
+                      var userHasNotDeclinedBet = bet['userStatus'] != 'declined';
                       var betIsClosed = bet['status'] != 'withdrawn' && bet['status'] != 'declined' && bet['status'] != 'expired';
 
-                      if (betIsOpen && userAcceptedBet) {
+                      if (betIsOpen && userHasNotDeclinedBet) {
                         //Add to open bets
                         open.add(Bet.fromMap(bet));
                       } else if (betIsRecent && created > threeDaysAgo) {
