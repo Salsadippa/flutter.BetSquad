@@ -1,5 +1,6 @@
 import 'package:betsquad/services/database.dart';
 import 'package:betsquad/styles/constants.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,23 +15,6 @@ class AllocationView extends StatefulWidget {
 }
 
 class _AllocationViewState extends State<AllocationView> {
-  String _userProfilePicture, _userUsername;
-  DatabaseService databaseService = DatabaseService();
-
-  @override
-  void initState() {
-    getUserInfo();
-    super.initState();
-  }
-
-  void getUserInfo() async {
-    var picture = await databaseService.getUserProfilePicture(widget.userId);
-    var username = await databaseService.getUserUsername(widget.userId);
-    setState(() {
-      _userProfilePicture = picture;
-      _userUsername = username;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +25,18 @@ class _AllocationViewState extends State<AllocationView> {
             child: CircleAvatar(
               radius: 30,
               backgroundColor: kBetSquadOrange,
-              child: CircleAvatar(
-                radius: 28,
-                backgroundImage: _userProfilePicture != null
-                    ? NetworkImage(_userProfilePicture)
-                    : AssetImage('images/user_placeholder'
-                        '.png'),
+              child: FutureBuilder<DataSnapshot>(
+                  future: FirebaseDatabase.instance.reference().child('users').child(widget.userId).child('image')
+                      .once(),
+                  builder: (context, snapshot) {
+                  return CircleAvatar(
+                    radius: 28,
+                    backgroundImage: snapshot.hasData
+                        ? NetworkImage(snapshot.data.value)
+                        : AssetImage('images/user_placeholder'
+                            '.png'),
+                  );
+                }
               ),
             ),
           ),
@@ -62,11 +52,17 @@ class _AllocationViewState extends State<AllocationView> {
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text(
-                  _userUsername ?? '',
-                  maxLines: 1,
-                  style: GoogleFonts.roboto(color: Colors.white, fontSize: 11),
-                  textAlign: TextAlign.center,
+                FutureBuilder<DataSnapshot>(
+                  future: FirebaseDatabase.instance.reference().child('users').child(widget.userId).child('username')
+                      .once(),
+                  builder: (context, snapshot) {
+                    return Text(
+                      snapshot.hasData ? snapshot.data.value : '',
+                      maxLines: 1,
+                      style: GoogleFonts.roboto(color: Colors.white, fontSize: 11),
+                      textAlign: TextAlign.center,
+                    );
+                  }
                 )
               ],
             ),

@@ -60,7 +60,7 @@ class Bet {
         createdAt: json['created'],
         numTickets: json['numTickets'],
         accepted: json['accepted'] ?? {},
-        assignments: json['assignments'] ?? {},
+        assignments: json['currentAssignments'] ?? {},
         winners: json['winners'] ?? {},
         invited: json['invited'] ?? {},
         match: json['match'],

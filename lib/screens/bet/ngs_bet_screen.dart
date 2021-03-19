@@ -204,12 +204,12 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                     ),
                     SizedBox(height: 20),
                     TextFieldWithTitleInfo(
-                      title: 'Bet amount per goal:',
+                      title: 'Total Bet:',
                       isEnabled: false,
                       controller: textEditingController,
                       onInfoButtonPressed: () {
-                        Utility.getInstance().showErrorAlertDialog(context, "Bet per goal",
-                            "Just before the game kicks off, all users will receive their random allocation of players.  If your player scores you will win the pot.  You will then receive a new allocation of players for the next bet.  There are 21 players available, which is the 10 outfield players from each team and 1 Goalkeepers/ own goals/ no goal.  If either goalkeeper scores or there is an own goal or the game ends, you will win the pot.");
+                        Utility.getInstance().showErrorAlertDialog(context, "Total Bet",
+                            "As the game kicks off, everyone who has accepted the bet will receive an equal split of random players.  If your player scores, you will win a share of the pot (calculated at the end of the game).  There are 21 player tickets available which is for the 10 outfield players from each team and one ticket for both goalkeepers, own goals and no goal scorer.  If there is an own goal, either goalkeeper scores, or the game ends while you hold this ticket, you will win a share of the pot.");
                       },
                       onChanged: (value) {},
                     ),
@@ -365,15 +365,14 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                                 child: Text('Accept', style: TextStyle(color: Colors.white, fontSize: 18)),
                                 color: Colors.green,
                                 onPressed: () async {
+                                  setState(() {
+                                    _loading = true;
+                                  });
                                   bool compliant = await UsersApi.complianceCheck();
                                   if (!compliant) {
                                     Alert.showErrorDialog(context, 'Cannot bet',
                                         'You have failed our compliance check. Please contact info@bet-squad.com');
                                   }
-                                  setState(() {
-                                    _loading = true;
-                                  });
-
                                   //accept bet
                                   Map acceptedBetResponse = await BetApi().acceptNGSBet(widget.bet);
                                   print(acceptedBetResponse);
@@ -468,15 +467,16 @@ class _WinnerListItemState extends State<WinnerListItem> {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
+        print(widget.winner);
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
               return NGSWinnerPage(
                 winnerEntryId: widget.winnerEntryId,
-                amount: widget.winner['amount'],
+                amount: widget.winner['amount'] != null ? (widget.winner['amount'] as num).toDouble() : null,
                 uid: widget.winner['userID'],
-                scoringPlayer: widget.winner['scoringPlayer'],
-                scoringTime: widget.winner['scoringTime'],
+                scoringPlayer: widget.winner['scoringPlayer'].toString(),
+                scoringTime: widget.winner['scoringTime'].toString(),
                 bet: widget.bet,
               );
             },

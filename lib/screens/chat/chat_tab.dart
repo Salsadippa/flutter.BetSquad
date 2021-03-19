@@ -39,7 +39,6 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                 );
               }
             } else if (result['type'] == 'squad') {
-              print(result['squadId']);
               Map response = await ChatApi.openSquadChat(squadId: result['squadId']);
               if (response['result'] == 'success') {
                 var chatId = response['chatId'];
@@ -107,15 +106,12 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                   chats.add(value);
                 });
 
-                print(chats);
 
                 return ListView.builder(
                   itemCount: chats.length,
                   itemBuilder: (context, index) {
                     var chat = chats[index];
-                    print(chat);
                     bool unread = chat['unread'] == true;
-                    print(unread);
                     return Container(
                       decoration: kGradientBoxDecoration,
                       child: Padding(
@@ -154,7 +150,6 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                                             .once(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasError) print(snapshot.error);
-                                      if (snapshot.hasData) print(snapshot.data.value);
                                       return CircleAvatar(
                                         radius: 22,
                                         backgroundImage: !snapshot.hasData ||
@@ -168,9 +163,7 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                           ),
                           trailing: GestureDetector(
                             onTap: () async {
-                              print("delete chat");
                               await ChatApi.deleteChat(chatId: chat['id'], chatType: chat['type']);
-                              print("delete chat done");
                             },
                             child: Icon(
                               Icons.cancel_outlined,
@@ -200,7 +193,6 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                                           .child('title')
                                           .once(),
                               builder: (context, snapshot) {
-                                print(snapshot.error);
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [

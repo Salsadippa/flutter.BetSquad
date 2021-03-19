@@ -53,6 +53,8 @@ class _MatchListScreenState extends State<MatchListScreen> {
             Theme(
               data: Theme.of(context).copyWith(buttonColor: kBetSquadOrange),
               child: CalendarStrip(
+                startDate: DateTime.now().subtract(Duration(days: 7)),
+                endDate: DateTime.now().add(Duration(days: 30)),
                 onDateSelected: (DateTime date) {
                   setState(() {
                     selectedDay = date;

@@ -84,7 +84,7 @@ class _NGSWinnerPageState extends State<NGSWinnerPage> {
                             style: GoogleFonts.roboto(color: Colors.white, fontSize: 25),
                           ),
                           Text(
-                            '£${widget.amount.toStringAsFixed(2)}',
+                            '£${widget.amount != null ? widget.amount.toStringAsFixed(2) : '??.??'}',
                             style: GoogleFonts.roboto(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                           ),
                           Column(
@@ -98,6 +98,7 @@ class _NGSWinnerPageState extends State<NGSWinnerPage> {
                           FlatButton(
                             onPressed: () {
                               print("pressed");
+                              print(widget.bet.winners);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => NGSAssignmentsPage(bet: widget.bet, winnerEntryId: widget.winnerEntryId,),

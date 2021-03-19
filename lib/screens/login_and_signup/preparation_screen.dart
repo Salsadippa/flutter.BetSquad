@@ -151,7 +151,7 @@ class _PreparationScreenState extends State<PreparationScreen> {
       height: 30,
     );
 
-    var upToDateText = DualColouredText('v1.0.0', 'Making sure you\'re up to date');
+    var upToDateText = DualColouredText('', 'Making sure you\'re up to date');
 
     var gamblingCommissionLogo = Container(
         margin: EdgeInsets.only(top: 100),

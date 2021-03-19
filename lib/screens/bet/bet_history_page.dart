@@ -108,6 +108,7 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                     var threeDaysAgo = DateTime.now().subtract(Duration(days: 3)).millisecondsSinceEpoch;
                     for (var i = 0; i < bets.length; i++) {
                       var bet = bets[i];
+
                       if (['ongoing', 'sent', 'received', 'reversal', 'requested', 'open'].contains(bet['status']) &&
                           bet['userStatus'] != 'declined') {
                         open.add(Bet.fromMap(bet));
@@ -116,6 +117,8 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                         var created = bet['created'];
                         if (created > threeDaysAgo) {
                           recent.add(Bet.fromMap(bet));
+                        } else {
+                          closed.add(Bet.fromMap(bet));
                         }
                       } else {
                         if (bet['status'] != 'withdrawn' && bet['status'] != 'declined' && bet['status'] != 'expired'){

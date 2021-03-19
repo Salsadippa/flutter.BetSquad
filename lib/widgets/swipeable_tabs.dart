@@ -108,7 +108,7 @@ class _CustomTabsState extends State<CustomTabView> with TickerProviderStateMixi
             color: kBetSquadOrange,
             child: TabBar(
               labelPadding: EdgeInsets.symmetric(horizontal: widget.labelSpacing ?? 0),
-              isScrollable: true,
+              isScrollable: false,
               controller: controller,
               labelColor: Colors.black,
               unselectedLabelColor: Colors.white,

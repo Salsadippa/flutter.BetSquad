@@ -5,16 +5,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
 
 class PaymentApi {
-
-  static Future<Map> withdrawFunds({double amount, String cardNumber, String expiryMonth, String expiryYear, String
-  cvv}) async {
+  static Future<Map> withdrawFunds(
+      {double amount, String cardNumber, String expiryMonth, String expiryYear, String cvv}) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.PAYMENT_SERVER);
+    NetworkHelper cloudFunctionsNetworkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
 
+    cloudFunctionsNetworkHelper.getJSON('/sendEmail', {
+      'from': user.email,
+      'to': 'dw@bet-squad.co.uk',
+      'subject': 'BetSquad Withdrawal Attempt',
+      'text': '${user.email} wishes to withdraw £${amount.toStringAsFixed(2)} from their BetSquad balance',
+      'idToken': idToken
+    });
+
     Map profileDetails = await UsersApi.getProfileDetails();
     print(profileDetails);
-    
+
     var params = {
       'usage': '',
       'description': 'deposit',
@@ -30,7 +39,12 @@ class PaymentApi {
       'billing_address': json.encode({
         'first_name': profileDetails['firstName'],
         'last_name': profileDetails['lastName'],
-        'address1': profileDetails['building'] + ' ' + profileDetails['street'] + ' ' + profileDetails['city'] + ' ' +
+        'address1': profileDetails['building'] +
+            ' ' +
+            profileDetails['street'] +
+            ' ' +
+            profileDetails['city'] +
+            ' ' +
             profileDetails['county'],
         'city': profileDetails['city'],
         'zip_code': profileDetails['zip_code'],
@@ -41,18 +55,29 @@ class PaymentApi {
 
     print(params);
 
-    // return {};
-
     Response result = await networkHelper.post('https://api.bet-squad.com/payments/withdraw/new', {}, params);
     print(result.statusCode);
     print(result.body);
-    return json.decode(result.body);
 
+    return json.decode(result.body);
   }
 
-  static Future<Map> depositFunds({double amount, String firstName, String lastName, String cardNumber, String
-  expiryMonth, String expiryYear, String email, String phoneNumber, String building, String street, String city,
-      String county, String postcode, String dob, String cvv}) async {
+  static Future<Map> depositFunds(
+      {double amount,
+      String firstName,
+      String lastName,
+      String cardNumber,
+      String expiryMonth,
+      String expiryYear,
+      String email,
+      String phoneNumber,
+      String building,
+      String street,
+      String city,
+      String county,
+      String postcode,
+      String dob,
+      String cvv}) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.PAYMENT_SERVER);
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
@@ -89,7 +114,7 @@ class PaymentApi {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
-    Map<String,String> queryParameters = {
+    Map<String, String> queryParameters = {
       'userID': user.uid,
       'newLimit': newLimit,
       'newPeriod': period,
@@ -103,15 +128,11 @@ class PaymentApi {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
-    Map<String,String> queryParameters = {
-      'senderId': user.uid,
-      'idToken': idToken
-    };
+    Map<String, String> queryParameters = {'senderId': user.uid, 'idToken': idToken};
     var response = await networkHelper.getJSON('/getDepositLimits', queryParameters);
     print(response);
     return response;
   }
-
 
   static Future<Map> netDepositForUser() async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
@@ -124,5 +145,4 @@ class PaymentApi {
     var result = await networkHelper.getJSON('netDepositForUser', userDetails);
     return result;
   }
-
 }

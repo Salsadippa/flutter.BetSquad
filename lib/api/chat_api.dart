@@ -11,7 +11,7 @@ class ChatApi {
       'chatType': chatType
     };
     var response = await networkHelper.getJSON('/markChatAsRead', queryParameters);
-    print(response);
+    // print(response);
     return response;
   }
 
@@ -24,7 +24,7 @@ class ChatApi {
       'chatMessage': message
     };
     var response = await networkHelper.getJSON('/newChatMessage', queryParameters);
-    print(response);
+    // print(response);
     return response;
   }
 
@@ -35,7 +35,7 @@ class ChatApi {
       'talkingTo': talkingTo,
     };
     var response = await networkHelper.getJSON('/openChat', queryParameters);
-    print(response);
+    // print(response);
     return response;
   }
 
@@ -47,7 +47,7 @@ class ChatApi {
       'chatType': chatType
     };
     var response = await networkHelper.getJSON('/deleteChat', queryParameters);
-    print(response);
+    // print(response);
     return response;
   }
 
@@ -58,7 +58,7 @@ class ChatApi {
       'squadId': squadId,
     };
     var response = await networkHelper.getJSON('/openSquadChat', queryParameters);
-    print(response);
+    // print(response);
     return response;
   }
 

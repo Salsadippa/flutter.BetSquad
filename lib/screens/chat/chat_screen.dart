@@ -27,7 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.chatId);
+    print("CHAT ID: " + widget.chatId);
     markChatAsRead();
   }
 
@@ -42,17 +42,48 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'images/app_bar_logo.png',
-              fit: BoxFit.contain,
-              height: 32,
-            ),
-          ],
-        ),
+        title: FutureBuilder<DataSnapshot>(
+            future: FirebaseDatabase.instance
+                .reference()
+                .child('users')
+                .child(FirebaseAuth.instance.currentUser.uid)
+                .child('chats').child(widget.chatId).once(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError || !snapshot.hasData || snapshot.data.value == null) {
+                return Container();
+              }
+              var chat = snapshot.data.value;
+              print(chat);
+              return FutureBuilder<DataSnapshot>(
+                  future: chat['type'] == 'personal'
+                      ? FirebaseDatabase.instance
+                          .reference()
+                          .child('users')
+                          .child(chat['talkingToId'])
+                          .child('username')
+                          .once()
+                      : chat['type'] == 'squad'
+                          ? FirebaseDatabase.instance
+                              .reference()
+                              .child('squads')
+                              .child(chat['squadId'])
+                              .child('name')
+                              .once()
+                          : FirebaseDatabase.instance
+                              .reference()
+                              .child('chats')
+                              .child(widget.chatId)
+                              .child('title')
+                              .once(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError || !snapshot.hasData) return Text('');
+                    print("title:" + snapshot.data.value);
+                    return Text(
+                      snapshot.data.value,
+                      style: GoogleFonts.roboto(fontSize: 15),
+                    );
+                  });
+            }),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -119,15 +150,6 @@ class _MessagesStreamState extends State<MessagesStream> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollController = ScrollController();
-
-      if(scrollController.hasClients){
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
-      } else {
-        print("no clients");
-      }
-    });
   }
 
   @override
@@ -136,7 +158,6 @@ class _MessagesStreamState extends State<MessagesStream> {
       stream: FirebaseDatabase.instance.reference().child('messages').child(widget.chatId).onValue,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-
           print(snapshot.error);
           return Expanded(
             child: Container(
@@ -149,14 +170,15 @@ class _MessagesStreamState extends State<MessagesStream> {
             ),
           );
         }
-        if (!snapshot.hasData){
+        if (!snapshot.hasData) {
           return Expanded(
             child: Container(
               decoration: kGradientBoxDecoration,
               child: Center(
-                  child: Text('Be the first to send a chat.', style:
-                  GoogleFonts.roboto(color:kBetSquadOrange, fontSize: 20),)
-              ),
+                  child: Text(
+                'Be the first to send a chat.',
+                style: GoogleFonts.roboto(color: kBetSquadOrange, fontSize: 20),
+              )),
             ),
           );
         }
@@ -168,14 +190,13 @@ class _MessagesStreamState extends State<MessagesStream> {
                 decoration: kGradientBoxDecoration,
                 child: Center(
                     child: Text(
-                      'Send a message',
-                      style: GoogleFonts.roboto(color: kBetSquadOrange, fontSize: 20),
-                    ))),
+                  'Send a message',
+                  style: GoogleFonts.roboto(color: kBetSquadOrange, fontSize: 20),
+                ))),
           );
         }
         List<MessageBubble> messageBubbles = [];
         for (var message in messages.values) {
-          print(message);
           final messageText = message['message'];
           final senderId = message['senderId'];
           final timestamp = message['timestamp'];

@@ -28,49 +28,28 @@ class _NGSAssignmentsPageState extends State<NGSAssignmentsPage> {
   @override
   void initState() {
     super.initState();
-    int goalCount = widget.bet.match.homeGoals + widget.bet.match.awayGoals;
-
-    //bet.assignemnts = {"0": {}, "262": {}}
-    //bet.assignments = {"afafdgdz":{"0": {}, "262": {}},
-    // "afafdgdz":{"0": {}, "262": {}},
-//    "afafdgdz":{"0": {}, "262": {}}
-    // }
-
 
     var data =
-        widget.winnerEntryId == null ? widget.bet.assignments.values.toList()[goalCount == 0 ? goalCount : goalCount - 1] : widget.bet.winners[widget.winnerEntryId]['assignments'];
+        widget.winnerEntryId == null ? widget.bet.assignments : widget.bet.winners[widget.winnerEntryId]['assignments'];
 
-    goalkeepersH = data.values
-        .toList()
-        .where((element) => element['position'] == 'G' || element['position'] == null)
-        .toList();
-    defendersH = data.values
-        .toList()
-        .where((element) => element['position'] == 'D' && element['side'] == 'home');
-    midfieldersH = data.values
-        .toList()
-        .where((element) => element['position'] == 'M' && element['side'] == 'home');
-    attackersH = data.values
-        .toList()
-        .where((element) => element['position'] == 'A' && element['side'] == 'home');
+    goalkeepersH =
+        data.values.toList().where((element) => element['position'] == 'G' || element['position'] == null).toList();
+    defendersH = data.values.toList().where((element) => element['position'] == 'D' && element['side'] == 'home');
+    midfieldersH = data.values.toList().where((element) => element['position'] == 'M' && element['side'] == 'home');
+    attackersH = data.values.toList().where((element) => element['position'] == 'A' && element['side'] == 'home');
 
     homeTeamPlayers = [...goalkeepersH, ...defendersH, ...midfieldersH, ...attackersH];
 
-    goalkeepersA = data.values
-        .toList()
-        .where((element) => element['position'] == 'G' || element['position'] == null)
-        .toList();
-    defendersA = data.values
-        .toList()
-        .where((element) => element['position'] == 'D' && element['side'] == 'away');
-    midfieldersA = data.values
-        .toList()
-        .where((element) => element['position'] == 'M' && element['side'] == 'away');
-    attackersA = data.values
-        .toList()
-        .where((element) => element['position'] == 'A' && element['side'] == 'away');
+    goalkeepersA =
+        data.values.toList().where((element) => element['position'] == 'G' || element['position'] == null).toList();
+    defendersA = data.values.toList().where((element) => element['position'] == 'D' && element['side'] == 'away');
+    midfieldersA = data.values.toList().where((element) => element['position'] == 'M' && element['side'] == 'away');
+    attackersA = data.values.toList().where((element) => element['position'] == 'A' && element['side'] == 'away');
 
     awayTeamPlayers = [...goalkeepersA, ...defendersA, ...midfieldersA, ...attackersA];
+
+    print(homeTeamPlayers);
+    print(awayTeamPlayers);
   }
 
   @override
@@ -90,7 +69,8 @@ class _NGSAssignmentsPageState extends State<NGSAssignmentsPage> {
                   initPosition: initPosition,
                   itemCount: tabs.length,
                   labelSpacing: 50,
-                  tabBuilder: (context, index) => Tab(text: tabs[index]),
+                  tabBuilder: (context, index) =>
+                      Container(width: MediaQuery.of(context).size.width / 2, child: Tab(text: tabs[index])),
                   pageBuilder: (context, index) {
                     switch (index) {
                       case 0:

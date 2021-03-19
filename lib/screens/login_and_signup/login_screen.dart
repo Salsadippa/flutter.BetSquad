@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
       height: 30,
     );
 
-    var pleaseLoginText = DualColouredText('v1.0.', 'Please log in');
+    var pleaseLoginText = DualColouredText('', 'Please log in');
 
     var emailTextField = Container(
       padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
