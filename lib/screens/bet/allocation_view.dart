@@ -4,6 +4,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../string_utils.dart';
+
 class AllocationView extends StatefulWidget {
   final String userId, playerName;
   final int playerNumber;
@@ -31,7 +33,7 @@ class _AllocationViewState extends State<AllocationView> {
                   builder: (context, snapshot) {
                   return CircleAvatar(
                     radius: 28,
-                    backgroundImage: snapshot.hasData
+                    backgroundImage: snapshot.hasData && !StringUtils.isNullOrEmpty(snapshot.data.toString())
                         ? NetworkImage(snapshot.data.value)
                         : AssetImage('images/user_placeholder'
                             '.png'),
@@ -57,7 +59,7 @@ class _AllocationViewState extends State<AllocationView> {
                       .once(),
                   builder: (context, snapshot) {
                     return Text(
-                      snapshot.hasData ? snapshot.data.value : '',
+                      snapshot.hasData && !StringUtils.isNullOrEmpty(snapshot.data.toString()) ? snapshot.data.value : '',
                       maxLines: 1,
                       style: GoogleFonts.roboto(color: Colors.white, fontSize: 11),
                       textAlign: TextAlign.center,

@@ -5,7 +5,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import '';
+import '../../string_utils.dart';
 
 User loggedInUser;
 
@@ -23,6 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   String messageText;
+  bool _loading = false;
 
   @override
   void initState() {
@@ -47,7 +50,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 .reference()
                 .child('users')
                 .child(FirebaseAuth.instance.currentUser.uid)
-                .child('chats').child(widget.chatId).once(),
+                .child('chats')
+                .child(widget.chatId)
+                .once(),
             builder: (context, snapshot) {
               if (snapshot.hasError || !snapshot.hasData || snapshot.data.value == null) {
                 return Container();
@@ -85,51 +90,65 @@ class _ChatScreenState extends State<ChatScreen> {
                   });
             }),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          MessagesStream(
-            chatId: widget.chatId,
-            // scrollController: scrollController,
-          ),
-          Container(
-            decoration: kGradientBoxDecoration,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
-                    child: TextField(
-                      style: GoogleFonts.roboto(color: Colors.white),
-                      controller: messageTextController,
-                      onChanged: (value) {
-                        messageText = value;
-                      },
-                      // decoration: kMessageTextFieldDecoration,
+      body: ModalProgressHUD(
+        inAsyncCall: _loading,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            MessagesStream(
+              chatId: widget.chatId,
+              // scrollController: scrollController,
+            ),
+            Container(
+              decoration: kGradientBoxDecoration,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
+                      child: TextField(
+                        style: GoogleFonts.roboto(color: Colors.white),
+                        controller: messageTextController,
+                        onChanged: (value) {
+                          messageText = value;
+                        },
+                        // decoration: kMessageTextFieldDecoration,
+                      ),
                     ),
                   ),
-                ),
-                FlatButton(
-                    onPressed: () {
-                      FirebaseDatabase.instance.reference().child('messages').child(widget.chatId).push().set({
-                        'message': messageText,
-                        'senderId': FirebaseAuth.instance.currentUser.uid,
-                        'timestamp': DateTime.now().millisecondsSinceEpoch
-                      });
-                      messageTextController.clear();
-                      ChatApi.newChatMessage(chatType: widget.chatType, chatId: widget.chatId, message: messageText);
+                  FlatButton(
+                    onPressed: () async {
+                      if (!StringUtils.isNullOrEmpty(messageText)) {
+                        setState(() {
+                          _loading = true;
+                        });
+                        await FirebaseDatabase.instance.reference().child('messages').child(widget.chatId).push().set({
+                          'message': messageText,
+                          'senderId': FirebaseAuth.instance.currentUser.uid,
+                          'timestamp': DateTime.now().millisecondsSinceEpoch
+                        });
+                        await ChatApi.newChatMessage(
+                            chatType: widget.chatType, chatId: widget.chatId, message: messageText);
+                        messageTextController.clear();
+                        setState(() {
+                          messageText = null;
+                          _loading = false;
+                        });
+                      }
                     },
                     child: Icon(
                       Icons.send,
                       color: kBetSquadOrange,
                       size: 30,
-                    )),
-              ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

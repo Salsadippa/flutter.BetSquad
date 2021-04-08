@@ -149,7 +149,7 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                         ' a'}',
                                     style: whiteTextStyle),
                                 Text('£${widget.bet.amount.toStringAsFixed(2)}',
-                                    style: GoogleFonts.roboto(color: Colors.white, fontSize: 30)),
+                                    style: GoogleFonts.roboto(color: Colors.green, fontSize: 50, fontWeight: FontWeight.bold)),
                                 Text(
                                   'bet that',
                                   style: whiteTextStyle,

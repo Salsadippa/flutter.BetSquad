@@ -109,7 +109,7 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                     for (var i = 0; i < bets.length; i++) {
                       var bet = bets[i];
                       var created = bet['created'];
-                      var betIsOpen = ['ongoing', 'sent', 'received', 'reversal', 'requested', 'open','won', 'lost'].contains(bet['status']);
+                      var betIsOpen = ['ongoing', 'sent', 'received', 'reversal', 'requested', 'open'].contains(bet['status']);
                       var betIsRecent = ['won', 'lost', 'requested reversal', 'reversed'].contains(bet['status']) ||
                           (bet['status'] == 'closed' && (bet['userStatus'] == 'won' || bet['userStatus'] == 'lost'));
                       var userHasNotDeclinedBet = bet['userStatus'] != 'declined';

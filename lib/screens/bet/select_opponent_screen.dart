@@ -6,6 +6,8 @@ import 'package:betsquad/api/users_api.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+import '../../string_utils.dart';
+
 class SelectOpponentScreen extends StatefulWidget {
   final Map alreadyInvitedUsers;
   final List alreadySelectedUsers, alreadySelectedSquads;
@@ -197,9 +199,8 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
                         backgroundColor: kBetSquadOrange,
                         radius: 22,
                         child: CircleAvatar(
-                          backgroundImage: user['image'] != null && user['image'] != ''
-                              ? NetworkImage(user['image'])
-                              : kUserPlaceholderImage,
+                          backgroundImage: StringUtils.isNullOrEmpty(user['image'])
+                              ? kUserPlaceholderImage : NetworkImage(user['image']),
                           radius: 20,
                         ),
                       ),

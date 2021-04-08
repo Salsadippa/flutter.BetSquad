@@ -469,8 +469,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                       backgroundColor: kBetSquadOrange,
                       child: CircleAvatar(
                         backgroundImage: selectedOpponent != null &&
-                                selectedOpponent['image'] != null &&
-                                selectedOpponent['image'] != ''
+                                !StringUtils.isNullOrEmpty(selectedOpponent['image'])
                             ? NetworkImage(selectedOpponent['image'])
                             : kUserPlaceholderImage,
                         radius: 48,

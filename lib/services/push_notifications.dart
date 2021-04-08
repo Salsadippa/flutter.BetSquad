@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:betsquad/services/database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 
 class PushNotificationsManager {
@@ -14,7 +13,6 @@ class PushNotificationsManager {
   static final PushNotificationsManager _instance = PushNotificationsManager._();
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   bool _initialized = false;
 
@@ -35,21 +33,12 @@ class PushNotificationsManager {
 
       DatabaseService().updateMessagingToken(token);
 
-      // init local notification
-      var initializationSettingsAndroid = AndroidInitializationSettings('ic_stat_name');
-      var initializationSettingsIOS = IOSInitializationSettings();
-      var initializationSettings = InitializationSettings(
-          android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-      _flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           print("onMessage: $message");
           if (message.containsKey('notification')){
-            showLocalNotification(title: message['notification']['title'], message: message['notification']['body']);
           }
           else if (message.containsKey('aps')){
-            showLocalNotification(title: message['aps']['alert']['title'], message: message['aps']['alert']['body']);
           }
         },
         onLaunch: (Map<String, dynamic> message) async {
@@ -90,18 +79,6 @@ class PushNotificationsManager {
         },
       ),
     );
-  }
-
-  Future<void> showLocalNotification({String title, String message}) async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'flutter_notif', 'flutter_notif', 'Show notification',
-        importance: Importance.max, priority: Priority.high, ticker: 'ticker');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
-    await _flutterLocalNotificationsPlugin.show(
-        10, title, message, platformChannelSpecifics,
-        payload: 'item x');
   }
 
 }

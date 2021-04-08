@@ -54,7 +54,7 @@ class _NGSWinnerPageState extends State<NGSWinnerPage> {
           child: FractionallySizedBox(
             heightFactor: 0.70,
             child: Container(
-              color: Colors.black,
+              decoration: kGradientBoxDecoration,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -75,7 +75,6 @@ class _NGSWinnerPageState extends State<NGSWinnerPage> {
                   ),
                   Expanded(
                     child: Container(
-                      color: Colors.black,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -85,7 +84,7 @@ class _NGSWinnerPageState extends State<NGSWinnerPage> {
                           ),
                           Text(
                             '£${widget.amount != null ? widget.amount.toStringAsFixed(2) : '??.??'}',
-                            style: GoogleFonts.roboto(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+                            style: GoogleFonts.roboto(color: Colors.green, fontSize: 50, fontWeight: FontWeight.bold),
                           ),
                           Column(
                             children: [
