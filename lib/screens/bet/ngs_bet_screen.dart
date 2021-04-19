@@ -38,6 +38,7 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
   bool _loading = false;
 
   TextEditingController textEditingController = TextEditingController();
+
 //  TextEditingController textEditingController2 = TextEditingController();
 //  TextEditingController textEditingController3 = TextEditingController();
 
@@ -244,29 +245,40 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text('${widget.bet.invited != null ? widget.bet.invited.length : 0} players invited, '
+                          Text(
+                              '${widget.bet.invited != null ? widget.bet.invited.length : 0} players invited, '
                               '${widget.bet.invitedSquads != null ? widget.bet.invitedSquads.length : 0} squads '
                               'invited',
-                              style: TextStyle(color: Colors.white), textAlign: TextAlign.center)
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center)
                         ],
                       ),
                     ),
 
                     StreamBuilder<Event>(
-                      stream: FirebaseDatabase.instance.reference().child("bets").child(widget.bet.id).child("winners").onValue,
-                      builder: (context,  snapshot) {
+                      stream: FirebaseDatabase.instance
+                          .reference()
+                          .child("bets")
+                          .child(widget.bet.id)
+                          .child("winners")
+                          .onValue,
+                      builder: (context, snapshot) {
                         if (snapshot.hasData) {
-
                           Map<dynamic, dynamic> winners = snapshot.data.snapshot.value;
 
-                          if (winners == null || winners.length == 0)
-                            return Container();
+                          if (winners == null || winners.length == 0) return Container();
 
-                            return Column(
-                                children:winners.entries
-                                    .map(
-                                      (e) => WinnerListItem(winner: e.value, winnerEntryId: e.key, bet: widget.bet),
-                                ).toList());
+                          return Column(
+                              children: winners.entries
+                                  .map(
+                                    (e) => WinnerListItem(
+                                      winner: e.value,
+                                      winnerEntryId: e.key,
+                                      bet: widget.bet,
+                                      key: ObjectKey(e),
+                                    ),
+                                  )
+                                  .toList());
                         }
                         return Container();
                       },
