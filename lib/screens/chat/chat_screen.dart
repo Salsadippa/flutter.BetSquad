@@ -38,11 +38,21 @@ class _ChatScreenState extends State<ChatScreen> {
     ChatApi.markChatAsRead(chatId: widget.chatId, chatType: widget.chatType);
   }
 
+  void showChat(){
+    ChatApi.showChat(chatId: widget.chatId, chatType: widget.chatType);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        actions: [
+          IconButton(icon: Icon(Icons.maps_ugc_outlined), onPressed:(){
+            showChat();
+          })
+        ],
         elevation: 0,
         centerTitle: true,
         title: FutureBuilder<DataSnapshot>(
