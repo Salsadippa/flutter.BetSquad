@@ -120,14 +120,14 @@ class _PreparationScreenState extends State<PreparationScreen> {
     }
 
     Future.wait(futures).then((values) async {
-     if (!(await Utility().isInTheUk())) {
-       Alert.showErrorDialog(
-           context,
-           'UK Access Only',
-           'You are not in the UK or we could not verify your location so we can\'t let you in. '
-               'Make sure location access is enabled and relaunch the app.');
-       return;
-     }
+//     if (!(await Utility().isInTheUk())) {
+//       Alert.showErrorDialog(
+//           context,
+//           'UK Access Only',
+//           'You are not in the UK or we could not verify your location so we can\'t let you in. '
+//               'Make sure location access is enabled and relaunch the app.');
+//       return;
+//     }
 
       print("saved match data");
 

@@ -1,6 +1,7 @@
 import 'package:betsquad/api/bet_api.dart';
 import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/models/bet.dart';
+import 'package:betsquad/screens/bet/euro_assignment_page.dart';
 import 'package:betsquad/screens/bet/ngs_invited_page.dart';
 import 'package:betsquad/screens/bet/ngs_winner_page.dart';
 import 'package:betsquad/screens/bet/select_opponent_screen.dart';
@@ -125,11 +126,19 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                       onTap: () {
                         if (widget.bet.assignments.isNotEmpty) {
                           //show invited
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => NGSAssignmentsPage(bet: widget.bet),
-                            ),
-                          );
+                          if(widget.bet.match.homeTeamName == "Euro2021"){
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => EuroAssignmentPage(bet: widget.bet),
+                              ),
+                            );
+                          }else{
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => NGSAssignmentsPage(bet: widget.bet),
+                              ),
+                            );
+                          }
                         } else {
                           //show assignments
                           Navigator.of(context).push(
