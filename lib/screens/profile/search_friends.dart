@@ -93,9 +93,8 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
               setState(() {
                 users = res;
                 users.sort(
-                        (a, b) => a['username'].toString().toLowerCase().compareTo(b['username'].toString().toLowerCase()));
+                    (a, b) => a['username'].toString().toLowerCase().compareTo(b['username'].toString().toLowerCase()));
               });
-
             },
             decoration:
                 InputDecoration.collapsed(hintText: "Search...", hintStyle: GoogleFonts.roboto(color: Colors.black)),
