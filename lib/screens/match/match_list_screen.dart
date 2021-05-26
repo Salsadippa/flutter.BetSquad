@@ -17,6 +17,7 @@ import 'package:betsquad/models/match.dart';
 import 'package:betsquad/widgets/match_cell.dart';
 import 'package:provider/provider.dart';
 import 'package:betsquad/models/card.dart' as BSCard;
+import 'package:sortedmap/sortedmap.dart';
 
 class MatchListScreen extends StatefulWidget {
   static const String ID = 'match_list_screen';
@@ -41,6 +42,8 @@ class _MatchListScreenState extends State<MatchListScreen> {
     setState(() {
       matches = fetchMatchesResult;
     });
+
+    print(fetchMatchesResult);
   }
 
   @override
@@ -102,6 +105,15 @@ class _MatchListScreenState extends State<MatchListScreen> {
 
   _buildExpandableContent(List<Match> matches, Function onPressed, Function onLongPressed, Match selectedMatch) {
     List<Widget> expandableContent = [];
+
+    matches.sort((a, b) {
+      if (a.startTimestamp.compareTo(b.startTimestamp) == 0) {
+        return a.homeTeamName.compareTo(b.homeTeamName);
+      } else {
+        return a.startTimestamp.compareTo(b.startTimestamp);
+      }
+    });
+
     for (Match match in matches) {
       expandableContent.add(
         StreamBuilder<Event>(

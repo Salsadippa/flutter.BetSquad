@@ -39,6 +39,18 @@ class ChatApi {
     return response;
   }
 
+  static Future<Map> showChat({String chatId, String chatType}) async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var queryParameters = {
+      'senderId': FirebaseAuth.instance.currentUser.uid,
+      'chatId': chatId,
+      'chatType': chatType
+    };
+    var response = await networkHelper.getJSON('/showChat', queryParameters);
+    // print(response);
+    return response;
+  }
+
   static Future<Map> deleteChat({String chatId, String chatType}) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var queryParameters = {

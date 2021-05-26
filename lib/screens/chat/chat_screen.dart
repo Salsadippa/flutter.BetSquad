@@ -34,6 +34,10 @@ class _ChatScreenState extends State<ChatScreen> {
     markChatAsRead();
   }
 
+  void showChat() {
+    ChatApi.showChat(chatId: widget.chatId, chatType: widget.chatType);
+  }
+
   void markChatAsRead() {
     ChatApi.markChatAsRead(chatId: widget.chatId, chatType: widget.chatType);
   }
@@ -45,6 +49,13 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.maps_ugc_outlined),
+              onPressed: () {
+                showChat();
+              })
+        ],
         title: FutureBuilder<DataSnapshot>(
             future: FirebaseDatabase.instance
                 .reference()

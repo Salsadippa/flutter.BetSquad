@@ -33,8 +33,6 @@ class _PreparationScreenState extends State<PreparationScreen> {
   void initState() {
     super.initState();
     saveMatches();
-    PushNotificationsManager pushNotificationsManager = PushNotificationsManager();
-    pushNotificationsManager.init();
   }
 
   saveMatches() async {
@@ -120,19 +118,21 @@ class _PreparationScreenState extends State<PreparationScreen> {
     }
 
     Future.wait(futures).then((values) async {
-     if (!(await Utility().isInTheUk())) {
-       Alert.showErrorDialog(
-           context,
-           'UK Access Only',
-           'You are not in the UK or we could not verify your location so we can\'t let you in. '
-               'Make sure location access is enabled and relaunch the app.');
-       return;
-     }
+     // if (!(await Utility().isInTheUk())) {
+     //   Alert.showErrorDialog(
+     //       context,
+     //       'UK Access Only',
+     //       'You are not in the UK or we could not verify your location so we can\'t let you in. '
+     //           'Make sure location access is enabled and relaunch the app.');
+     //   return;
+     // }
 
       print("saved match data");
 
-      if (await firebaseHelper.loggedInUser())
+      if (await firebaseHelper.loggedInUser()){
+        await PushNotificationsManager().init();
         Navigator.pushReplacementNamed(context, TabBarController.ID);
+      }
       else
         Navigator.pushReplacementNamed(context, LoginScreen.ID);
 

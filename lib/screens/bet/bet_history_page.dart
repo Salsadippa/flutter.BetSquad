@@ -132,6 +132,10 @@ class _BetHistoryPageState extends State<BetHistoryPage> {
                       }
                     }
 
+                    open.sort((a,b) => a.match.startTimestamp.compareTo(b.match.startTimestamp));
+                    recent.sort((a,b) => a.match.startTimestamp.compareTo(b.match.startTimestamp));
+                    closed.sort((a,b) => a.match.startTimestamp.compareTo(b.match.startTimestamp));
+
                     return TabBarView(
                       children: [
                         Scaffold(
@@ -348,7 +352,10 @@ class BetHistoryCell extends StatelessWidget {
                                     );
                                   }),
                           Text(
-                            '${DateFormat.yMMMd().format(DateTime.fromMillisecondsSinceEpoch(int.parse(liveBet.match.startTimestamp) * 1000))}',
+                            '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(int.parse(liveBet.match
+                                .startTimestamp) * 1000))} ${DateFormat.MMMd().format(DateTime
+                                .fromMillisecondsSinceEpoch(int.parse(liveBet.match
+                                .startTimestamp) * 1000))}',
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(

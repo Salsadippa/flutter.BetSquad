@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+import '../../string_utils.dart';
 import '../alert.dart';
 
 class FindFriendsPage extends StatefulWidget {
@@ -47,7 +48,7 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
                     backgroundColor: kBetSquadOrange,
                     child: CircleAvatar(
                       radius: 20,
-                      backgroundImage: user['image'] != null
+                      backgroundImage: !StringUtils.isNullOrEmpty(user['image'])
                           ? NetworkImage(user['image'])
                           : AssetImage('images/user_placeholder'
                               '.png'),
@@ -88,15 +89,16 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
             },
             onChanged: (String value) async {
               List res = await UsersApi.searchUsers(value);
+              print(res);
               setState(() {
                 users = res;
+                users.sort(
+                        (a, b) => a['username'].toString().toLowerCase().compareTo(b['username'].toString().toLowerCase()));
               });
+
             },
-            decoration: InputDecoration.collapsed(
-              hintText: "Search...",
-              hintStyle: GoogleFonts.roboto(color: Colors.black
-              )
-            ),
+            decoration:
+                InputDecoration.collapsed(hintText: "Search...", hintStyle: GoogleFonts.roboto(color: Colors.black)),
           ),
         ),
       ),

@@ -26,7 +26,7 @@ class H2HDetailPage extends StatefulWidget {
 class _H2HDetailPageState extends State<H2HDetailPage> {
   String _profilePicture, _opponentProfilePicture, _selectedOpponentUsername;
   DatabaseService databaseService = DatabaseService();
-
+  static const H2H_FEE = 0.95;
   bool _loading = false;
 
   void getUserDetails() async {
@@ -130,8 +130,9 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                 radius: 50,
                                 backgroundColor: kBetSquadOrange,
                                 child: CircleAvatar(
-                                  backgroundImage:
-                                      _profilePicture != null || _profilePicture == '' ? NetworkImage(_profilePicture) : kUserPlaceholderImage,
+                                  backgroundImage: _profilePicture != null || _profilePicture == ''
+                                      ? NetworkImage(_profilePicture)
+                                      : kUserPlaceholderImage,
                                   radius: 48,
                                 ),
                               ),
@@ -142,14 +143,13 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Text(
-                                    'You ${widget.bet.status == 'ongoing' ? 'have an ongoing' : widget.bet.status ==
-                                        'withdrawn' ? 'have a withdrawn' : widget.bet.status == 'expired' ? 'have an '
-                                        'expired'
-                                        : widget.bet.status +
-                                        ' a'}',
+                                    'You ${widget.bet.status == 'ongoing' ? 'have an ongoing' : widget.bet.status == 'withdrawn' ? 'have a withdrawn' : widget.bet.status == 'expired' ? 'have an '
+                                        'expired' : widget.bet.status + ' a'}',
                                     style: whiteTextStyle),
-                                Text('£${widget.bet.amount.toStringAsFixed(2)}',
-                                    style: GoogleFonts.roboto(color: Colors.green, fontSize: 50, fontWeight: FontWeight.bold)),
+                                Text(
+                                    '£${(widget.bet.status == 'won' ? (widget.bet.amount + (widget.bet.amount * H2H_FEE)) : widget.bet.amount).toStringAsFixed(2)}',
+                                    style: GoogleFonts.roboto(
+                                        color: Colors.green, fontSize: 50, fontWeight: FontWeight.bold)),
                                 Text(
                                   'bet that',
                                   style: whiteTextStyle,
@@ -171,9 +171,7 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                             widget.bet.match.homeTeamName,
                                             style: whiteTextStyle,
                                           ),
-
-                                          Text(': \t${widget.bet.match.homeGoals}\t',
-                                              style: whiteTextStyle),
+                                          Text(': \t${widget.bet.match.homeGoals}\t', style: whiteTextStyle),
                                         ],
                                       ),
                                       SizedBox(
@@ -233,9 +231,7 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                             widget.bet.match.awayTeamName,
                                             style: whiteTextStyle,
                                           ),
-
-                                          Text(': \t${widget.bet.match.awayGoals}\t',
-                                              style: whiteTextStyle),
+                                          Text(': \t${widget.bet.match.awayGoals}\t', style: whiteTextStyle),
                                         ],
                                       ),
                                     ],
@@ -262,8 +258,8 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                       onPressed: () async {
                                         bool compliant = await UsersApi.complianceCheck();
                                         if (!compliant) {
-                                          Alert.showErrorDialog(
-                                              context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
+                                          Alert.showErrorDialog(context, 'Cannot bet',
+                                              'You have failed our compliance check. Please contact info@bet-squad.com');
                                         }
 
                                         setState(() {

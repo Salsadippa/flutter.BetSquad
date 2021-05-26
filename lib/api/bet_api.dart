@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:betsquad/models/bet.dart';
+import 'package:betsquad/models/bet.dart';
 import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/services/networking.dart';
 import 'package:betsquad/services/push_notifications.dart';
