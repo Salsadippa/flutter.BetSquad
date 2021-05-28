@@ -40,7 +40,7 @@ class _SquadsTabState extends State<SquadsTab> {
   }
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     FirebaseServices().uploadProfilePhotoForExistingUser(image);
   }
 

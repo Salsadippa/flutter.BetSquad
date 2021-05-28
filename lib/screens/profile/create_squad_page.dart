@@ -35,7 +35,7 @@ class _CreateSquadPageState extends State<CreateSquadPage> {
   }
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
 //      squad['image'] = image;
     });

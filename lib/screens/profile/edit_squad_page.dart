@@ -26,7 +26,7 @@ class _EditSquadPageState extends State<EditSquadPage> {
   TextEditingController textEditingController = TextEditingController();
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
 //      squad['image'] = image;
     });

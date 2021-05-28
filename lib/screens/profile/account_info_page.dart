@@ -41,7 +41,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
       phoneNumberController = TextEditingController();
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     FirebaseServices().uploadProfilePhotoForExistingUser(image);
   }
 

@@ -22,7 +22,7 @@ class _SignUpUsernameScreenState extends State<SignUpUsernameScreen> {
   var _image;
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       _image = image;
     });
