@@ -40,6 +40,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
   int initPosition = 0;
   int currentIndex = 0;
   bool _ngsLoading = false, _h2hLoading = false;
+  bool inputtingBetAmount = false;
 
   var h2hBet = Bet(mode: 'head2head', amount: 0);
   var ngsBet = Bet(mode: 'NGS', amount: 0);
@@ -111,13 +112,14 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
     var h2hScreen = Container(
       decoration: kGrassTrimBoxDecoration,
       child: FractionallySizedBox(
-        heightFactor: 0.75,
+        heightFactor: _nodeText1.hasFocus ? 0.95 : 0.8,
         child: Container(
           decoration: kGradientBoxDecoration,
           child: Column(
             children: <Widget>[
+              SizedBox(height: _nodeText1.hasFocus ? 20 : 0,),
               Container(
-                height: 100,
+                height: _nodeText1.hasFocus ? 0 : 80,
                 child: Transform.translate(
                   offset: Offset(0.0, -30.0),
                   child: CircleAvatar(
@@ -143,6 +145,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
               ),
               Expanded(
                 child: Container(
+                  height: 150,
                   child: KeyboardActions(
                     config: _buildConfig(context),
                     child: Column(
@@ -449,7 +452,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 ),
               ),
               Container(
-                height: 100,
+                height: _nodeText1.hasFocus ? 0 : 80,
                 child: Transform.translate(
                   offset: Offset(0.0, 10.0),
                   child: GestureDetector(

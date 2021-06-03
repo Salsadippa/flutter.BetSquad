@@ -5,7 +5,10 @@ import 'package:betsquad/services/firebase_services.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:betsquad/styles/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String ID = 'login_screen';
@@ -18,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   String _email, _password = '';
   FirebaseServices _firebaseHelper = FirebaseServices();
   bool _loading = false;
+  final fb = FacebookLogin();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   _signIn() async {
     setState(() {
@@ -53,6 +58,55 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  loginFacebook() async {
+    print('Starting Facebook Login');
+
+    final res = await fb.logIn(
+        permissions: [
+          FacebookPermission.publicProfile,
+          FacebookPermission.email
+        ]
+    );
+
+    switch(res.status){
+      case FacebookLoginStatus.success:
+        print('It worked');
+
+        //Get Token
+        final FacebookAccessToken fbToken = res.accessToken;
+
+        //Convert to Auth Credential
+        final AuthCredential credential
+        = FacebookAuthProvider.credential(fbToken.token);
+
+        //User Credential to Sign in with Firebase
+        final result = await _firebaseAuth.signInWithCredential(credential);
+
+        //print('${result.user.displayName} is now logged in');
+
+        print(_firebaseAuth.currentUser.uid);
+
+        Navigator.pushReplacementNamed(context, TabBarController.ID);
+//        if(await getUserDetails(_firebaseAuth.currentUser.uid)){
+//          Navigator.push(context, MaterialPageRoute(builder: (context) => MainTabs()));
+//        }else{
+//          _fullName = result.user.displayName;
+//          _email = result.user.email;
+//          print("${result.user.uid}");
+//          print("user doesn't exist");
+//          addUserToDatabase(_firebaseAuth.currentUser.uid, "fbuser${random.nextInt(100)}");
+//        }
+
+        break;
+      case FacebookLoginStatus.cancel:
+        print('The user canceled the login');
+        break;
+      case FacebookLoginStatus.error:
+        print('There was an error ${res.error.developerMessage}');
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var betSquadLogo = Container(
@@ -66,6 +120,27 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     var pleaseLoginText = DualColouredText('', 'Please log in');
+
+    Widget fbLoginButtonText =
+    Text("Login with Facebook", style: GoogleFonts.cabin(fontSize: 18, color: Colors.white), textAlign: TextAlign.center);
+
+    Widget fbLoginButton = Container(
+      width: MediaQuery.of(context).size.width,
+      height: 45,
+      child: FlatButton(
+        textColor: Colors.white,
+        color: Colors.blue,
+        child: fbLoginButtonText,
+        onPressed: () {
+          setState(() {
+            loginFacebook();
+          });
+        },
+        shape: new RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(10.0),
+        ),
+      ),
+    );
 
     var emailTextField = Container(
       padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
@@ -159,6 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 passwordTextField,
                 signInButton,
                 forgotPasswordAndSignupButtons
+
               ],
             ),
           ),

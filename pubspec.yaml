@@ -41,6 +41,7 @@ dependencies:
   geocoding: ^1.0.5
   sortedmap: ^0.4.2
   calendar_strip: ^1.0.7
+  flutter_login_facebook: ^0.5.0
 
 dev_dependencies:
   flutter_test:
