@@ -46,7 +46,8 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                 return Center(
                   child: Text(
                     'No chats',
-                    style: GoogleFonts.roboto(fontSize: 22, color: kBetSquadOrange),
+                    style: GoogleFonts.roboto(
+                        fontSize: 22, color: kBetSquadOrange),
                   ),
                 );
               }
@@ -76,7 +77,8 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                           ),
                         );
                         if (result['type'] == 'user') {
-                          Map response = await ChatApi.openChat(talkingTo: result['user']['uid']);
+                          Map response = await ChatApi.openChat(
+                              talkingTo: result['user']['uid']);
                           if (response['result'] == 'success') {
                             var chatId = response['chatId'];
                             Navigator.of(context).push(
@@ -88,7 +90,8 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                             );
                           }
                         } else if (result['type'] == 'squad') {
-                          Map response = await ChatApi.openSquadChat(squadId: result['squadId']);
+                          Map response = await ChatApi.openSquadChat(
+                              squadId: result['squadId']);
                           if (response['result'] == 'success') {
                             var chatId = response['chatId'];
                             Navigator.of(context).push(
@@ -115,7 +118,8 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                               SizedBox(width: 5),
                               Text(
                                 'New Chat',
-                                style: GoogleFonts.roboto(color: kBetSquadOrange, fontSize: 18),
+                                style: GoogleFonts.roboto(
+                                    color: kBetSquadOrange, fontSize: 18),
                               ),
                             ],
                           ),
@@ -138,7 +142,8 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                           ),
                           onTap: (CompletionHandler handler) async {
                             await handler(true);
-                            await ChatApi.deleteChat(chatId: chat['id'], chatType: chat['type']);
+                            await ChatApi.deleteChat(
+                                chatId: chat['id'], chatType: chat['type']);
                             setState(() {});
                           },
                           color: Colors.red),
@@ -165,10 +170,57 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                             backgroundColor: kBetSquadOrange,
                             radius: 28,
                             child: chat['type'] == 'bet'
-                                ? CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: AssetImage('images/user_placeholder.png'),
-                                  )
+                                ? FutureBuilder<DataSnapshot>(
+                                future: FirebaseDatabase.instance
+                                    .reference()
+                                    .child('bets')
+                                    .child(chat['id'])
+                                    .child('from')
+                                    .once(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData ){
+                                    return CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage: AssetImage('images/ball.png'),
+                                    );
+                                  }
+                                  print("bet id: " + chat['id']);
+                                  if (snapshot.data.value == null){
+                                    print(chat['id'] + 'no value');
+                                  }
+                                  print("user ID: " + snapshot.data.value);
+
+                                  if (snapshot.hasError)
+                                    print(snapshot.error);
+                                  return FutureBuilder<DataSnapshot>(
+                                      future: FirebaseDatabase
+                                          .instance
+                                          .reference()
+                                          .child('users')
+                                          .child(snapshot.data.value)
+                                          .child('image')
+                                          .once(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasError)
+                                          print(snapshot.error);
+                                        return CircleAvatar(
+                                          radius: 25,
+                                          backgroundImage: !snapshot
+                                              .hasData ||
+                                              snapshot.hasError ||
+                                              StringUtils
+                                                  .isNullOrEmpty(
+                                                  snapshot
+                                                      .data
+                                                      .value)
+                                              ? AssetImage(
+                                              'images/user_placeholder'
+                                                  '.png')
+                                              : NetworkImage(snapshot
+                                              .data.value),
+                                        );
+                                      });
+                                })
                                 : FutureBuilder<DataSnapshot>(
                                     future: chat['type'] == 'personal'
                                         ? FirebaseDatabase.instance
@@ -184,13 +236,16 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                                             .child('image')
                                             .once(),
                                     builder: (context, snapshot) {
-                                      if (snapshot.hasError) print(snapshot.error);
+                                      if (snapshot.hasError)
+                                        print(snapshot.error);
                                       return CircleAvatar(
                                         radius: 25,
                                         backgroundImage: !snapshot.hasData ||
                                                 snapshot.hasError ||
-                                                StringUtils.isNullOrEmpty(snapshot.data.value)
-                                            ? AssetImage('images/user_placeholder'
+                                                StringUtils.isNullOrEmpty(
+                                                    snapshot.data.value)
+                                            ? AssetImage(
+                                                'images/user_placeholder'
                                                 '.png')
                                             : NetworkImage(snapshot.data.value),
                                       );
@@ -207,21 +262,29 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                                 String lastMessage;
                                 int lastMessageTimestamp;
                                 if (snapshot.hasData) {
-                                  Map messagesDict = (snapshot.data.snapshot.value);
+                                  Map messagesDict =
+                                      (snapshot.data.snapshot.value);
                                   //considering there could be no messages in the chat
                                   if (messagesDict != null) {
-                                    Map lastMessageDict = messagesDict.values.toList()[0];
-                                    lastMessage = (lastMessageDict['message']).toString();
-                                    lastMessageTimestamp = (lastMessageDict['timestamp'] as num).toInt();
+                                    Map lastMessageDict =
+                                        messagesDict.values.toList()[0];
+                                    lastMessage =
+                                        (lastMessageDict['message']).toString();
+                                    lastMessageTimestamp =
+                                        (lastMessageDict['timestamp'] as num)
+                                            .toInt();
                                   }
                                 }
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
                                   child: lastMessage == null
                                       ? Container()
                                       : Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               lastMessage ?? '',
@@ -235,10 +298,12 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                                             SizedBox(height: 4),
                                             Text(
                                               lastMessageTimestamp != null
-                                                  ? Utility.timeAgoSinceDate(
-                                                      DateTime.fromMillisecondsSinceEpoch(lastMessageTimestamp))
+                                                  ? Utility.timeAgoSinceDate(DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                          lastMessageTimestamp))
                                                   : '',
-                                              style: GoogleFonts.roboto(color: Colors.grey),
+                                              style: GoogleFonts.roboto(
+                                                  color: Colors.grey),
                                             )
                                           ],
                                         ),
@@ -275,7 +340,8 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                                         width: 8,
                                         height: 8,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                           color: kBetSquadOrange,
                                         ),
                                       ),
@@ -283,13 +349,16 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                                       child: Text(
                                         !snapshot.hasData ||
                                                 snapshot.hasError ||
-                                                StringUtils.isNullOrEmpty(snapshot.data.value)
+                                                StringUtils.isNullOrEmpty(
+                                                    snapshot.data.value)
                                             ? ''
                                             : chat['type'] == 'bet'
                                                 ? 'NGS Bet: ${snapshot.data.value}'
                                                 : snapshot.data.value,
                                         style: GoogleFonts.roboto(
-                                            color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
                                         maxLines: 1,
                                       ),
                                     ),
