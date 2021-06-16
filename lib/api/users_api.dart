@@ -31,6 +31,29 @@ class UsersApi {
     Map allUsers = await networkHelper.getJSON('getAllUsers', {'idToken': idToken});
     allUsers.removeWhere((key, value) => key == user.uid);
     allUsers.removeWhere((key, value) => StringUtils.isNullOrEmpty(value['username']));
+    print("allUsers => $allUsers");
+    return allUsers;
+  }
+
+
+  static Future getOpponents() async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
+    var opponents = await networkHelper.getJSON('getOpponents', {'idToken': idToken, 'userID':user.uid});
+//    opponents.removeWhere((key, value) => key == user.uid);
+//    opponents.removeWhere((key, value) => StringUtils.isNullOrEmpty(value['username']));
+    print("opponents => $opponents");
+    return opponents;
+  }
+
+  static Future getUsersToSelect() async {
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+    var user = FirebaseAuth.instance.currentUser;
+    var idToken = await user.getIdToken();
+    Map allUsers = await networkHelper.getJSON('getAllUsers', {'idToken': idToken});
+    allUsers.removeWhere((key, value) => key == user.uid);
+    allUsers.removeWhere((key, value) => StringUtils.isNullOrEmpty(value['username']));
     return allUsers;
   }
 
@@ -184,7 +207,7 @@ class UsersApi {
   }
 
   static Future<Map> saveProfileDetails({String firstName, String lastName, String username, String email, String dob,
-      String building, String street, String city, String county, String postcode, String phoneNumber}) async {
+    String building, String street, String city, String county, String postcode, String phoneNumber}) async {
     NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
     var user = FirebaseAuth.instance.currentUser;
     var idToken = await user.getIdToken();
@@ -233,4 +256,5 @@ class UsersApi {
   }
 
 }
+
 
