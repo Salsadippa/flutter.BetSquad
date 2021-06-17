@@ -48,7 +48,7 @@ class TextFieldWithDatePicker extends StatelessWidget {
           FlatButton(
               color: Colors.grey,
               onPressed: () {
-                DatePicker.showDatePicker(context, showTitleActions: true,
+                DatePicker.showDatePicker(context, showTitleActions: true, minTime: DateTime(1940, 1, 1),
                     onChanged: (date) {
                   print('change $date');
                 }, onConfirm: (date) {

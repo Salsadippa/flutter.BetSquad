@@ -2,6 +2,7 @@ import 'package:betsquad/api/users_api.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
+
 import 'package:floating_search_bar/floating_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -64,14 +65,17 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
                       setState(() {
                         _loading = true;
                       });
-                      var result = await UsersApi.sendFriendRequest(user['uid']);
+                      var result =
+                          await UsersApi.sendFriendRequest(user['uid']);
                       setState(() {
                         _loading = false;
                       });
                       if (result['result'] == 'success') {
-                        Alert.showSuccessDialog(context, 'Friend Request Sent', result['message']);
+                        Alert.showSuccessDialog(
+                            context, 'Friend Request Sent', result['message']);
                       } else {
-                        Alert.showErrorDialog(context, 'Can\'t Send Request', result['message']);
+                        Alert.showErrorDialog(
+                            context, 'Can\'t Send Request', result['message']);
                       }
                       print(result);
                     },
@@ -92,12 +96,15 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
               print(res);
               setState(() {
                 users = res;
-                users.sort(
-                    (a, b) => a['username'].toString().toLowerCase().compareTo(b['username'].toString().toLowerCase()));
+                users.sort((a, b) => a['username']
+                    .toString()
+                    .toLowerCase()
+                    .compareTo(b['username'].toString().toLowerCase()));
               });
             },
-            decoration:
-                InputDecoration.collapsed(hintText: "Search...", hintStyle: GoogleFonts.roboto(color: Colors.black)),
+            decoration: InputDecoration.collapsed(
+                hintText: "Search...",
+                hintStyle: GoogleFonts.roboto(color: Colors.black)),
           ),
         ),
       ),
