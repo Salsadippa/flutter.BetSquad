@@ -130,7 +130,6 @@ class _PreparationScreenState extends State<PreparationScreen> {
       print("saved match data");
 
       if (await firebaseHelper.loggedInUser()) {
-        await PushNotificationsManager().init();
         Navigator.pushReplacementNamed(context, TabBarController.ID);
       } else
         Navigator.pushReplacementNamed(context, LoginScreen.ID);

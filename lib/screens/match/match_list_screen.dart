@@ -6,6 +6,7 @@ import 'package:betsquad/models/match_data.dart';
 import 'package:betsquad/models/substitution.dart';
 import 'package:betsquad/screens/match/match_detail_tabs.dart';
 import 'package:betsquad/services/local_database.dart';
+import 'package:betsquad/services/push_notifications.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,6 +35,7 @@ class _MatchListScreenState extends State<MatchListScreen> {
   void initState() {
     super.initState();
     selectedDay = DateTime.now();
+    PushNotificationsManager().init();
     getMatches();
   }
 
