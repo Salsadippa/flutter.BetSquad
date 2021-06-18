@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:betsquad/api/users_api.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'dart:convert';
 
 import '../../string_utils.dart';
 
@@ -40,7 +41,7 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
       _loading = true;
       selectedSquads = widget.alreadySelectedSquads;
     });
-    Map users = await UsersApi.getAllUsers();
+    Map users = await UsersApi.getOpponents();
     var opponents = users.values.toList();
     opponents.sort((a, b) => a['username'].toString().toLowerCase().compareTo(b['username'].toString().toLowerCase()));
     opponents.removeWhere((element) => widget.alreadyInvitedUsers.keys.contains(element['uid']));
@@ -194,15 +195,6 @@ class _SelectOpponentScreenState extends State<SelectOpponentScreen> {
                       title: Text(
                         user['username'] ?? '',
                         style: TextStyle(color: Colors.white),
-                      ),
-                      leading: CircleAvatar(
-                        backgroundColor: kBetSquadOrange,
-                        radius: 22,
-                        child: CircleAvatar(
-                          backgroundImage: StringUtils.isNullOrEmpty(user['image'])
-                              ? kUserPlaceholderImage : NetworkImage(user['image']),
-                          radius: 20,
-                        ),
                       ),
                       trailing: allUsers[index].isSelected
                           ? Icon(
