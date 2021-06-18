@@ -40,6 +40,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
   int initPosition = 0;
   int currentIndex = 0;
   bool _ngsLoading = false, _h2hLoading = false;
+  bool inputtingBetAmount = false;
 
   var h2hBet = Bet(mode: 'head2head', amount: 0);
   var ngsBet = Bet(mode: 'NGS', amount: 0);
@@ -49,12 +50,12 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
   var selectedOpponent;
   var whiteTextStyle = TextStyle(color: Colors.white);
   CurrencyTextFieldController currencyTextFieldController =
-      CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
+  CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
   var invitedUsers = [];
   var invitedSquads = [];
 
   CurrencyTextFieldController currencyTextFieldController2 =
-      CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
+  CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
 
 //  TextEditingController textEditingController = TextEditingController();
 //  TextEditingController textEditingController2 = TextEditingController();
@@ -111,13 +112,14 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
     var h2hScreen = Container(
       decoration: kGrassTrimBoxDecoration,
       child: FractionallySizedBox(
-        heightFactor: 0.75,
+        heightFactor: _nodeText1.hasFocus ? 0.95 : 0.8,
         child: Container(
           decoration: kGradientBoxDecoration,
           child: Column(
             children: <Widget>[
+              SizedBox(height: _nodeText1.hasFocus ? 20 : 0,),
               Container(
-                height: 100,
+                height: _nodeText1.hasFocus ? 0 : 80,
                 child: Transform.translate(
                   offset: Offset(0.0, -30.0),
                   child: CircleAvatar(
@@ -143,6 +145,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
               ),
               Expanded(
                 child: Container(
+                  height: 150,
                   child: KeyboardActions(
                     config: _buildConfig(context),
                     child: Column(
@@ -340,8 +343,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                                           h2hBet.homeBet == BetOption.Positive
                                               ? 'images/win_green.png'
                                               : (h2hBet.homeBet == BetOption.Negative
-                                                  ? 'images/win_red.png'
-                                                  : 'images/win_grey.png'),
+                                              ? 'images/win_red.png'
+                                              : 'images/win_grey.png'),
                                         ),
                                       ),
                                     ),
@@ -372,8 +375,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                                           h2hBet.drawBet == BetOption.Positive
                                               ? 'images/draw_green.png'
                                               : (h2hBet.drawBet == BetOption.Negative
-                                                  ? 'images/draw_red.png'
-                                                  : 'images/draw_grey.png'),
+                                              ? 'images/draw_red.png'
+                                              : 'images/draw_grey.png'),
                                         ),
                                       ),
                                     ),
@@ -403,8 +406,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                                           h2hBet.awayBet == BetOption.Positive
                                               ? 'images/lose_green.png'
                                               : (h2hBet.awayBet == BetOption.Negative
-                                                  ? 'images/lose_red.png'
-                                                  : 'images/lose_grey.png'),
+                                              ? 'images/lose_red.png'
+                                              : 'images/lose_grey.png'),
                                         ),
                                       ),
                                     )
@@ -449,7 +452,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 ),
               ),
               Container(
-                height: 100,
+                height: _nodeText1.hasFocus ? 0 : 80,
                 child: Transform.translate(
                   offset: Offset(0.0, 10.0),
                   child: GestureDetector(
@@ -469,7 +472,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                       backgroundColor: kBetSquadOrange,
                       child: CircleAvatar(
                         backgroundImage: selectedOpponent != null &&
-                                !StringUtils.isNullOrEmpty(selectedOpponent['image'])
+                            !StringUtils.isNullOrEmpty(selectedOpponent['image'])
                             ? NetworkImage(selectedOpponent['image'])
                             : kUserPlaceholderImage,
                         radius: 48,
@@ -606,34 +609,34 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
 
     var betScreens = Scaffold(
         body: ModalProgressHUD(
-      progressIndicator: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(kBetSquadOrange),
-      ),
-      inAsyncCall: _ngsLoading || _h2hLoading,
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: CustomTabView(
-              initPosition: initPosition,
-              itemCount: tabs.length,
-              labelSpacing: 20,
-              tabBuilder: (context, index) => Tab(text: tabs[index]),
-              pageBuilder: (context, index) {
-                switch (index) {
-                  case 0:
-                    return h2hScreen;
-                  default:
-                    return ngsScreen;
-                }
-              },
-              onPositionChange: (index) {
-                initPosition = index;
-              },
-            ),
-          )
-        ],
-      ),
-    ));
+          progressIndicator: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(kBetSquadOrange),
+          ),
+          inAsyncCall: _ngsLoading || _h2hLoading,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: CustomTabView(
+                  initPosition: initPosition,
+                  itemCount: tabs.length,
+                  labelSpacing: 20,
+                  tabBuilder: (context, index) => Tab(text: tabs[index]),
+                  pageBuilder: (context, index) {
+                    switch (index) {
+                      case 0:
+                        return h2hScreen;
+                      default:
+                        return ngsScreen;
+                    }
+                  },
+                  onPositionChange: (index) {
+                    initPosition = index;
+                  },
+                ),
+              )
+            ],
+          ),
+        ));
 
     final List<Widget> screens = [
       betScreens,

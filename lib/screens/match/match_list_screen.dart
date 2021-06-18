@@ -37,6 +37,7 @@ class _MatchListScreenState extends State<MatchListScreen> {
     selectedDay = DateTime.now();
     PushNotificationsManager().init();
     getMatches();
+    print("Current userId:" + FirebaseAuth.instance.currentUser.uid);
   }
 
   getMatches() async {
