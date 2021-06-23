@@ -404,8 +404,8 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                                     Navigator.of(context).pop();
                                     Alert.showSuccessDialog(context, 'Bet Accepted', acceptedBetResponse['message']);
                                   } else {
-                                    Alert.showSuccessDialog(
-                                        context, 'Accept Bet Failed', acceptedBetResponse['message']);
+                                    Alert.showErrorDialog(
+                                        context, 'Accept Bet not successful', acceptedBetResponse['message']);
                                   }
                                 },
                               ),
