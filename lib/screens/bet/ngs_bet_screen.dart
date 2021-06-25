@@ -390,9 +390,10 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                                     _loading = true;
                                   });
                                   bool compliant = await UsersApi.complianceCheck();
+
                                   if (!compliant) {
-                                    Alert.showErrorDialog(context, 'Cannot bet',
-                                        'You have failed our compliance check. Please contact info@bet-squad.com');
+                                    Alert.showErrorDialog(context, 'Sorry',
+                                        'We couldn\'t confirm your age or identity.  We will be in contact shortly to confirm what we need.  If you can\'t wait send a message to The UnderFlapper');
                                   }
                                   //accept bet
                                   Map acceptedBetResponse = await BetApi().acceptNGSBet(widget.bet);

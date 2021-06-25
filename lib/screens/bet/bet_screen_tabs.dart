@@ -707,8 +707,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 setState(() {
                   _h2hLoading = false;
                 });
-                Alert.showErrorDialog(
-                    context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
+                Alert.showErrorDialog(context, 'Sorry',
+                    'We couldn\'t confirm your age or identity.  We will be in contact shortly to confirm what we need.  If you can\'t wait send a message to The UnderFlapper');
               }
 
               Map createBetResponse = await BetApi().sendH2HBet(h2hBet);
@@ -727,8 +727,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 if (errorMsg == "You do not have enough funds to place this bet") {
                   Alert.showDepositError(context, 'Insufficient funds', errorMsg);
                 } else {
-                  Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
-                }
+                  Alert.showErrorDialog(context, 'Sorry',
+                      'We couldn\'t confirm your age or identity.  We will be in contact shortly to confirm what we need.  If you can\'t wait send a message to The UnderFlapper');                }
               }
             } else {
               if (_ngsLoading) return;
@@ -773,8 +773,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 setState(() {
                   _ngsLoading = false;
                 });
-                Alert.showErrorDialog(
-                    context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
+                Alert.showErrorDialog(context, 'Sorry',
+                    'We couldn\'t confirm your age or identity.  We will be in contact shortly to confirm what we need.  If you can\'t wait send a message to The UnderFlapper');
               }
 
               Map createBetResponse = await BetApi().sendNGSBet(ngsBet, invitedUsers, invitedSquads);
@@ -790,7 +790,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 var errorMsg = createBetResponse['message'];
                 print(errorMsg);
                 Navigator.pop(context);
-                Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
+                Alert.showErrorDialog(context, 'Sorry',
+                    'We couldn\'t confirm your age or identity.  We will be in contact shortly to confirm what we need.  If you can\'t wait send a message to The UnderFlapper');
               }
             }
           },
