@@ -258,6 +258,8 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                       onPressed: () async {
                                         bool compliant = await UsersApi.complianceCheck();
                                         if (!compliant) {
+                                          await UsersApi.notifyAdmin(title: '${FirebaseAuth.instance.currentUser.uid} error message', message:'${FirebaseAuth.instance.currentUser.uid} has received error message on compliance.');
+
                                           Alert.showErrorDialog(context, 'Cannot bet',
                                               'You have failed our compliance check. Please contact info@bet-squad.com');
                                         }

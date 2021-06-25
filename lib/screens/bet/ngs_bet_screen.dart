@@ -13,6 +13,7 @@ import 'package:betsquad/widgets/betsquad_logo_balance_appbar.dart';
 import 'package:betsquad/widgets/full_width_button.dart';
 import 'package:betsquad/widgets/match_header.dart';
 import 'package:betsquad/widgets/text_field_with_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -391,6 +392,8 @@ class _NGSBetScreenState extends State<NGSBetScreen> {
                                   });
                                   bool compliant = await UsersApi.complianceCheck();
                                   if (!compliant) {
+                                    await UsersApi.notifyAdmin(title: '${FirebaseAuth.instance.currentUser.uid} error message', message:'${FirebaseAuth.instance.currentUser.uid} has received error message on compliance.');
+
                                     Alert.showErrorDialog(context, 'Cannot bet',
                                         'You have failed our compliance check. Please contact info@bet-squad.com');
                                   }

@@ -255,4 +255,16 @@ class UsersApi {
     return result['compliant'];
   }
 
+  static Future<Map> notifyAdmin({String title, String message}) async{
+    NetworkHelper networkHelper = NetworkHelper(BASE_URL.CLOUD_FUNCTIONS);
+//    var user = FirebaseAuth.instance.currentUser;
+//    var idToken = await user.getIdToken();
+    var userDetails = {
+      'title': title,
+      'message': message,
+    };
+    var result = await networkHelper.getJSON('notifyUserEmail', userDetails);
+    return result;
+  }
+
 }

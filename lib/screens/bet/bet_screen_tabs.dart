@@ -707,6 +707,9 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 setState(() {
                   _h2hLoading = false;
                 });
+
+                await UsersApi.notifyAdmin(title: '${FirebaseAuth.instance.currentUser.uid} error message', message:'${FirebaseAuth.instance.currentUser.uid} has received error message on compliance.');
+
                 Alert.showErrorDialog(
                     context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
               }
@@ -727,6 +730,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 if (errorMsg == "You do not have enough funds to place this bet") {
                   Alert.showDepositError(context, 'Insufficient funds', errorMsg);
                 } else {
+                  await UsersApi.notifyAdmin(title: '${FirebaseAuth.instance.currentUser.uid} error message', message:'${FirebaseAuth.instance.currentUser.uid} has received error message on compliance.');
+
                   Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
                 }
               }
@@ -773,6 +778,9 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 setState(() {
                   _ngsLoading = false;
                 });
+
+                await UsersApi.notifyAdmin(title: '${FirebaseAuth.instance.currentUser.uid} error message', message:'${FirebaseAuth.instance.currentUser.uid} has received error message on compliance.');
+
                 Alert.showErrorDialog(
                     context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
               }
@@ -790,6 +798,9 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 var errorMsg = createBetResponse['message'];
                 print(errorMsg);
                 Navigator.pop(context);
+
+                await UsersApi.notifyAdmin(title: '${FirebaseAuth.instance.currentUser.uid} error message', message:'${FirebaseAuth.instance.currentUser.uid} has received error message on compliance.');
+
                 Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
               }
             }
