@@ -46,7 +46,11 @@ class _MatchListScreenState extends State<MatchListScreen> {
       matches = fetchMatchesResult;
     });
 
-    print(fetchMatchesResult);
+    if(matches.length == 0){
+      print("there are no matches");
+    }else{
+      print("showing matches => $fetchMatchesResult");
+    }
   }
 
   @override
