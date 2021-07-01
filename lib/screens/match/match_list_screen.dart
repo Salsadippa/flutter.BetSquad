@@ -30,7 +30,7 @@ class MatchListScreen extends StatefulWidget {
 class _MatchListScreenState extends State<MatchListScreen> {
   Map<String, List<Match>> matches;
   DateTime selectedDay;
-
+  bool noMatches = false;
   @override
   void initState() {
     super.initState();
@@ -48,6 +48,9 @@ class _MatchListScreenState extends State<MatchListScreen> {
 
     if(matches.length == 0){
       print("there are no matches");
+      setState(() {
+        noMatches = true;
+      });
     }else{
       print("showing matches => $fetchMatchesResult");
     }
@@ -55,57 +58,73 @@ class _MatchListScreenState extends State<MatchListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Widget emptyListTextWidget = Center(
+      child: Text(
+        noMatches ? "No matches yet" : " ",
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.white),
+      ),
+    );
+
     Match selectedMatch = Provider.of<MatchData>(context).selectedMatch;
     return Scaffold(
-      body: Container(
-        decoration: kGrassTrimBoxDecoration,
-        child: Column(
-          children: <Widget>[
-            CalendarStrip(
-              startDate: DateTime.now().subtract(Duration(days: 7)),
-              endDate: DateTime.now().add(Duration(days: 30)),
-              selectedDate: selectedDay,
-              onDateSelected: (DateTime date) {
-                setState(() {
-                  selectedDay = date;
-                  print(date);
-                });
-                getMatches();
-              },
-              containerDecoration: BoxDecoration(color: Colors.white),
-              monthNameWidget: (monthLabel) =>
-                  Container(child: Text(monthLabel), padding: EdgeInsets.only(top: 7, bottom: 3)),
-            ),
-            Expanded(
-              child: new ListView.builder(
-                itemCount: matches != null ? matches.length : 0,
-                itemBuilder: (context, i) {
-                  return custom.ExpansionTile(
-                    initiallyExpanded: true,
-                    headerBackgroundColor: kBetSquadOrange,
-                    title: Container(
-                      padding: EdgeInsets.only(left: 35),
-                      child: Text(
-                        matches.keys.toList()[i],
-                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
+      body: Stack(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Container(
+              decoration: kGrassTrimBoxDecoration,
+              child: Column(
+                children: <Widget>[
+                  CalendarStrip(
+                    startDate: DateTime.now().subtract(Duration(days: 7)),
+                    endDate: DateTime.now().add(Duration(days: 30)),
+                    selectedDate: selectedDay,
+                    onDateSelected: (DateTime date) {
+                      setState(() {
+                        selectedDay = date;
+                        print(date);
+                      });
+                      getMatches();
+                    },
+                    containerDecoration: BoxDecoration(color: Colors.white),
+                    monthNameWidget: (monthLabel) =>
+                        Container(child: Text(monthLabel), padding: EdgeInsets.only(top: 7, bottom: 3)),
+                  ),
+                  Expanded(
+                    child: new ListView.builder(
+                      itemCount: matches != null ? matches.length : 0,
+                      itemBuilder: (context, i) {
+                        return custom.ExpansionTile(
+                          initiallyExpanded: true,
+                          headerBackgroundColor: kBetSquadOrange,
+                          title: Container(
+                            padding: EdgeInsets.only(left: 35),
+                            child: Text(
+                              matches.keys.toList()[i],
+                              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          children: _buildExpandableContent(matches[matches.keys.toList()[i]], (Match match) {
+                            if (match.currentState == 0) {
+                              Provider.of<MatchData>(context, listen: false).updateSelectedMatch(match);
+                            } else {
+                              Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
+                            }
+                          }, (Match match) {
+                            Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
+                          }, selectedMatch),
+                        );
+                      },
                     ),
-                    children: _buildExpandableContent(matches[matches.keys.toList()[i]], (Match match) {
-                      if (match.currentState == 0) {
-                        Provider.of<MatchData>(context, listen: false).updateSelectedMatch(match);
-                      } else {
-                        Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
-                      }
-                    }, (Match match) {
-                      Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
-                    }, selectedMatch),
-                  );
-                },
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          emptyListTextWidget,
+        ],
       ),
     );
   }
