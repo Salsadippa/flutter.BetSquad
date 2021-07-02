@@ -279,7 +279,7 @@ class _H2HDetailPageState extends State<H2HDetailPage> {
                                           Alert.showSuccessDialog(
                                               context, 'Bet Accepted', acceptedBetResponse['message']);
                                         } else {
-                                          Alert.showSuccessDialog(
+                                          Alert.showErrorDialog(
                                               context, 'Accept Bet Failed', acceptedBetResponse['message']);
                                         }
                                       },
