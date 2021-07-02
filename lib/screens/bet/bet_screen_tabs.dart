@@ -50,12 +50,12 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
   var selectedOpponent;
   var whiteTextStyle = TextStyle(color: Colors.white);
   CurrencyTextFieldController currencyTextFieldController =
-  CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
+      CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
   var invitedUsers = [];
   var invitedSquads = [];
 
   CurrencyTextFieldController currencyTextFieldController2 =
-  CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
+      CurrencyTextFieldController(rightSymbol: "£", decimalSymbol: ".", thousandSymbol: ",");
 
 //  TextEditingController textEditingController = TextEditingController();
 //  TextEditingController textEditingController2 = TextEditingController();
@@ -117,7 +117,9 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
           decoration: kGradientBoxDecoration,
           child: Column(
             children: <Widget>[
-              SizedBox(height: _nodeText1.hasFocus ? 20 : 0,),
+              SizedBox(
+                height: _nodeText1.hasFocus ? 20 : 0,
+              ),
               Container(
                 height: _nodeText1.hasFocus ? 0 : 80,
                 child: Transform.translate(
@@ -134,9 +136,9 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                             .once(),
                         builder: (context, snapshot) {
                           return CircleAvatar(
-                            backgroundImage: snapshot.hasData && !StringUtils.isNullOrEmpty(snapshot.data.value) ?
-                            NetworkImage(snapshot.data.value) :
-                            kUserPlaceholderImage,
+                            backgroundImage: snapshot.hasData && !StringUtils.isNullOrEmpty(snapshot.data.value)
+                                ? NetworkImage(snapshot.data.value)
+                                : kUserPlaceholderImage,
                             radius: 48,
                           );
                         }),
@@ -343,8 +345,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                                           h2hBet.homeBet == BetOption.Positive
                                               ? 'images/win_green.png'
                                               : (h2hBet.homeBet == BetOption.Negative
-                                              ? 'images/win_red.png'
-                                              : 'images/win_grey.png'),
+                                                  ? 'images/win_red.png'
+                                                  : 'images/win_grey.png'),
                                         ),
                                       ),
                                     ),
@@ -375,8 +377,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                                           h2hBet.drawBet == BetOption.Positive
                                               ? 'images/draw_green.png'
                                               : (h2hBet.drawBet == BetOption.Negative
-                                              ? 'images/draw_red.png'
-                                              : 'images/draw_grey.png'),
+                                                  ? 'images/draw_red.png'
+                                                  : 'images/draw_grey.png'),
                                         ),
                                       ),
                                     ),
@@ -406,8 +408,8 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                                           h2hBet.awayBet == BetOption.Positive
                                               ? 'images/lose_green.png'
                                               : (h2hBet.awayBet == BetOption.Negative
-                                              ? 'images/lose_red.png'
-                                              : 'images/lose_grey.png'),
+                                                  ? 'images/lose_red.png'
+                                                  : 'images/lose_grey.png'),
                                         ),
                                       ),
                                     )
@@ -471,10 +473,10 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                       radius: 50,
                       backgroundColor: kBetSquadOrange,
                       child: CircleAvatar(
-                        backgroundImage: selectedOpponent != null &&
-                            !StringUtils.isNullOrEmpty(selectedOpponent['image'])
-                            ? NetworkImage(selectedOpponent['image'])
-                            : kUserPlaceholderImage,
+                        backgroundImage:
+                            selectedOpponent != null && !StringUtils.isNullOrEmpty(selectedOpponent['image'])
+                                ? NetworkImage(selectedOpponent['image'])
+                                : kUserPlaceholderImage,
                         radius: 48,
                       ),
                     ),
@@ -609,34 +611,34 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
 
     var betScreens = Scaffold(
         body: ModalProgressHUD(
-          progressIndicator: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(kBetSquadOrange),
-          ),
-          inAsyncCall: _ngsLoading || _h2hLoading,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: CustomTabView(
-                  initPosition: initPosition,
-                  itemCount: tabs.length,
-                  labelSpacing: 20,
-                  tabBuilder: (context, index) => Tab(text: tabs[index]),
-                  pageBuilder: (context, index) {
-                    switch (index) {
-                      case 0:
-                        return h2hScreen;
-                      default:
-                        return ngsScreen;
-                    }
-                  },
-                  onPositionChange: (index) {
-                    initPosition = index;
-                  },
-                ),
-              )
-            ],
-          ),
-        ));
+      progressIndicator: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(kBetSquadOrange),
+      ),
+      inAsyncCall: _ngsLoading || _h2hLoading,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: CustomTabView(
+              initPosition: initPosition,
+              itemCount: tabs.length,
+              labelSpacing: 20,
+              tabBuilder: (context, index) => Tab(text: tabs[index]),
+              pageBuilder: (context, index) {
+                switch (index) {
+                  case 0:
+                    return h2hScreen;
+                  default:
+                    return ngsScreen;
+                }
+              },
+              onPositionChange: (index) {
+                initPosition = index;
+              },
+            ),
+          )
+        ],
+      ),
+    ));
 
     final List<Widget> screens = [
       betScreens,
@@ -708,7 +710,10 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                   _h2hLoading = false;
                 });
                 Alert.showErrorDialog(
-                    context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
+                    context,
+                    'Sorry',
+                    'We couldn\'t confirm your age or identity.  We will be in contact shortly to confirm what we need.  If you '
+                        'can\'t wait send a message to The UnderFlapper');
               }
 
               Map createBetResponse = await BetApi().sendH2HBet(h2hBet);
@@ -727,7 +732,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 if (errorMsg == "You do not have enough funds to place this bet") {
                   Alert.showDepositError(context, 'Insufficient funds', errorMsg);
                 } else {
-                  Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
+                  Alert.showErrorDialog(context, 'Sorry', errorMsg);
                 }
               }
             } else {
@@ -774,7 +779,10 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                   _ngsLoading = false;
                 });
                 Alert.showErrorDialog(
-                    context, 'Cannot bet', 'You have failed our compliance check. Please contact info@bet-squad.com');
+                    context,
+                    'Sorry',
+                    'We couldn\'t confirm your age or identity.  We will be in contact shortly to confirm what we need. If you '
+                        'can\'t wait send a message to The UnderFlapper');
               }
 
               Map createBetResponse = await BetApi().sendNGSBet(ngsBet, invitedUsers, invitedSquads);
@@ -790,7 +798,7 @@ class _BetScreenTabsState extends State<BetScreenTabs> {
                 var errorMsg = createBetResponse['message'];
                 print(errorMsg);
                 Navigator.pop(context);
-                Alert.showErrorDialog(context, 'Failed to Send', errorMsg);
+                Alert.showErrorDialog(context, 'Sorry', errorMsg);
               }
             }
           },

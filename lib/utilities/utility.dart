@@ -1,5 +1,7 @@
+import 'package:betsquad/services/location_services.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
@@ -52,17 +54,10 @@ class Utility {
   }
 
   Future<bool> isInTheUk() async {
-    print("get 1");
-
-    try {
-      print("get 2");
-      var country = await getCountryName();
-      print(country);
-      return country == 'United Kingdom';
-    } catch (e) {
-      if (e.toString() == 'User denied permissions to access the device\'s location.') return false;
-    }
-    return false;
+    Position position = await LocationServices.getCurrentLocation();
+    Placemark place = await LocationServices.getAddressFromLatLng(position.latitude, position.longitude);
+    print(place.country);
+    return place.country == 'United Kingdom';
   }
 
   Future<String> getCountryName() async {
