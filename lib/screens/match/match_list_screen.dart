@@ -16,6 +16,8 @@ import 'package:calendar_strip/calendar_strip.dart';
 import 'package:betsquad/widgets/custom_expansion_tile.dart' as custom;
 import 'package:betsquad/models/match.dart';
 import 'package:betsquad/widgets/match_cell.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:betsquad/models/card.dart' as BSCard;
 import 'package:sortedmap/sortedmap.dart';
@@ -30,6 +32,7 @@ class MatchListScreen extends StatefulWidget {
 class _MatchListScreenState extends State<MatchListScreen> {
   Map<String, List<Match>> matches;
   DateTime selectedDay;
+  int _daysUntilNextMatch;
 
   @override
   void initState() {
@@ -42,11 +45,28 @@ class _MatchListScreenState extends State<MatchListScreen> {
 
   getMatches() async {
     var fetchMatchesResult = await DBProvider.db.getMatchesOnDate(selectedDay);
+
+    if (fetchMatchesResult.length == 0) {
+      int daysUntilNextMatch = await howManyDaysUntilNextMatch();
+      setState(() {
+        _daysUntilNextMatch = daysUntilNextMatch;
+      });
+    }
+
     setState(() {
       matches = fetchMatchesResult;
     });
 
     print(fetchMatchesResult);
+  }
+
+  howManyDaysUntilNextMatch() async {
+    for (var i = 1; i < 100; i++) {
+      var fetchMatchesResult = await DBProvider.db.getMatchesOnDate(selectedDay.add(Duration(days: i)));
+      if (fetchMatchesResult.isNotEmpty) {
+        return i;
+      }
+    }
   }
 
   @override
@@ -73,32 +93,43 @@ class _MatchListScreenState extends State<MatchListScreen> {
                   Container(child: Text(monthLabel), padding: EdgeInsets.only(top: 7, bottom: 3)),
             ),
             Expanded(
-              child: new ListView.builder(
-                itemCount: matches != null ? matches.length : 0,
-                itemBuilder: (context, i) {
-                  return custom.ExpansionTile(
-                    initiallyExpanded: true,
-                    headerBackgroundColor: kBetSquadOrange,
-                    title: Container(
-                      padding: EdgeInsets.only(left: 35),
-                      child: Text(
-                        matches.keys.toList()[i],
-                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
+              child: matches != null && matches.length == 0
+                  ? Center(
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                            'There are matches on the selected day. The next match is on ${DateFormat.MMMd().format
+                          (selectedDay.add(Duration(days: _daysUntilNextMatch)))}',
+                            style: GoogleFonts.roboto(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center),
                       ),
+                    )
+                  : new ListView.builder(
+                      itemCount: matches != null ? matches.length : 0,
+                      itemBuilder: (context, i) {
+                        return custom.ExpansionTile(
+                          initiallyExpanded: true,
+                          headerBackgroundColor: kBetSquadOrange,
+                          title: Container(
+                            padding: EdgeInsets.only(left: 35),
+                            child: Text(
+                              matches.keys.toList()[i],
+                              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          children: _buildExpandableContent(matches[matches.keys.toList()[i]], (Match match) {
+                            if (match.currentState == 0) {
+                              Provider.of<MatchData>(context, listen: false).updateSelectedMatch(match);
+                            } else {
+                              Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
+                            }
+                          }, (Match match) {
+                            Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
+                          }, selectedMatch),
+                        );
+                      },
                     ),
-                    children: _buildExpandableContent(matches[matches.keys.toList()[i]], (Match match) {
-                      if (match.currentState == 0) {
-                        Provider.of<MatchData>(context, listen: false).updateSelectedMatch(match);
-                      } else {
-                        Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
-                      }
-                    }, (Match match) {
-                      Navigator.pushNamed(context, MatchDetailTabs.ID, arguments: match);
-                    }, selectedMatch),
-                  );
-                },
-              ),
             ),
           ],
         ),

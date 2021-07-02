@@ -56,8 +56,7 @@ class Utility {
   Future<bool> isInTheUk() async {
     Position position = await LocationServices.getCurrentLocation();
     Placemark place = await LocationServices.getAddressFromLatLng(position.latitude, position.longitude);
-    print(place.country);
-    return place.country == 'United Kingdom';
+    return place != null && place.country == 'United Kingdom';
   }
 
   Future<String> getCountryName() async {
