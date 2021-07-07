@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share/share.dart';
 
 class BetSquadLogoProfileBalanceAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -96,6 +97,9 @@ class _BetSquadLogoProfileBalanceAppBarState extends State<BetSquadLogoProfileBa
         actions: <Widget>[
           Row(
             children: <Widget>[
+              IconButton(icon: Icon(Icons.share_rounded, color: Colors.grey[800],), onPressed:(){
+                Share.share('I\'m on Bet Squad and I need some friends to bet against! My username is ,username.\n\nDownload for Apple https://apps.apple.com/gb/app/betsquad/id1542057706 \n\nDownload for Android https://play.google.com/store/apps/details?id=com.betsquad.betsquad&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1');
+              }),
               balanceButton,
               SizedBox(
                 width: 10,
