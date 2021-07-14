@@ -120,6 +120,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
                       child: TextField(
+                        decoration: InputDecoration(hintText: 'Type message here',hintStyle: TextStyle(color: Colors.white)),
                         style: GoogleFonts.roboto(color: Colors.white),
                         controller: messageTextController,
                         onChanged: (value) {
