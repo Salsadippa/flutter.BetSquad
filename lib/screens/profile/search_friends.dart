@@ -97,7 +97,7 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
               });
             },
             decoration:
-                InputDecoration.collapsed(hintText: "Search...", hintStyle: GoogleFonts.roboto(color: Colors.black)),
+                InputDecoration.collapsed(hintText: "Click here to search", hintStyle: GoogleFonts.roboto(color: Colors.black)),
           ),
         ),
       ),
