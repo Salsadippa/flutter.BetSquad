@@ -12,7 +12,7 @@ import 'package:betsquad/utilities/utility.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:calendar_strip/calendar_strip.dart';
+//import 'package:calendar_strip/calendar_strip.dart';
 import 'package:betsquad/widgets/custom_expansion_tile.dart' as custom;
 import 'package:betsquad/models/match.dart';
 import 'package:betsquad/widgets/match_cell.dart';
@@ -77,21 +77,21 @@ class _MatchListScreenState extends State<MatchListScreen> {
         decoration: kGrassTrimBoxDecoration,
         child: Column(
           children: <Widget>[
-            CalendarStrip(
-              startDate: DateTime.now().subtract(Duration(days: 7)),
-              endDate: DateTime.now().add(Duration(days: 30)),
-              selectedDate: selectedDay,
-              onDateSelected: (DateTime date) {
-                setState(() {
-                  selectedDay = date;
-                  print(date);
-                });
-                getMatches();
-              },
-              containerDecoration: BoxDecoration(color: Colors.white),
-              monthNameWidget: (monthLabel) =>
-                  Container(child: Text(monthLabel), padding: EdgeInsets.only(top: 7, bottom: 3)),
-            ),
+//            CalendarStrip(
+//              startDate: DateTime.now().subtract(Duration(days: 7)),
+//              endDate: DateTime.now().add(Duration(days: 30)),
+//              selectedDate: selectedDay,
+//              onDateSelected: (DateTime date) {
+//                setState(() {
+//                  selectedDay = date;
+//                  print(date);
+//                });
+//                getMatches();
+//              },
+//              containerDecoration: BoxDecoration(color: Colors.white),
+//              monthNameWidget: (monthLabel) =>
+//                  Container(child: Text(monthLabel), padding: EdgeInsets.only(top: 7, bottom: 3)),
+//            ),
             Expanded(
               child: matches != null && matches.length == 0
                   ? Center(

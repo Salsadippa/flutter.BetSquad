@@ -6,6 +6,7 @@ import 'package:betsquad/string_utils.dart';
 import 'package:betsquad/styles/constants.dart';
 import 'package:betsquad/utilities/utility.dart';
 import 'package:betsquad/widgets/swipeable_tabs.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -171,56 +172,54 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                             radius: 28,
                             child: chat['type'] == 'bet'
                                 ? FutureBuilder<DataSnapshot>(
-                                future: FirebaseDatabase.instance
-                                    .reference()
-                                    .child('bets')
-                                    .child(chat['id'])
-                                    .child('from')
-                                    .once(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData ){
-                                    return CircleAvatar(
-                                      radius: 25,
-                                      backgroundImage: AssetImage('images/ball.png'),
-                                    );
-                                  }
-                                  print("bet id: " + chat['id']);
-                                  if (snapshot.data.value == null){
-                                    print(chat['id'] + 'no value');
-                                  }
-                                  print("user ID: " + snapshot.data.value);
-
-                                  if (snapshot.hasError)
-                                    print(snapshot.error);
-                                  return FutureBuilder<DataSnapshot>(
-                                      future: FirebaseDatabase
-                                          .instance
-                                          .reference()
-                                          .child('users')
-                                          .child(snapshot.data.value)
-                                          .child('image')
-                                          .once(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasError)
-                                          print(snapshot.error);
+                                    future: FirebaseDatabase.instance
+                                        .reference()
+                                        .child('bets')
+                                        .child(chat['id'])
+                                        .child('from')
+                                        .once(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) {
                                         return CircleAvatar(
                                           radius: 25,
-                                          backgroundImage: !snapshot
-                                              .hasData ||
-                                              snapshot.hasError ||
-                                              StringUtils
-                                                  .isNullOrEmpty(
-                                                  snapshot
-                                                      .data
-                                                      .value)
-                                              ? AssetImage(
-                                              'images/user_placeholder'
-                                                  '.png')
-                                              : NetworkImage(snapshot
-                                              .data.value),
+                                          backgroundImage:
+                                              AssetImage('images/ball.png'),
                                         );
-                                      });
-                                })
+                                      }
+                                      print("bet id: " + chat['id']);
+                                      if (snapshot.data.value == null) {
+                                        print(chat['id'] + 'no value');
+                                      }
+                                      print("user ID: " + snapshot.data.value);
+
+                                      if (snapshot.hasError)
+                                        print(snapshot.error);
+                                      return FutureBuilder<DataSnapshot>(
+                                          future: FirebaseDatabase.instance
+                                              .reference()
+                                              .child('users')
+                                              .child(snapshot.data.value)
+                                              .child('image')
+                                              .once(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasError)
+                                              print(snapshot.error);
+                                            return CircleAvatar(
+                                              radius: 25,
+                                              backgroundImage: !snapshot
+                                                          .hasData ||
+                                                      snapshot.hasError ||
+                                                      StringUtils.isNullOrEmpty(
+                                                          snapshot.data.value)
+                                                  ? AssetImage(
+                                                      'images/user_placeholder'
+                                                      '.png')
+                                                  : CachedNetworkImageProvider(snapshot.data.value),
+//                                          NetworkImage(snapshot
+//                                              .data.value),
+                                            );
+                                          });
+                                    })
                                 : FutureBuilder<DataSnapshot>(
                                     future: chat['type'] == 'personal'
                                         ? FirebaseDatabase.instance
@@ -247,7 +246,7 @@ class _ChatTabScreenState extends State<ChatTabScreen> {
                                             ? AssetImage(
                                                 'images/user_placeholder'
                                                 '.png')
-                                            : NetworkImage(snapshot.data.value),
+                                            : CachedNetworkImageProvider(snapshot.data.value),
                                       );
                                     }),
                           ),
