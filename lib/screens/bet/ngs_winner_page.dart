@@ -35,6 +35,18 @@ class _NGSWinnerPageState extends State<NGSWinnerPage> {
     });
   }
 
+  String returnWholeNumberIfMoneyIsWhole(double earning){
+    //Whole meaning it ends with .00
+    var reversedEarning =  earning.toStringAsFixed(2).split('').reversed.join();
+
+    if(reversedEarning[0] == "0" && reversedEarning[1] == "0"){
+      return earning.toStringAsFixed(2); //Converts to a 2dp string
+    }else{
+      return earning.toStringAsFixed(0); //Convert to a whole number 
+    }
+
+  }
+
   @override
   void initState() {
     super.initState();
@@ -83,7 +95,7 @@ class _NGSWinnerPageState extends State<NGSWinnerPage> {
                             style: GoogleFonts.roboto(color: Colors.white, fontSize: 25),
                           ),
                           Text(
-                            '£${widget.amount != null ? widget.amount.toStringAsFixed(2) : '??.??'}',
+                            '£${widget.amount != null ? returnWholeNumberIfMoneyIsWhole(widget.amount) : '??.??'}',
                             style: GoogleFonts.roboto(color: Colors.green, fontSize: 50, fontWeight: FontWeight.bold),
                           ),
                           Column(
