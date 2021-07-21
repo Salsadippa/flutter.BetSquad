@@ -42,10 +42,11 @@ dependencies:
   sortedmap: ^0.4.2
   calendar_strip: ^1.0.7
   share:
+  cached_network_image:
 
 dev_dependencies:
   flutter_test:
-   sdk: flutter
+    sdk: flutter
   change_app_package_name: ^0.1.2
 
 flutter_icons:
@@ -57,9 +58,9 @@ flutter:
   uses-material-design: true
 
   fonts:
-  - family: CustomIcons
-    fonts:
-      - asset: lib/fonts/CustomIcons.ttf
+    - family: CustomIcons
+      fonts:
+        - asset: lib/fonts/CustomIcons.ttf
 
   assets:
     - images/
